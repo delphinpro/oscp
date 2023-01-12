@@ -1,2 +1,3 @@
-# oscp
-Start panel for Open Server (Open Server Control Panel)
+# Open Server Control Panel
+
+Web-панель управления для OSPanel v6.
