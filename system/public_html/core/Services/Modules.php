@@ -28,6 +28,16 @@ class Modules
         return $this->modules;
     }
 
+    public function get($moduleName): ?Module
+    {
+        foreach ($this->modules as $module) {
+            if ($module->name === $moduleName) {
+                return $module;
+            }
+        }
+        return null;
+    }
+
     private function readConfig(): void
     {
         $modules = httpRequest('/mod/list/all/');

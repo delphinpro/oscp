@@ -20,7 +20,13 @@
               <tr>
                 <td class="p-0">
                   <div class="d-flex align-items-center">
-                    <i class="bi bi-box-arrow-in-right fs-3 text-light me-2"></i>
+                    @if (!$domain->isAvailable())
+                      <i class="bi bi-exclamation-triangle-fill fs-4 text-danger me-2"
+                        title="Модуль {{ $domain->engine }} отсутствует или выключен"
+                      ></i>
+                    @else
+                      <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
+                    @endif
                     <a href="http://{{ $domain->host }}" target="_blank">http://{{ $domain->host }}</a>
                   </div>
                 </td>

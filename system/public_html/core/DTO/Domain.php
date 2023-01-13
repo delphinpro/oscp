@@ -2,6 +2,8 @@
 
 namespace OpenServer\DTO;
 
+use OpenServer\Services\Modules;
+
 /**
  * @property-read string host
  * @property-read string aliases
@@ -20,6 +22,7 @@ namespace OpenServer\DTO;
 class Domain
 {
     protected array $data;
+    protected ?Module $module;
 
     public function __construct(array $data)
     {
@@ -39,6 +42,7 @@ class Domain
             'ssl_cert_file'  => $this->path($data['ssl_cert_file'] ?? '{root_dir}/user/ssl/default/cert.crt'),
             'ssl_key_file'   => $this->path($data['ssl_key_file'] ?? '{root_dir}/user/ssl/default/cert.key'),
         ];
+        $this->module = Modules::make()->get($this->engine);
     }
 
     public function __get(string $name)
@@ -49,6 +53,11 @@ class Domain
     public function isValidRoot(): bool
     {
         return file_exists($this->root_directory);
+    }
+
+    public function isAvailable(): bool
+    {
+        return (bool)$this->module?->enabled;
     }
 
     public function toArray(): array
