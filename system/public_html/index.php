@@ -32,23 +32,24 @@ try {
 
     $router = new Router(new Request());
 
-    $router->get('/', static fn() => Response::json());
+    $router->get('/ping', static fn() => Response::json());
 
-    $router->get('/main', IndexController::class);
+    $router->get('/api/main', IndexController::class);
 
-    $router->post('/module/init', [ModuleController::class, 'init']);
-    $router->post('/module/restart', [ModuleController::class, 'restart']);
-    $router->post('/module/on', [ModuleController::class, 'on']);
-    $router->post('/module/off', [ModuleController::class, 'off']);
+    $router->post('/api/module/init', [ModuleController::class, 'init']);
+    $router->post('/api/module/restart', [ModuleController::class, 'restart']);
+    $router->post('/api/module/on', [ModuleController::class, 'on']);
+    $router->post('/api/module/off', [ModuleController::class, 'off']);
 
-    $router->post('/domain/on', [DomainController::class, 'on']);
-    $router->post('/domain/off', [DomainController::class, 'off']);
-    $router->post('/domain/create', [DomainController::class, 'create']);
-    $router->post('/domain/update', [DomainController::class, 'update']);
-    $router->post('/domain/delete', [DomainController::class, 'delete']);
+    $router->post('/api/domain/on', [DomainController::class, 'on']);
+    $router->post('/api/domain/off', [DomainController::class, 'off']);
+    $router->post('/api/domain/create', [DomainController::class, 'create']);
+    $router->post('/api/domain/update', [DomainController::class, 'update']);
+    $router->post('/api/domain/delete', [DomainController::class, 'delete']);
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
 
+    header("{$_SERVER['SERVER_PROTOCOL']} 500 Server Error");
     echo $e->getMessage();
 
 }

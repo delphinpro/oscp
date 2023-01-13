@@ -43,17 +43,17 @@ function http_request(url, method = 'GET', data = null) {
 }
 
 function http_get(url) {
-  return http_request(ENTRY_POINT + url);
+  return http_request(ENTRY_POINT + '/api' + url);
 }
 
 function http_post(url, data = {}) {
-  return http_request(ENTRY_POINT + url, 'POST', data);
+  return http_request(ENTRY_POINT + '/api' + url, 'POST', data);
 }
 
 let hasError = false;
 
 function check_api_host() {
-  fetch(ENTRY_POINT + '/')
+  fetch(ENTRY_POINT + '/ping')
     .then(res => res.json())
     .then(() => {
       if (hasError) {
