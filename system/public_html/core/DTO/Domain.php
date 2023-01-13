@@ -46,6 +46,11 @@ class Domain
         return $this->data[$name] ?? null;
     }
 
+    public function isValidRoot(): bool
+    {
+        return file_exists($this->root_directory);
+    }
+
     public function toArray(): array
     {
         return $this->data;

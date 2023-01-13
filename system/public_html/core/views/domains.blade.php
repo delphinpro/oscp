@@ -41,8 +41,13 @@
           </td>
           <td>{{ $domain->engine }}</td>
           <td class="font-monospace">{{ $domain->ip }}</td>
-          <td class="font-monospace">
-            <div style="max-width:100%;word-break:break-all;font-size:1rem;">{{ $domain->root_directory }}</div>
+          <td class="font-monospace {{ !$domain->isValidRoot() ? 'text-danger' : '' }}">
+            <div style="max-width:100%;word-break:break-all;font-size:1rem;">
+              {{ $domain->root_directory }}
+              @if (!$domain->isValidRoot())
+                <i class="bi bi-exclamation-triangle-fill text-danger" title="Путь не существует"></i>
+              @endif
+            </div>
           </td>
           <td class="text-center">
             <i class="bi {{ $domain->ssl ? 'text-success bi-check-lg' : 'text-danger bi-x-lg' }}"></i>
