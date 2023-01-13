@@ -30,6 +30,9 @@ function http_request(url, method = 'GET', data = null) {
     .then(res => {
       hideLoader();
       if (res.status === 200) {
+        if (res.message) {
+          message(res.message);
+        }
         return res['payload'];
       } else {
         throw Error(res['message'] ?? 'Server Error');
