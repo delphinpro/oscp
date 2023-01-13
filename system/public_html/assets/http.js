@@ -1,7 +1,32 @@
-function http_get(url) {
+function http_request(url, method = 'GET', data = null) {
+  let body = null;
+
+  if (method.toUpperCase() === 'POST') {
+    if (!(data instanceof FormData) && data !== null) {
+      body = new FormData();
+      for (let key in data) {
+        body.append(key, data[key]);
+      }
+    }
+    // if (body instanceof FormData) {
+    //   for (var pair of body.entries()) {
+    //     console.log(pair[0] + ' = ' + pair[1]);
+    //   }
+    // }
+  }
+
   showLoader();
-  return fetch(ENTRY_POINT + url)
-    .then(res => res.json())
+
+  return fetch(url, {
+    method,
+    body,
+  })
+    .then(res => res.headers.get('Content-Type') === 'application/json'
+      ? res.json()
+      : res.text().then(message => ({
+        status: 500,
+        message,
+      })))
     .then(res => {
       hideLoader();
       if (res.status === 200) {
@@ -11,48 +36,18 @@ function http_get(url) {
       }
     })
     .catch(err => {
-      console.log('CATCH', err.message);
       hideLoader();
+      message(`<pre>${err.message.replace('<br />', '').trim()}</pre>`, 'danger');
       throw Error(err);
     });
 }
 
+function http_get(url) {
+  return http_request(ENTRY_POINT + url);
+}
+
 function http_post(url, data = {}) {
-  showLoader();
-  let fd = data;
-
-  if (!(data instanceof FormData)) {
-    fd = new FormData();
-    for (let key in data) {
-      fd.append(key, data[key]);
-    }
-  }
-
-  for (var pair of fd.entries()) {
-    // console.log(pair[0] + ' = ' + pair[1]);
-  }
-
-  return fetch(ENTRY_POINT + url, {
-    method: 'POST',
-    body  : fd,
-  })
-    .then(res => res.json())
-    .then(res => {
-      hideLoader();
-      if (res.status === 200) {
-        if (res.message) {
-          message(res.message);
-        }
-        return res['payload'];
-      } else {
-        throw Error(res['message'] ?? 'Server Error');
-      }
-    })
-    .catch(err => {
-      console.log('CATCH', err.message);
-      hideLoader();
-      throw Error(err);
-    });
+  return http_request(ENTRY_POINT + url, 'POST', data);
 }
 
 let hasError = false;

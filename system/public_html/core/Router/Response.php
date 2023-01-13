@@ -34,6 +34,7 @@ class Response
     public function __toString(): string
     {
         if ($this->json) {
+            header('Content-Type: application/json');
             return json_encode([
                 'status'  => $this->status,
                 'message' => $this->message,
@@ -41,6 +42,7 @@ class Response
             ]);
         }
 
+        header('Content-Type: text/html');
         return $this->content;
     }
 
