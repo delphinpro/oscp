@@ -25,7 +25,13 @@
                         title="Модуль {{ $domain->engine }} отсутствует или выключен"
                       ></i>
                     @else
-                      <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
+                      @if($domain->admin_path)
+                        <a href="http://{{ $domain->host }}{{ $domain->admin_path }}" target="_blank">
+                          <i class="bi bi-box-arrow-in-right fs-4 text-danger me-2"></i>
+                        </a>
+                      @else
+                        <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
+                      @endif
                     @endif
                     <a href="http://{{ $domain->host }}" target="_blank">http://{{ $domain->host }}</a>
                   </div>
@@ -33,7 +39,13 @@
                 <td class="p-0">
                   @if ($domain->ssl)
                     <div class="d-flex align-items-center">
-                      <i class="bi bi-box-arrow-in-right fs-3 text-light me-2"></i>
+                      @if($domain->admin_path)
+                        <a href="https://{{ $domain->host }}{{ $domain->admin_path }}" target="_blank">
+                          <i class="bi bi-box-arrow-in-right fs-4 text-danger me-2"></i>
+                        </a>
+                      @else
+                        <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
+                      @endif
                       <a href="https://{{ $domain->host }}" target="_blank">https://{{ $domain->host }}</a>
                     </div>
                   @endif

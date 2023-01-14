@@ -71,6 +71,7 @@ function updateModalForm(modal, data) {
   modal.querySelector('input[name=ip]').value = data?.ip ?? 'auto';
   modal.querySelector('select[name=engine]').value = data?.engine ?? 'PHP-8.1';
   modal.querySelector('input[name=root_directory]').value = data?.root_directory ?? '';
+  modal.querySelector('input[name=admin_path]').value = data?.admin_path ?? '';
 }
 
 const domainModal = document.getElementById('modal-domain');

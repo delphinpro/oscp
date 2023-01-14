@@ -18,6 +18,7 @@ use OpenServer\Services\Modules;
  * @property-read bool ssl
  * @property-read string ssl_cert_file
  * @property-read string ssl_key_file
+ * @property-read string admin_path
  */
 class Domain
 {
