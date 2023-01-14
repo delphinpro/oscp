@@ -1,5 +1,5 @@
 function http_request(url, method = 'GET', data = null) {
-  let body = null;
+  let body = data;
 
   if (method.toUpperCase() === 'POST') {
     if (!(data instanceof FormData) && data !== null) {

@@ -46,6 +46,11 @@ class Request
         return $this->body[$key] ?? $default;
     }
 
+    public function all(): array
+    {
+        return $this->body;
+    }
+
     public function except(array $keys): array
     {
         return array_filter(

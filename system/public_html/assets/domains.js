@@ -51,9 +51,6 @@ function domain_update(form) {
         rememberTabs('tab_group', '.site-groups');
         const modal = bootstrap.Modal.getInstance(document.querySelector('#modal-domain'));
         modal.hide();
-      })
-      .catch(err => {
-        message(err.message, 'danger');
       });
   } catch { }
   return false;
