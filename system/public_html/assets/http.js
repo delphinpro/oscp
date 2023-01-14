@@ -40,7 +40,15 @@ function http_request(url, method = 'GET', data = null) {
     })
     .catch(err => {
       hideLoader();
-      message(`<pre>${err.message.replace('<br />', '').trim()}</pre>`, 'danger');
+      let msg = err.message.replace('<br />', '').trim();
+      if (msg.indexOf('Stack trace') !== -1) {
+        let parts = msg.split('Stack trace:', 2);
+        msg = `<pre style="white-space:pre-wrap;">${parts[0]}</pre>
+        <pre class="m-0">Stack trace:\n${parts[1].trim()}</pre>`;
+      } else {
+        msg = `<pre style="white-space:pre-wrap;" class="m-0">${msg}</pre>`;
+      }
+      message(msg, 'danger');
       throw Error(err);
     });
 }

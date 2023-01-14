@@ -23,7 +23,7 @@ function rememberTabs(lsKey, containerClass) {
 function message(message, type = 'primary') {
   document.getElementById('flash').innerHTML =
     `<div class="container"><div class="alert alert-${type} alert-dismissible fade show my-0 mx-3">
-    <strong>${message}</strong>
+    ${message}
     <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
   </div></div>`;
 }
