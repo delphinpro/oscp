@@ -5,7 +5,7 @@ namespace OpenServer\DTO;
 use OpenServer\Traits\Makeable;
 
 /**
- * @method static Module make(string $name, string $status, bool $enabled, bool $init, string $version, string $type, string $compatible, string $license)
+ * @method static Module make(string $name, string $status, bool $enabled, bool $init, string $version, string $type, string $compatible, string $license, array $params)
  */
 class Module
 {
@@ -20,6 +20,7 @@ class Module
         readonly string $type,
         readonly string $compatible,
         readonly string $license,
+        readonly array $params = []
     ) {
     }
 
@@ -35,5 +36,15 @@ class Module
             'compatible' => $this->compatible,
             'license'    => $this->license,
         ];
+    }
+
+    public function ip(): ?string
+    {
+        return $this->params['ip'] ?? null;
+    }
+
+    public function port(): ?string
+    {
+        return $this->params['port'] ?? null;
     }
 }

@@ -61,6 +61,16 @@ class Domain
         return (bool)$this->module?->enabled;
     }
 
+    public function realIp(): string
+    {
+        return (string)$this->module?->ip();
+    }
+
+    public function realPort(): string
+    {
+        return (string)$this->module?->port();
+    }
+
     public function toArray(): array
     {
         return $this->data;

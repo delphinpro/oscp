@@ -2,6 +2,10 @@
   --bs-btn-font-weight: 500;
 }
 
+.monospace {
+  font-family: monospace !important;
+}
+
 .form-control {
   font-size: 1.2rem;
 }
@@ -108,5 +112,7 @@
   z-index: 99999;
   bottom: 1rem;
   left: 0;
+  overflow: auto;
   width: 100%;
+  max-height: 90vh;
 }

@@ -40,7 +40,13 @@
             <span class="bulb ms-2 {{ $domain->enabled ? 'bg-success' : 'bg-danger' }}"></span>
           </td>
           <td>{{ $domain->engine }}</td>
-          <td class="font-monospace">{{ $domain->ip }}</td>
+          <td class="font-monospace">
+            @if($domain->ip !== 'auto')
+              {{ $domain->ip }}
+            @else
+              {{ $domain->realIp() }}
+            @endif
+          </td>
           <td class="font-monospace {{ !$domain->isValidRoot() ? 'text-danger' : '' }}">
             <div style="max-width:100%;word-break:break-all;font-size:1rem;">
               {{ $domain->root_directory }}

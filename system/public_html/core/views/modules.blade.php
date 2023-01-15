@@ -5,6 +5,7 @@
     <tr>
       <th>Модуль</th>
       <th>Статус</th>
+      <th>IP</th>
       <th>Версия</th>
       <th>Тип</th>
       <th>Совместимость</th>
@@ -31,6 +32,9 @@
           </span>
         </td>
         <td>{{ $module->status }}</td>
+        <td class="monospace">
+          {{ $module->ip() }}{{ $module->port() ? ':'.$module->port() : '' }}
+        </td>
         <td>{{ $module->version }}</td>
         <td>{{ $module->type }}</td>
         <td>{{ $module->compatible }}</td>

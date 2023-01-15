@@ -50,8 +50,12 @@ class Modules
             $cols = explode('  ', $str);
             $cols = array_filter($cols, static fn($col) => (bool)$col);
             $cols = array_values(array_map(static fn($col) => trim($col), $cols));
+            $name = $cols[0];
+            $config = parse_ini_file(ROOT_DIR.'/config/'.$name.'/module.ini');
+            $profile = $config['profile'];
+            $settings = parse_ini_file(ROOT_DIR.'/config/'.$name.'/'.$profile.'/settings.ini', true, INI_SCANNER_RAW);
             return Module::make(
-                name: $cols[0],
+                $name,
                 status: $cols[1],
                 enabled: $cols[1] === 'Включён',
                 init: $cols[1] === 'Инициализирован',
@@ -59,6 +63,10 @@ class Modules
                 type: $cols[3],
                 compatible: $cols[4],
                 license: $cols[5],
+                params: [
+                    'ip'   => $settings['main']['ip'] ?? null,
+                    'port' => $settings['main']['port'] ?? null,
+                ]
             );
         }, $modules);
     }
