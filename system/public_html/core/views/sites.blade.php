@@ -24,6 +24,10 @@
                       <i class="bi bi-exclamation-triangle-fill fs-4 text-danger me-2"
                         title="Модуль {{ $domain->engine }} отсутствует или выключен"
                       ></i>
+                    @elseif(!$domain->isValidRoot())
+                      <i class="bi bi-exclamation-triangle-fill fs-4 text-danger me-2"
+                        title="Неверная папка домена"
+                      ></i>
                     @else
                       @if($domain->admin_path)
                         <a href="http://{{ $domain->host }}{{ $domain->admin_path }}" target="_blank">
@@ -33,11 +37,17 @@
                         <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
                       @endif
                     @endif
-                    <a href="http://{{ $domain->host }}" target="_blank">http://{{ $domain->host }}</a>
+                    @if($domain->isValidRoot())
+                      <a href="http://{{ $domain->host }}" target="_blank">http://{{ $domain->host }}</a>
+                    @else
+                      http://{{ $domain->host }}
+                    @endif
                   </div>
                 </td>
                 <td class="p-0">
-                  @if ($domain->ssl)
+                  @if (!$domain->isValidRoot())
+                    <span class="text-danger">Неверная папка домена</span>
+                  @elseif ($domain->ssl)
                     <div class="d-flex align-items-center">
                       @if($domain->admin_path)
                         <a href="https://{{ $domain->host }}{{ $domain->admin_path }}" target="_blank">
