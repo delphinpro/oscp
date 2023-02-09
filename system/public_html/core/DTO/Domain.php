@@ -71,6 +71,16 @@ class Domain
         return (string)$this->module?->port();
     }
 
+    public function siteUrl(): string
+    {
+        return 'http'.($this->ssl ? 's' : '').'://'.$this->host;
+    }
+
+    public function adminUrl(): string
+    {
+        return 'http'.($this->ssl ? 's' : '').'://'.$this->host.'/'.ltrim($this->admin_path, '/');
+    }
+
     public function toArray(): array
     {
         return $this->data;

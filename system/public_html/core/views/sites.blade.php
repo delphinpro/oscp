@@ -18,45 +18,35 @@
           <table class="table table-borderless">
             @foreach ($group as $domain)
               <tr>
-                <td class="p-0">
-                  <div class="d-flex align-items-center">
-                    @if (!$domain->isAvailable())
-                      <i class="bi bi-exclamation-triangle-fill fs-4 text-danger me-2"
-                        title="Модуль {{ $domain->engine }} отсутствует или выключен"
-                      ></i>
-                    @elseif(!$domain->isValidRoot())
-                      <i class="bi bi-exclamation-triangle-fill fs-4 text-danger me-2"
-                        title="Неверная папка домена"
-                      ></i>
+                <td style="width: 33%;">
+                  <div class="d-flex align-items-center text-nowrap">
+                    @if($domain->isValidRoot() && $domain->isAvailable())
+                      <a href="{{ $domain->siteUrl() }}" target="_blank">{{ $domain->siteUrl() }}</a>
                     @else
-                      @if($domain->admin_path)
-                        <a href="http://{{ $domain->host }}{{ $domain->admin_path }}" target="_blank">
-                          <i class="bi bi-box-arrow-in-right fs-4 text-danger me-2"></i>
-                        </a>
-                      @else
-                        <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
-                      @endif
-                    @endif
-                    @if($domain->isValidRoot())
-                      <a href="http://{{ $domain->host }}" target="_blank">http://{{ $domain->host }}</a>
-                    @else
-                      http://{{ $domain->host }}
+                      {{ $domain->siteUrl() }}
                     @endif
                   </div>
                 </td>
-                <td class="p-0">
-                  @if (!$domain->isValidRoot())
-                    <span class="text-danger">Неверная папка домена</span>
-                  @elseif ($domain->ssl)
+                <td class="ps-4">
+                  @if (!$domain->isAvailable())
                     <div class="d-flex align-items-center">
-                      @if($domain->admin_path)
-                        <a href="https://{{ $domain->host }}{{ $domain->admin_path }}" target="_blank">
-                          <i class="bi bi-box-arrow-in-right fs-4 text-danger me-2"></i>
-                        </a>
-                      @else
-                        <i class="bi bi-box-arrow-in-right fs-4 text-light me-2"></i>
-                      @endif
-                      <a href="https://{{ $domain->host }}" target="_blank">https://{{ $domain->host }}</a>
+                      <i class="bi bi-exclamation-triangle-fill fs-5 text-danger me-2 align-middle"></i>
+                      <span class="text-danger">Модуль {{ $domain->engine }} отсутствует или выключен</span>
+                    </div>
+                  @elseif(!$domain->isValidRoot())
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-exclamation-triangle-fill fs-5 text-danger me-2 align-middle"></i>
+                      <span class="text-danger">Неверная папка домена</span>
+                    </div>
+                  @elseif($domain->admin_path)
+                    <div class="d-flex">
+                      <a href="{{ $domain->adminUrl() }}"
+                        class="text-success text-decoration-none d-flex align-items-center"
+                        target="_blank"
+                      >
+                        <i class="bi bi-box-arrow-in-right me-2 fs-5"></i>
+                        <span>Вход в админку</span>
+                      </a>
                     </div>
                   @endif
                 </td>
