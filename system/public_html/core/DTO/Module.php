@@ -19,7 +19,6 @@ class Module
         readonly string $version,
         readonly string $type,
         readonly string $compatible,
-        readonly string $license,
         readonly array $params = []
     ) {
     }
@@ -34,7 +33,6 @@ class Module
             'version'    => $this->version,
             'type'       => $this->type,
             'compatible' => $this->compatible,
-            'license'    => $this->license,
         ];
     }
 

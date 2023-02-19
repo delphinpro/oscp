@@ -62,7 +62,6 @@ class Modules
                 version: $cols[2],
                 type: $cols[3],
                 compatible: $cols[4],
-                license: $cols[5],
                 params: [
                     'ip'   => $settings['main']['ip'] ?? null,
                     'port' => $settings['main']['port'] ?? null,
