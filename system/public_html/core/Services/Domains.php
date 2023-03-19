@@ -80,7 +80,6 @@ class Domains
         $ini = '';
 
         foreach ($this->domains as $domain) {
-            $logDirectory = $this->path($domain->log_directory);
             $cgiDirectory = $this->path($domain->cgi_directory);
             $rootDirectory = $this->path($domain->root_directory);
             $sslCertFile = $this->path($domain->ssl_cert_file);
@@ -93,18 +92,19 @@ class Domains
             $ini .= <<<DOMAIN
 [$domain->host]
 
-aliases        = $domain->aliases
-enabled        = $enabled
-engine         = $domain->engine
-ip             = $domain->ip
-log_directory  = $logDirectory
-log_format     = $domain->log_format
-cgi_directory  = $cgiDirectory
-root_directory = $rootDirectory
-self_config    = $selfConfig
-ssl            = $ssl
-ssl_cert_file  = $sslCertFile
-ssl_key_file   = $sslKeyFile
+aliases         = $domain->aliases
+enabled         = $enabled
+engine          = $domain->engine
+ip              = $domain->ip
+log_format      = $domain->log_format
+cgi_directory   = $cgiDirectory
+root_directory  = $rootDirectory
+self_config     = $selfConfig
+ssl             = $ssl
+ssl_cert_file   = $sslCertFile
+ssl_key_file    = $sslKeyFile
+project_modules = $domain->project_modules
+project_command = $domain->project_command
 DOMAIN;
             $ini .= PHP_EOL;
             foreach ($domain->toArray() as $key => $value) {
@@ -114,7 +114,6 @@ DOMAIN;
                     'enabled',
                     'engine',
                     'ip',
-                    'log_directory',
                     'log_format',
                     'cgi_directory',
                     'root_directory',
@@ -122,9 +121,14 @@ DOMAIN;
                     'ssl',
                     'ssl_cert_file',
                     'ssl_key_file',
+                    'project_modules',
+                    'project_command',
                 ])) {
                     if (is_bool($value)) {
                         $value = $value ? 'on' : 'off';
+                    }
+                    if (is_null($value)) {
+                        $value = 'null';
                     }
                     $ini .= $key.' = '.$value.PHP_EOL;
                 }
@@ -222,9 +226,20 @@ DOMAIN;
 
     private function readConfig(): void
     {
-        $iniSections = parse_ini_file(ROOT_DIR.'/config/domains.ini', true, INI_SCANNER_TYPED);
+        $iniSections = parse_ini_file(ROOT_DIR.'/config/domains.ini', true, INI_SCANNER_RAW);
 
-        foreach ($iniSections as $host => $domain) {
+        foreach ($iniSections as $host => &$domain) {
+            foreach ($domain as $key => $value) {
+                if (in_array(strtolower($value), ['on', 'true', 'yes'])) {
+                    $domain[$key] = true;
+                }
+                if (in_array(strtolower($value), ['off', 'false', 'no', 'none'])) {
+                    $domain[$key] = false;
+                }
+                if (strtolower($value) === 'null') {
+                    $domain[$key] = null;
+                }
+            }
             $this->domains[$host] = new Domain(['host' => $host, ...$domain]);
         }
     }

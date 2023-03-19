@@ -115,18 +115,19 @@
           </div>
           <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
           <pre class="text-bg-dark p-3">[api.ospanel]
-aliases        =
-enabled        = on
-engine         = PHP-8.1
-ip             = auto
-log_directory  = &#123;root_dir&#125;\logs\domains
-log_format     = combined
-cgi_directory  = &#123;root_dir&#125;\system\cgi-bin
-root_directory = &#123;root_dir&#125;\system\public_html
-self_config    = off
-ssl            = off
-ssl_cert_file  = &#123;root_dir&#125;\user\ssl\default\cert.crt
-ssl_key_file   = &#123;root_dir&#125;\user\ssl\default\cert.key</pre>
+aliases         =
+enabled         = on
+engine          = PHP-8.1
+ip              = auto
+log_format      = combined
+cgi_directory   = &#123;root_dir&#125;\system\cgi-bin
+root_directory  = &#123;root_dir&#125;\system\public_html
+self_config     = off
+ssl             = off
+ssl_cert_file   = &#123;root_dir&#125;\user\ssl\default\cert.crt
+ssl_key_file    = &#123;root_dir&#125;\user\ssl\default\cert.key
+project_modules =
+project_command =</pre>
           <p>2. Откройте интерфейс командной строки и выполните команду:</p>
           <pre class="text-bg-dark p-3">osp on PHP-8.1</pre>
           <p>3. Обновите эту страницу</p>
@@ -235,6 +236,18 @@ ssl_key_file   = &#123;root_dir&#125;\user\ssl\default\cert.key</pre>
             <label class="col-sm-3 col-form-label">DOCUMENT_ROOT</label>
             <div class="col-sm-9">
               <input class="form-control font-monospace" name="root_directory" required type="text">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">Project command</label>
+            <div class="col-sm-9">
+              <input class="form-control font-monospace" name="project_command" type="text">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">Project modules</label>
+            <div class="col-sm-9">
+              <input class="form-control font-monospace" name="project_modules" type="text">
             </div>
           </div>
           <p><b><i><small>Custom settings</small></i></b></p>
