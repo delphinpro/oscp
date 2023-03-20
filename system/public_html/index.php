@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 use OpenServer\Controllers\DomainController;
 use OpenServer\Controllers\IndexController;

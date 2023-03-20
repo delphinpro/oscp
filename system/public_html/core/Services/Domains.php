@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\Services;
 
@@ -145,6 +150,7 @@ DOMAIN;
         return array_filter($this->domains, static function (Domain $d) use ($filter) {
             if ($d->host === API_DOMAIN) return false;
             if ($filter) return $d->enabled;
+
             return true;
         });
     }
@@ -216,6 +222,7 @@ DOMAIN;
                 $l2 = count(explode('.', $d2));
                 if ($d1 === $d2) return 0;
                 if ($l1 === $l2) return $d1 < $d2 ? -1 : 1;
+
                 return $l1 - $l2;
             });
         }

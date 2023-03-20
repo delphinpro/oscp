@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\Services;
 
@@ -35,6 +40,7 @@ class Modules
                 return $module;
             }
         }
+
         return null;
     }
 
@@ -54,6 +60,7 @@ class Modules
             $config = parse_ini_file(ROOT_DIR.'/config/'.$name.'/module.ini');
             $profile = $config['profile'];
             $settings = parse_ini_file(ROOT_DIR.'/config/'.$name.'/'.$profile.'/settings.ini', true, INI_SCANNER_RAW);
+
             return Module::make(
                 $name,
                 status: $cols[1],

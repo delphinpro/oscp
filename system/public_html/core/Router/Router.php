@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\Router;
 
@@ -9,6 +14,7 @@ namespace OpenServer\Router;
 class Router
 {
     private Request $request;
+
     private array $supportedHttpMethods = [
         'GET',
         'POST',
@@ -79,6 +85,7 @@ class Router
         if ($result === '') {
             return '/';
         }
+
         return $result;
     }
 

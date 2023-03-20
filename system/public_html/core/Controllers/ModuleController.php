@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\Controllers;
 
@@ -11,24 +16,28 @@ class ModuleController extends Controller
     public function init(Request $request): Response
     {
         $module = $request->input('module');
+
         return $this->action('init', $module);
     }
 
     public function restart(Request $request): Response
     {
         $module = $request->input('module');
+
         return $this->action('restart', $module);
     }
 
     public function on(Request $request): Response
     {
         $module = $request->input('module');
+
         return $this->action('on', $module);
     }
 
     public function off(Request $request): Response
     {
         $module = $request->input('module');
+
         return $this->action('off', $module);
     }
 

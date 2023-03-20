@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 use JetBrains\PhpStorm\NoReturn;
 
@@ -78,11 +83,13 @@ function clearString(string $string): array|string|null
 {
     $string = trim($string);
     $string = str_replace(["\r", ""], "", $string);
+
     return preg_replace('/\[\d+m/', '', $string);
 }
 
 /**
  * @param $url
+ *
  * @return null|array|string|string[]
  * @throws \RuntimeException
  */

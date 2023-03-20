@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\Router;
 
@@ -7,8 +12,11 @@ use eftec\bladeone\BladeOne;
 class Response
 {
     protected string|array|null $content = null;
+
     protected int $status = 200;
+
     protected ?string $message = null;
+
     protected bool $json = false;
 
     public static function view(string $view, array $data): static
@@ -35,6 +43,7 @@ class Response
     {
         if ($this->json) {
             header('Content-Type: application/json');
+
             return json_encode([
                 'status'  => $this->status,
                 'message' => $this->message,
@@ -43,18 +52,21 @@ class Response
         }
 
         header('Content-Type: text/html');
+
         return $this->content;
     }
 
     public function status(int $status): static
     {
         $this->status = $status;
+
         return $this;
     }
 
     public function message(string $message): static
     {
         $this->message = $message;
+
         return $this;
     }
 
@@ -62,12 +74,14 @@ class Response
     public function setContent(string|array|null $content): static
     {
         $this->content = $content;
+
         return $this;
     }
 
     public function asJson(): static
     {
         $this->json = true;
+
         return $this;
     }
 }

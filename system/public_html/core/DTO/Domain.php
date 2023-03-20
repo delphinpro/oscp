@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\DTO;
 
@@ -9,12 +14,12 @@ use OpenServer\Services\Modules;
  * @property-read string aliases
  * @property-read string engine
  * @property-read string root_directory
- * @property-read bool enabled
+ * @property-read bool   enabled
  * @property-read string cgi_directory
  * @property-read string ip
  * @property-read string log_format
- * @property-read bool self_config
- * @property-read bool ssl
+ * @property-read bool   self_config
+ * @property-read bool   ssl
  * @property-read string ssl_cert_file
  * @property-read string ssl_key_file
  * @property-read string admin_path
@@ -24,6 +29,7 @@ use OpenServer\Services\Modules;
 class Domain
 {
     protected array $data;
+
     protected ?Module $module;
 
     public function __construct(array $data)

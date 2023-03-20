@@ -1,4 +1,9 @@
 <?php
+/*
+ * OSPanel Web Dashboard
+ * Copyright (c) 2023.
+ * Licensed under MIT License
+ */
 
 namespace OpenServer\Router;
 
@@ -28,6 +33,7 @@ namespace OpenServer\Router;
 class Request
 {
     protected array $requestVariables = [];
+
     protected ?array $body = null;
 
     public function __construct()
