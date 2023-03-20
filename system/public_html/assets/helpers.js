@@ -26,10 +26,22 @@ function rememberTabs(lsKey, containerClass) {
     });
 }
 
+let messageTimeout;
+
 function message(message, type = 'primary') {
-    document.getElementById('flash').innerHTML =
+    message = message
+        .trim()
+        .replaceAll('\n', '<br>')
+        .replaceAll('\r', '')
+        .replaceAll('', '')
+        .replace('[93m', '')
+        .replace('[0m', '');
+    const el = document.getElementById('flash');
+    el.innerHTML =
         `<div class="container"><div class="alert alert-${type} alert-dismissible fade show my-0 mx-3">
-    ${message}
-    <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
-  </div></div>`;
+            ${message}
+            <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+         </div></div>`;
+    clearTimeout(messageTimeout);
+    messageTimeout = setTimeout(() => el.innerHTML = '', 5000);
 }

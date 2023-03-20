@@ -4,6 +4,16 @@
  * Licensed under MIT License
  */
 
+class Api {
+    request(url) {
+        return fetch(window.API_URL + url, {
+            method: 'GET',
+        });
+    }
+}
+
+window.api = new Api();
+
 function http_request(url, method = 'GET', data = null) {
     let body = data;
 
@@ -70,6 +80,7 @@ function http_post(url, data = {}) {
 let hasError = false;
 
 function check_api_host() {
+    if (!window.ping) return;
     fetch(ENTRY_POINT + '/ping')
         .then(res => res.json())
         .then(() => {

@@ -10,7 +10,7 @@ namespace OpenServer\DTO;
 use OpenServer\Traits\Makeable;
 
 /**
- * @method static Module make(string $name, string $status, bool $enabled, bool $init, string $version, string $type, string $compatible, string $license, array $params)
+ * @method static Module make(string $name, string $status, bool $enabled, bool $init, string $version, string $type, string $compatible, array $params)
  */
 class Module
 {

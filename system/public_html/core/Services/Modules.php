@@ -62,7 +62,7 @@ class Modules
             $settings = parse_ini_file(ROOT_DIR.'/config/'.$name.'/'.$profile.'/settings.ini', true, INI_SCANNER_RAW);
 
             return Module::make(
-                $name,
+                name: $name,
                 status: $cols[1],
                 enabled: $cols[1] === 'Включён',
                 init: $cols[1] === 'Инициализирован',

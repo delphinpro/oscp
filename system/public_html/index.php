@@ -41,10 +41,7 @@ try {
 
     $router->get('/api/main', IndexController::class);
 
-    $router->post('/api/module/init', [ModuleController::class, 'init']);
-    $router->post('/api/module/restart', [ModuleController::class, 'restart']);
-    $router->post('/api/module/on', [ModuleController::class, 'on']);
-    $router->post('/api/module/off', [ModuleController::class, 'off']);
+    $router->post('/api/module', [ModuleController::class, 'all']);
 
     $router->post('/api/domain/on', [DomainController::class, 'on']);
     $router->post('/api/domain/off', [DomainController::class, 'off']);
