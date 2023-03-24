@@ -15,3 +15,15 @@ http_get('/main')
         rememberTabs('tab_group', '.site-groups');
         rememberTabs('tab_main', '.main-tabs');
     });
+
+document.addEventListener('click', function (e) {
+    let link = e.target.closest('.open-console');
+    if (link) {
+        e.preventDefault();
+        e.stopPropagation();
+        let href = link.dataset.api;
+
+        api.request(href)
+            .then(res => res.text());
+    }
+});

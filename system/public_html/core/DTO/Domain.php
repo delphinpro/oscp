@@ -89,6 +89,11 @@ class Domain
         return 'http'.($this->ssl ? 's' : '').'://'.$this->host.'/'.ltrim($this->admin_path, '/');
     }
 
+    public function console(): string
+    {
+        return '/project/cli/'.$this->host;
+    }
+
     public function toArray(): array
     {
         return $this->data;

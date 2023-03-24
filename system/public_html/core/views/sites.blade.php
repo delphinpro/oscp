@@ -38,16 +38,22 @@
                       <i class="bi bi-exclamation-triangle-fill fs-5 text-danger me-2 align-middle"></i>
                       <span class="text-danger">Неверная папка домена</span>
                     </div>
-                  @elseif($domain->admin_path)
-                    <div class="d-flex">
+                  @else
+                    <a href="javascript:" data-api="{{ $domain->console() }}"
+                      class="open-console btn btn-secondary btn-sm"
+                      target="_blank"
+                    >>_ Консоль</a>
+                    @if($domain->admin_path)
                       <a href="{{ $domain->adminUrl() }}"
-                        class="text-success text-decoration-none d-flex align-items-center"
+                        class="btn btn-secondary btn-sm"
                         target="_blank"
                       >
-                        <i class="bi bi-box-arrow-in-right me-2 fs-5"></i>
-                        <span>Вход в админку</span>
+                        <span class="d-flex align-items-center">
+                          <i class="bi bi-box-arrow-in-right me-2 -fs-5"></i>
+                          <span>Вход в админку</span>
+                        </span>
                       </a>
-                    </div>
+                    @endif
                   @endif
                 </td>
               </tr>
