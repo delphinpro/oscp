@@ -92,6 +92,7 @@ class Domains
             $enabled = $domain->enabled ? 'on' : 'off';
             $ssl = $domain->ssl ? 'on' : 'off';
             $selfConfig = $domain->self_config ? 'on' : 'off';
+            $projectUseWinEnv = $domain->project_use_win_env ? 'on' : 'off';
 
             $ini .= PHP_EOL;
             $ini .= <<<DOMAIN
@@ -110,6 +111,7 @@ ssl_cert_file   = $sslCertFile
 ssl_key_file    = $sslKeyFile
 project_modules = $domain->project_modules
 project_command = $domain->project_command
+project_use_win_env = $projectUseWinEnv
 DOMAIN;
             $ini .= PHP_EOL;
             foreach ($domain->toArray() as $key => $value) {
@@ -128,6 +130,7 @@ DOMAIN;
                     'ssl_key_file',
                     'project_modules',
                     'project_command',
+                    'project_use_win_env',
                 ])) {
                     if (is_bool($value)) {
                         $value = $value ? 'on' : 'off';

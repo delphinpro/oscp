@@ -20,6 +20,7 @@
  * @property {string} ssl_key_file
  * @property {string} project_modules
  * @property {string} project_command
+ * @property {boolean} project_use_win_env
  */
 
 function domain_action(action, host) {
@@ -81,6 +82,7 @@ function updateModalForm(modal, data) {
     modal.querySelector('input[name=admin_path]').value = data?.admin_path ?? '';
     modal.querySelector('input[name=project_modules]').value = data?.project_modules ?? '';
     modal.querySelector('input[name=project_command]').value = data?.project_command ?? '';
+    modal.querySelector('input[type=checkbox][name=project_use_win_env]').checked = data?.project_use_win_env ?? false;
 }
 
 const domainModal = document.getElementById('modal-domain');
