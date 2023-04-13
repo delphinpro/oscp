@@ -91,8 +91,8 @@ class Domains
             $sslKeyFile = $this->path($domain->ssl_key_file);
             $enabled = $domain->enabled ? 'on' : 'off';
             $ssl = $domain->ssl ? 'on' : 'off';
-            $selfConfig = $domain->self_config ? 'on' : 'off';
-            $projectUseWinEnv = $domain->project_use_win_env ? 'on' : 'off';
+            $autoConfigure = $domain->auto_configure ? 'on' : 'off';
+            $projectUseSysEnv = $domain->project_use_sys_env ? 'on' : 'off';
 
             $ini .= PHP_EOL;
             $ini .= <<<DOMAIN
@@ -105,13 +105,13 @@ ip              = $domain->ip
 log_format      = $domain->log_format
 cgi_directory   = $cgiDirectory
 root_directory  = $rootDirectory
-self_config     = $selfConfig
+auto_configure  = $autoConfigure
 ssl             = $ssl
 ssl_cert_file   = $sslCertFile
 ssl_key_file    = $sslKeyFile
-project_modules = $domain->project_modules
-project_command = $domain->project_command
-project_use_win_env = $projectUseWinEnv
+project_add_modules = $domain->project_add_modules
+project_add_command = $domain->project_add_command
+project_use_sys_env = $projectUseSysEnv
 DOMAIN;
             $ini .= PHP_EOL;
             foreach ($domain->toArray() as $key => $value) {
@@ -124,13 +124,13 @@ DOMAIN;
                     'log_format',
                     'cgi_directory',
                     'root_directory',
-                    'self_config',
+                    'auto_configure',
                     'ssl',
                     'ssl_cert_file',
                     'ssl_key_file',
-                    'project_modules',
-                    'project_command',
-                    'project_use_win_env',
+                    'project_add_modules',
+                    'project_add_command',
+                    'project_use_sys_env',
                 ])) {
                     if (is_bool($value)) {
                         $value = $value ? 'on' : 'off';
@@ -159,6 +159,8 @@ DOMAIN;
     }
 
     /**
+     * @param  bool  $filter
+     *
      * @return array
      */
     private function groupDomains(bool $filter = false): array
@@ -198,11 +200,9 @@ DOMAIN;
         foreach ($input as $groupName => $group) {
             $parts = explode('.', $groupName);
             $result[$groupName] = $group;
-            if (count($parts) > 1) {
-                if ($input[$parts[1]][$groupName] ?? null) {
-                    $result[$groupName][$groupName] = $input[$parts[1]][$groupName] ?? null;
-                    // dd($groupName, $parts, $result);
-                }
+            if ((count($parts) > 1) && $input[$parts[1]][$groupName] ?? null) {
+                $result[$groupName][$groupName] = $input[$parts[1]][$groupName] ?? null;
+                // dd($groupName, $parts, $result);
             }
         }
         // dd($input);

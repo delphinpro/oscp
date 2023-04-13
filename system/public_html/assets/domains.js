@@ -14,13 +14,13 @@
  * @property {string} cgi_directory
  * @property {string} ip
  * @property {string} log_format
- * @property {boolean} self_config
+ * @property {boolean} auto_configure
  * @property {boolean} ssl
  * @property {string} ssl_cert_file
  * @property {string} ssl_key_file
- * @property {string} project_modules
- * @property {string} project_command
- * @property {boolean} project_use_win_env
+ * @property {string} project_add_modules
+ * @property {string} project_add_command
+ * @property {boolean} project_use_sys_env
  */
 
 function domain_action(action, host) {
@@ -80,9 +80,9 @@ function updateModalForm(modal, data) {
     modal.querySelector('select[name=engine]').value = data?.engine ?? 'PHP-8.1';
     modal.querySelector('input[name=root_directory]').value = data?.root_directory ?? '';
     modal.querySelector('input[name=admin_path]').value = data?.admin_path ?? '';
-    modal.querySelector('input[name=project_modules]').value = data?.project_modules ?? '';
-    modal.querySelector('input[name=project_command]').value = data?.project_command ?? '';
-    modal.querySelector('input[type=checkbox][name=project_use_win_env]').checked = data?.project_use_win_env ?? false;
+    modal.querySelector('input[name=project_add_modules]').value = data?.project_add_modules ?? '';
+    modal.querySelector('input[name=project_add_command]').value = data?.project_add_command ?? '';
+    modal.querySelector('input[type=checkbox][name=project_use_sys_env]').checked = data?.project_use_sys_env ?? false;
 }
 
 const domainModal = document.getElementById('modal-domain');
