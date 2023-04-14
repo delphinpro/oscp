@@ -19,7 +19,7 @@
  * @property {string} ssl_cert_file
  * @property {string} ssl_key_file
  * @property {string} project_add_modules
- * @property {string} project_add_command
+ * @property {string} project_add_commands
  * @property {boolean} project_use_sys_env
  */
 
@@ -81,7 +81,7 @@ function updateModalForm(modal, data) {
     modal.querySelector('input[name=root_directory]').value = data?.root_directory ?? '';
     modal.querySelector('input[name=admin_path]').value = data?.admin_path ?? '';
     modal.querySelector('input[name=project_add_modules]').value = data?.project_add_modules ?? '';
-    modal.querySelector('input[name=project_add_command]').value = data?.project_add_command ?? '';
+    modal.querySelector('input[name=project_add_commands]').value = data?.project_add_commands ?? '';
     modal.querySelector('input[type=checkbox][name=project_use_sys_env]').checked = data?.project_use_sys_env ?? false;
 }
 

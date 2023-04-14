@@ -98,20 +98,20 @@ class Domains
             $ini .= <<<DOMAIN
 [$domain->host]
 
-aliases         = $domain->aliases
-enabled         = $enabled
-engine          = $domain->engine
-ip              = $domain->ip
-log_format      = $domain->log_format
-cgi_directory   = $cgiDirectory
-root_directory  = $rootDirectory
-auto_configure  = $autoConfigure
-ssl             = $ssl
-ssl_cert_file   = $sslCertFile
-ssl_key_file    = $sslKeyFile
-project_add_modules = $domain->project_add_modules
-project_add_command = $domain->project_add_command
-project_use_sys_env = $projectUseSysEnv
+aliases              = $domain->aliases
+enabled              = $enabled
+engine               = $domain->engine
+ip                   = $domain->ip
+log_format           = $domain->log_format
+cgi_directory        = $cgiDirectory
+root_directory       = $rootDirectory
+auto_configure       = $autoConfigure
+ssl                  = $ssl
+ssl_cert_file        = $sslCertFile
+ssl_key_file         = $sslKeyFile
+project_add_modules  = $domain->project_add_modules
+project_add_commands = $domain->project_add_commands
+project_use_sys_env  = $projectUseSysEnv
 DOMAIN;
             $ini .= PHP_EOL;
             foreach ($domain->toArray() as $key => $value) {
@@ -129,7 +129,7 @@ DOMAIN;
                     'ssl_cert_file',
                     'ssl_key_file',
                     'project_add_modules',
-                    'project_add_command',
+                    'project_add_commands',
                     'project_use_sys_env',
                 ])) {
                     if (is_bool($value)) {

@@ -24,7 +24,7 @@ use OpenServer\Services\Modules;
  * @property-read string ssl_key_file
  * @property-read string admin_path
  * @property-read string project_add_modules
- * @property-read string project_add_command
+ * @property-read string project_add_commands
  * @property-read bool   project_use_sys_env
  */
 class Domain
@@ -37,21 +37,21 @@ class Domain
     {
         $this->data = [
             ...$data,
-            'host'                => $data['host'],
-            'aliases'             => $data['aliases'] ?? '',
-            'engine'              => $data['engine'] ?? 'PHP-8.1',
-            'root_directory'      => $this->path($data['root_directory']),
-            'enabled'             => (bool)($data['enabled'] ?? true),
-            'cgi_directory'       => $this->path($data['cgi_directory'] ?? ''),
-            'ip'                  => $data['ip'] ?? 'auto',
-            'log_format'          => $data['log_format'] ?? 'combined',
-            'auto_configure'      => (bool)($data['auto_configure'] ?? true),
-            'ssl'                 => (bool)($data['ssl'] ?? false),
-            'ssl_cert_file'       => $this->path($data['ssl_cert_file'] ?? '{root_dir}/user/ssl/default/cert.crt'),
-            'ssl_key_file'        => $this->path($data['ssl_key_file'] ?? '{root_dir}/user/ssl/default/cert.key'),
-            'project_add_modules'     => $data['project_add_modules'] ?? '',
-            'project_add_command'     => str_replace('&#38;', '&', $data['project_add_command'] ?? ''),
-            'project_use_sys_env' => (bool)($data['project_use_sys_env'] ?? false),
+            'host'                 => $data['host'],
+            'aliases'              => $data['aliases'] ?? '',
+            'engine'               => $data['engine'] ?? 'PHP-8.1',
+            'root_directory'       => $this->path($data['root_directory']),
+            'enabled'              => (bool)($data['enabled'] ?? true),
+            'cgi_directory'        => $this->path($data['cgi_directory'] ?? ''),
+            'ip'                   => $data['ip'] ?? 'auto',
+            'log_format'           => $data['log_format'] ?? 'combined',
+            'auto_configure'       => (bool)($data['auto_configure'] ?? true),
+            'ssl'                  => (bool)($data['ssl'] ?? false),
+            'ssl_cert_file'        => $this->path($data['ssl_cert_file'] ?? '{root_dir}/user/ssl/default/cert.crt'),
+            'ssl_key_file'         => $this->path($data['ssl_key_file'] ?? '{root_dir}/user/ssl/default/cert.key'),
+            'project_add_modules'  => $data['project_add_modules'] ?? '',
+            'project_add_commands' => str_replace('&#38;', '&', $data['project_add_commands'] ?? ''),
+            'project_use_sys_env'  => (bool)($data['project_use_sys_env'] ?? false),
         ];
         $this->module = Modules::make()->get($this->engine);
     }
