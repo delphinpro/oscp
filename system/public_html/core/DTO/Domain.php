@@ -40,7 +40,7 @@ class Domain
             'host'                 => $data['host'],
             'aliases'              => $data['aliases'] ?? '',
             'engine'               => $data['engine'] ?? 'PHP-8.1',
-            'root_directory'       => $this->path($data['root_directory']),
+            'root_directory'       => $this->path($data['root_directory'] ?? ''),
             'enabled'              => (bool)($data['enabled'] ?? true),
             'cgi_directory'        => $this->path($data['cgi_directory'] ?? ''),
             'ip'                   => $data['ip'] ?? 'auto',
