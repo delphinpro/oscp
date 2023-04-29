@@ -22,6 +22,7 @@ function module_action(action, module) {
                             .then(res => {
                                 if (res) {
                                     document.getElementById('modules').innerHTML = res;
+                                    document.dispatchEvent(new CustomEvent('modules_update'));
                                 }
                                 window.ping = true;
                                 hideLoader();
@@ -37,6 +38,7 @@ function module_action(action, module) {
                     .then(res => {
                         if (res) {
                             document.getElementById('modules').innerHTML = res;
+                            document.dispatchEvent(new CustomEvent('modules_update'));
                         }
                         hideLoader();
                     });

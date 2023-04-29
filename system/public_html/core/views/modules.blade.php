@@ -1,6 +1,11 @@
 @php /** @var \OpenServer\DTO\Module[] $modules */ @endphp
 
-<table class="table table-sm table-hover">
+<div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" role="switch" id="hide-off-modules">
+  <label class="form-check-label" for="hide-off-modules">Скрывать отключённые</label>
+</div>
+
+<table class="table table-sm table-hover" id="table-modules">
   <thead>
     <tr>
       <th>Модуль</th>
@@ -21,7 +26,7 @@
   </thead>
   <tbody>
     @foreach ($modules as $module)
-      <tr>
+      <tr class="{{ $module->enabled ? '' : 'state-off' }}">
         <td>
           <span class="d-flex align-items-center">
             <span class="bulb me-2

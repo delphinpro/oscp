@@ -101,6 +101,10 @@
   border-top-color: transparent;
 }
 
+#table-modules.hide-off-modules .state-off {
+  display: none;
+}
+
 #error { display: none; }
 
 #error.show { display: block; }
