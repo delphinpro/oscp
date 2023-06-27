@@ -46,7 +46,7 @@ class Modules
 
     private function readConfig(): void
     {
-        $modules = httpRequest('/mod/list/all/');
+        $modules = httpRequest('/modules');
         $modules = explode("\n", $modules);
         $modules = array_filter($modules, static function ($str) {
             return !(str_contains($str, 'МОДУЛЬ') || str_contains($str, '—————'));

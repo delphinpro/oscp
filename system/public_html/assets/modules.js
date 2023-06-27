@@ -8,11 +8,11 @@ function module_action(action, module) {
     showLoader();
     if (action === 'restart') {
         window.ping = false;
-        api.request(`/mod/off/${module}/`)
+        api.request(`/off/${module}/`)
             .then(res => res.text())
             .then(res => message(res))
             .then(() => {
-                api.request(`/mod/on/${module}/`)
+                api.request(`/on/${module}/`)
                     .then(res => res.text())
                     .then(res => {
                         message(res);
@@ -30,7 +30,7 @@ function module_action(action, module) {
                     });
             });
     } else {
-        api.request(`/mod/${action}/${module}/`)
+        api.request(`/${action}/${module}/`)
             .then(res => res.text())
             .then(res => {
                 message(res);
