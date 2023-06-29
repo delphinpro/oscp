@@ -200,7 +200,7 @@ DOMAIN;
         foreach ($input as $groupName => $group) {
             $parts = explode('.', $groupName);
             $result[$groupName] = $group;
-            if ((count($parts) > 1) && $input[$parts[1]][$groupName] ?? null) {
+            if ((count($parts) > 1) && isset($input[$parts[1]][$groupName])) {
                 $result[$groupName][$groupName] = $input[$parts[1]][$groupName] ?? null;
                 // dd($groupName, $parts, $result);
             }
