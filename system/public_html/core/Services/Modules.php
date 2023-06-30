@@ -10,15 +10,21 @@ namespace OpenServer\Services;
 use OpenServer\DTO\Module;
 use OpenServer\Traits\Makeable;
 
-/**
- * @method static Modules make()
- */
 class Modules
 {
-    use Makeable;
-
     /** @var \OpenServer\DTO\Module[] */
     protected array $modules;
+
+    private static ?Modules $instance = null;
+
+    public static function make(): Modules
+    {
+        if (!self::$instance) {
+            self::$instance = new Modules();
+        }
+
+        return self::$instance;
+    }
 
     public function __construct()
     {
