@@ -49,7 +49,7 @@
           </td>
           <td class="font-monospace {{ !$domain->isValidRoot() ? 'text-danger' : 'text-muted' }}">
             <div style="max-width:100%;word-break:break-all;font-size:1rem;">
-              {{ $domain->root_directory }}
+              {{ $domain->public_dir }}
               @if (!$domain->isValidRoot())
                 <i class="bi bi-exclamation-triangle-fill text-danger" title="Путь не существует"></i>
               @endif

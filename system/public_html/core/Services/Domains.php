@@ -85,8 +85,8 @@ class Domains
         $ini = '';
 
         foreach ($this->domains as $domain) {
-            $cgiDirectory = $this->path($domain->cgi_directory);
-            $rootDirectory = $this->path($domain->root_directory);
+            $cgiDirectory = $this->path($domain->cgi_dir);
+            $rootDirectory = $this->path($domain->public_dir);
             $sslCertFile = $this->path($domain->ssl_cert_file);
             $sslKeyFile = $this->path($domain->ssl_key_file);
             $enabled = $domain->enabled ? 'on' : 'off';
@@ -103,8 +103,8 @@ enabled              = $enabled
 engine               = $domain->engine
 ip                   = $domain->ip
 log_format           = $domain->log_format
-cgi_directory        = $cgiDirectory
-root_directory       = $rootDirectory
+cgi_dir              = $cgiDirectory
+public_dir           = $rootDirectory
 auto_configure       = $autoConfigure
 ssl                  = $ssl
 ssl_cert_file        = $sslCertFile
@@ -122,8 +122,8 @@ DOMAIN;
                     'engine',
                     'ip',
                     'log_format',
-                    'cgi_directory',
-                    'root_directory',
+                    'cgi_dir',
+                    'public_dir',
                     'auto_configure',
                     'ssl',
                     'ssl_cert_file',

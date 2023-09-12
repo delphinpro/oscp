@@ -13,9 +13,9 @@ use OpenServer\Services\Modules;
  * @property-read string host
  * @property-read string aliases
  * @property-read string engine
- * @property-read string root_directory
+ * @property-read string public_dir
  * @property-read bool   enabled
- * @property-read string cgi_directory
+ * @property-read string cgi_dir
  * @property-read string ip
  * @property-read string log_format
  * @property-read bool   auto_configure
@@ -40,9 +40,9 @@ class Domain
             'host'                 => $data['host'],
             'aliases'              => $data['aliases'] ?? '',
             'engine'               => $data['engine'] ?? 'PHP-8.1',
-            'root_directory'       => $this->path($data['root_directory'] ?? ''),
+            'public_dir'       => $this->path($data['public_dir'] ?? ''),
             'enabled'              => (bool)($data['enabled'] ?? true),
-            'cgi_directory'        => $this->path($data['cgi_directory'] ?? ''),
+            'cgi_dir'              => $this->path($data['cgi_dir'] ?? ''),
             'ip'                   => $data['ip'] ?? 'auto',
             'log_format'           => $data['log_format'] ?? 'combined',
             'auto_configure'       => (bool)($data['auto_configure'] ?? true),
@@ -64,7 +64,7 @@ class Domain
 
     public function isValidRoot(): bool
     {
-        return file_exists($this->root_directory);
+        return file_exists($this->public_dir);
     }
 
     public function isAvailable(): bool

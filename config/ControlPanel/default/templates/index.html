@@ -122,8 +122,8 @@ enabled         = on
 engine          = PHP-8.1
 ip              = auto
 log_format      = combined
-cgi_directory   = &#123;root_dir&#125;\system\cgi-bin
-root_directory  = &#123;root_dir&#125;\system\public_html
+cgi_dir         = &#123;root_dir&#125;\system\cgi-bin
+public_dir      = &#123;root_dir&#125;\system\public_html
 auto_configure  = on
 ssl             = off
 ssl_cert_file   = &#123;root_dir&#125;\user\ssl\default\cert.crt
@@ -237,7 +237,7 @@ project_add_commands =</pre>
           <div class="row mb-3">
             <label class="col-sm-3 col-form-label">DOCUMENT_ROOT</label>
             <div class="col-sm-9">
-              <input class="form-control font-monospace" name="root_directory" required type="text">
+              <input class="form-control font-monospace" name="public_dir" required type="text">
             </div>
           </div>
           <div class="row mb-3">
