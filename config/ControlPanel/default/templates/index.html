@@ -108,7 +108,7 @@
   </nav><!-- // .navbar -->
 
   <div class="main">
-    <div class="container">
+    <div class="container-xl">
       <div class="content bg-white shadow p-3">
         <div id="error">
           <div class="alert alert-danger">
@@ -128,6 +128,7 @@ auto_configure  = on
 ssl             = off
 ssl_cert_file   = &#123;root_dir&#125;\user\ssl\default\cert.crt
 ssl_key_file    = &#123;root_dir&#125;\user\ssl\default\cert.key
+project_home_dir     =
 project_add_modules  =
 project_add_commands =</pre>
           <p>2. Откройте интерфейс командной строки и выполните команду:</p>
@@ -235,9 +236,15 @@ project_add_commands =</pre>
             </div>
           </div>
           <div class="row mb-3">
-            <label class="col-sm-3 col-form-label">DOCUMENT_ROOT</label>
+            <label class="col-sm-3 col-form-label">Public dir</label>
             <div class="col-sm-9">
               <input class="form-control font-monospace" name="public_dir" required type="text">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">Project dir</label>
+            <div class="col-sm-9">
+              <input class="form-control font-monospace" name="project_home_dir" required type="text">
             </div>
           </div>
           <div class="row mb-3">

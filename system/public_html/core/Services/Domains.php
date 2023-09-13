@@ -87,6 +87,7 @@ class Domains
         foreach ($this->domains as $domain) {
             $cgiDirectory = $this->path($domain->cgi_dir);
             $rootDirectory = $this->path($domain->public_dir);
+            $projectDir = $this->path($domain->project_home_dir);
             $sslCertFile = $this->path($domain->ssl_cert_file);
             $sslKeyFile = $this->path($domain->ssl_key_file);
             $enabled = $domain->enabled ? 'on' : 'off';
@@ -105,6 +106,7 @@ ip                   = $domain->ip
 log_format           = $domain->log_format
 cgi_dir              = $cgiDirectory
 public_dir           = $rootDirectory
+project_home_dir     = $projectDir
 auto_configure       = $autoConfigure
 ssl                  = $ssl
 ssl_cert_file        = $sslCertFile
@@ -124,6 +126,7 @@ DOMAIN;
                     'log_format',
                     'cgi_dir',
                     'public_dir',
+                    'project_home_dir',
                     'auto_configure',
                     'ssl',
                     'ssl_cert_file',

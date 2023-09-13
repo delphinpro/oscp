@@ -10,6 +10,7 @@
  * @property {string} aliases
  * @property {string} engine
  * @property {string} public_dir
+ * @property {string} project_home_dir
  * @property {boolean} enabled
  * @property {string} cgi_dir
  * @property {string} ip
@@ -79,6 +80,7 @@ function updateModalForm(modal, data) {
     modal.querySelector('input[name=ip]').value = data?.ip ?? 'auto';
     modal.querySelector('select[name=engine]').value = data?.engine ?? 'PHP-8.1';
     modal.querySelector('input[name=public_dir]').value = data?.public_dir ?? '';
+    modal.querySelector('input[name=project_home_dir]').value = data?.project_home_dir ?? '';
     modal.querySelector('input[name=admin_path]').value = data?.admin_path ?? '';
     modal.querySelector('input[name=project_add_modules]').value = data?.project_add_modules ?? '';
     modal.querySelector('input[name=project_add_commands]').value = data?.project_add_commands ?? '';

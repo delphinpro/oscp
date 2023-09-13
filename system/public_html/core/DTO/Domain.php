@@ -14,6 +14,7 @@ use OpenServer\Services\Modules;
  * @property-read string aliases
  * @property-read string engine
  * @property-read string public_dir
+ * @property-read string project_home_dir
  * @property-read bool   enabled
  * @property-read string cgi_dir
  * @property-read string ip
@@ -40,7 +41,8 @@ class Domain
             'host'                 => $data['host'],
             'aliases'              => $data['aliases'] ?? '',
             'engine'               => $data['engine'] ?? 'PHP-8.1',
-            'public_dir'       => $this->path($data['public_dir'] ?? ''),
+            'public_dir'           => $this->path($data['public_dir'] ?? ''),
+            'project_home_dir'     => $this->path($data['project_home_dir'] ?? ''),
             'enabled'              => (bool)($data['enabled'] ?? true),
             'cgi_dir'              => $this->path($data['cgi_dir'] ?? ''),
             'ip'                   => $data['ip'] ?? 'auto',
