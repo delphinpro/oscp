@@ -11,14 +11,14 @@
 <div class="alert alert-warning">
   Для применения изменений необходимо перезапустить соответствующий модуль
 </div>
-<table class="table table-sm table-hover">
+<table class="table table-sm">
   <thead>
     <tr>
       <th class="text-end">Домен</th>
       <th class="text-center">Статус</th>
       <th>Модуль</th>
       <th>IP</th>
-      <th>DOCUMENT_ROOT</th>
+      {{-- <th>DOCUMENT_ROOT</th> --}}
       <th class="text-center">SSL</th>
       <th class="text-end">Действия</th>
     </tr>
@@ -33,7 +33,7 @@
       @endif
       @foreach ($group as $domain)
         <tr>
-          <td class="text-end">
+          <td class="text-end" rowspan="2">
             <span class="font-monospace text-primary">{{ $domain->host }}</span>
           </td>
           <td class="text-center">
@@ -46,14 +46,6 @@
             @else
               {{ $domain->realIp() }}
             @endif
-          </td>
-          <td class="font-monospace {{ !$domain->isValidRoot() ? 'text-danger' : 'text-muted' }}">
-            <div style="max-width:100%;word-break:break-all;font-size:1rem;">
-              {{ $domain->public_dir }}
-              @if (!$domain->isValidRoot())
-                <i class="bi bi-exclamation-triangle-fill text-danger" title="Путь не существует"></i>
-              @endif
-            </div>
           </td>
           <td class="text-center">
             <i class="bi {{ $domain->ssl ? 'text-success bi-check-lg' : 'text-danger bi-x-lg' }}"></i>
@@ -82,6 +74,17 @@
                 ><i class="bi bi-trash3"></i></button>
               </div>
             @endif
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="4" class="font-monospace {{ !$domain->isValidRoot() ? 'text-danger' : 'text-muted' }}" style="padding-block: 0;">
+            <div style="max-width:100%;word-break:break-all;font-size:1rem;">
+              {{ $domain->public_dir }}
+              @if (!$domain->isValidRoot())
+                <i class="bi bi-exclamation-triangle-fill text-danger" title="Путь не существует"></i>
+              @endif
+            </div>
           </td>
         </tr>
       @endforeach
