@@ -38,11 +38,6 @@ class Router
         $this->routes[strtolower($name)][$this->formatRoute($route)] = $method;
     }
 
-    public function __destruct()
-    {
-        $this->resolve();
-    }
-
     /**
      * Resolves a route
      */

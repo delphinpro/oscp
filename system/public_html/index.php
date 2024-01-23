@@ -49,6 +49,8 @@ try {
     $router->post('/api/domain/update', [DomainController::class, 'update']);
     $router->post('/api/domain/delete', [DomainController::class, 'delete']);
 
+    $router->resolve();
+
 } catch (Throwable $e) {
 
     header("{$_SERVER['SERVER_PROTOCOL']} 500 Server Error");
