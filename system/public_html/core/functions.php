@@ -95,7 +95,8 @@ function clearString(string $string): array|string|null
  */
 function httpRequest($url): array|string|null
 {
-    $ch = curl_init(API_URL.'/'.ltrim($url, '/'));
+    $url1 = API_URL.'/'.ltrim($url, '/');
+    $ch = curl_init($url1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -104,7 +105,7 @@ function httpRequest($url): array|string|null
     if ($data === false) {
         $error = curl_error($ch);
         curl_close($ch);
-        throw new RuntimeException($error);
+        throw new RuntimeException($error.' '.$url1);
     }
 
     curl_close($ch);
