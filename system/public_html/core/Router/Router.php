@@ -20,6 +20,8 @@ class Router
         'POST',
     ];
 
+    private array $routes = [];
+
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -33,7 +35,7 @@ class Router
             $this->invalidMethodHandler();
         }
 
-        $this->{strtolower($name)}[$this->formatRoute($route)] = $method;
+        $this->routes[strtolower($name)][$this->formatRoute($route)] = $method;
     }
 
     public function __destruct()
@@ -46,7 +48,7 @@ class Router
      */
     public function resolve(): void
     {
-        $methodDictionary = $this->{strtolower($this->request->requestMethod)};
+        $methodDictionary = $this->routes[strtolower($this->request->requestMethod)];
         $formattedRoute = $this->formatRoute($this->request->requestUri);
         $callable = $methodDictionary[$formattedRoute];
 
