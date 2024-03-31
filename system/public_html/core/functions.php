@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -131,4 +131,44 @@ function absolutePath(string $path): string
 function localPath(string $path): string
 {
     return str_ireplace(ROOT_DIR, '{root_dir}', $path);
+}
+
+/**
+ * @param  string  $filename
+ *
+ * @return array{menu:array}
+ */
+function readIniFile(string $filename): array
+{
+    if (!file_exists($file = ROOT_DIR.'/'.ltrim($filename, '/'))) {
+        return [];
+    }
+
+    $iniSections = parse_ini_file($file, true, INI_SCANNER_RAW);
+    $data = [];
+
+    foreach ($iniSections as $section => $params) {
+        $data[$section] = [];
+        foreach ($params as $key => $value) {
+            if (in_array(strtolower($value), ['on', 'true', 'yes'])) {
+                $value = true;
+            }
+            if (in_array(strtolower($value), ['off', 'false', 'no'])) {
+                $value = false;
+            }
+            if (strtolower($value) === 'null') {
+                $value = null;
+            }
+            if (is_numeric($value)) {
+                if (str_contains($value, '.')) {
+                    $value = (float)$value;
+                } else {
+                    $value = (int)$value;
+                }
+            }
+            $data[$section][$key] = $value;
+        }
+    }
+
+    return $data;
 }

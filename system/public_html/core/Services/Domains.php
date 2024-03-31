@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -239,20 +239,9 @@ DOMAIN;
 
     private function readConfig(): void
     {
-        $iniSections = parse_ini_file(ROOT_DIR.'/config/domains.ini', true, INI_SCANNER_RAW);
+        $domainsData = readIniFile('config/domains.ini');
 
-        foreach ($iniSections as $host => &$domain) {
-            foreach ($domain as $key => $value) {
-                if (in_array(strtolower($value), ['on', 'true', 'yes'])) {
-                    $domain[$key] = true;
-                }
-                if (in_array(strtolower($value), ['off', 'false', 'no', 'none'])) {
-                    $domain[$key] = false;
-                }
-                if (strtolower($value) === 'null') {
-                    $domain[$key] = null;
-                }
-            }
+        foreach ($domainsData as $host => $domain) {
             $this->domains[$host] = new Domain(['host' => $host, ...$domain]);
         }
     }
