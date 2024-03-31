@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -96,12 +96,23 @@ class Domain
 
     public function console(): string
     {
-        return '/project/cli/'.$this->host;
+        return '/cli/'.$this->host;
     }
 
     public function toArray(): array
     {
-        return $this->data;
+        return [
+            ...$this->data,
+            'adminUrl'    => $this->admin_path ? $this->adminUrl() : null,
+            'siteUrl'     => $this->siteUrl(),
+            'consoleUrl'  => $this->console(),
+            'isValidRoot' => $this->isValidRoot(),
+            'isAvailable' => $this->isAvailable(),
+
+            'isActive'   => $this->enabled && $this->isAvailable() && $this->isValidRoot(),
+            'isProblem'  => $this->enabled && !($this->isAvailable() && $this->isValidRoot()),
+            'isDisabled' => !$this->enabled,
+        ];
     }
 
     private function path(string $path): string

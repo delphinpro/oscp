@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -9,22 +9,21 @@ namespace OpenServer\Controllers;
 
 use OpenServer\Router\Response;
 use OpenServer\Services\Domains;
-use OpenServer\Services\Modules;
 
 class IndexController extends Controller
 {
     public function __invoke(): Response
     {
-        $domains = Domains::make();
-        $modules = Modules::make();
+        $domain = Domains::make()->get(API_DOMAIN);
 
         return Response::json([
-            'domains' => $domains->toArray(),
-            'main'    => (string)Response::view('app', [
-                'sites'   => $domains->getGroups(filter: true),
-                'domains' => $domains->getGroups(),
-                'modules' => $modules->getList(),
-            ]),
+            'version'     => OSP_VERSION,
+            'releaseDate' => OSP_DATE,
+            'apiDomain'   => API_DOMAIN,
+            'apiEngine'   => $domain->engine,
+            'webApiUrl'   => WEB_API_URL,
+            'cliApiUrl'   => CLI_API_URL,
+            'settings'    => readIniFile('config/program.ini'),
         ]);
     }
 }

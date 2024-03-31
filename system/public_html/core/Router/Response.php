@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -24,7 +24,7 @@ class Response
         $blade = new BladeOne(
             templatePath: dirname(__DIR__).'/views',
             compiledPath: dirname(__DIR__).'/.cache',
-            mode: BladeOne::MODE_DEBUG
+            mode        : BladeOne::MODE_DEBUG
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -39,6 +39,9 @@ class Response
             ->asJson();
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function __toString(): string
     {
         if ($this->json) {
@@ -48,7 +51,7 @@ class Response
                 'status'  => $this->status,
                 'message' => $this->message,
                 'payload' => $this->content,
-            ]);
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
         }
 
         header('Content-Type: text/html');

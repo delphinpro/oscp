@@ -36,14 +36,22 @@ class Domains
     /**
      * @return \OpenServer\DTO\Domain[]
      */
-    public function toArray(bool $filter = false): array
+    public function toArray(): array
     {
-        return array_map(static fn(Domain $d) => $d->toArray(), $this->filterDomains($filter));
+        $domains = $this->filterDomains();
+
+        usort($domains, static function (Domain $a, Domain $b) {
+            if ($a->host === $b->host) return 0;
+
+            return $a->host < $b->host ? -1 : 1;
+        });
+
+        return array_map(static fn(Domain $d) => $d->toArray(), $domains);
     }
 
-    public function getGroups(bool $filter = false): array
+    public function toGroups(): array
     {
-        return $this->groupDomains($filter);
+        return $this->groupDomains();
     }
 
     public function has(string $host): bool
@@ -151,14 +159,9 @@ DOMAIN;
     /**
      * @return \OpenServer\DTO\Domain[]
      */
-    private function filterDomains(bool $filter = false): array
+    private function filterDomains(): array
     {
-        return array_filter($this->domains, static function (Domain $d) use ($filter) {
-            if ($d->host === API_DOMAIN) return false;
-            if ($filter) return $d->enabled;
-
-            return true;
-        });
+        return array_filter($this->domains, static fn(Domain $d) => $d->host !== API_DOMAIN);
     }
 
     /**
@@ -166,11 +169,11 @@ DOMAIN;
      *
      * @return array
      */
-    private function groupDomains(bool $filter = false): array
+    private function groupDomains(): array
     {
         $result = [];
 
-        foreach ($this->filterDomains($filter) as $item) {
+        foreach ($this->filterDomains() as $item) {
             if (str_contains($item->host, '.')) {
                 [, $group] = explode('.', $item->host, 2);
             } else {
@@ -231,6 +234,7 @@ DOMAIN;
 
                 return $l1 - $l2;
             });
+            $group = array_map(static fn(Domain $d) => $d->toArray(), $group);
         }
         unset($group);
 

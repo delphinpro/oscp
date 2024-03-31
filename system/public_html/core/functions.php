@@ -95,7 +95,7 @@ function clearString(string $string): array|string|null
  */
 function httpRequest($url): array|string|null
 {
-    $url1 = API_URL.'/'.ltrim($url, '/');
+    $url1 = CLI_API_URL.'/'.ltrim($url, '/');
     $ch = curl_init($url1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
