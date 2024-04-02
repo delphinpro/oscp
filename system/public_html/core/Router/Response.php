@@ -7,8 +7,6 @@
 
 namespace OpenServer\Router;
 
-use eftec\bladeone\BladeOne;
-
 class Response
 {
     protected string|array|null $content = null;
@@ -19,18 +17,7 @@ class Response
 
     protected bool $json = false;
 
-    public static function view(string $view, array $data): static
-    {
-        $blade = new BladeOne(
-            templatePath: dirname(__DIR__).'/views',
-            compiledPath: dirname(__DIR__).'/.cache',
-            mode        : BladeOne::MODE_DEBUG
-        );
-
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return (new static())
-            ->setContent($blade->run($view, $data));
-    }
+    protected array $headers = [];
 
     public static function json(array|string|null $data = null): static
     {
@@ -44,6 +31,10 @@ class Response
      */
     public function __toString(): string
     {
+        foreach ($this->headers as $header) {
+            header($header);
+        }
+
         if ($this->json) {
             header('Content-Type: application/json');
 
@@ -69,6 +60,16 @@ class Response
     public function message(string $message): static
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function headers(array $headers): static
+    {
+        $this->headers = array_merge(
+            $this->headers,
+            $headers,
+        );
 
         return $this;
     }
