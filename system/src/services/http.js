@@ -57,20 +57,6 @@ export default new class {
                     throw Error(res['message'] ?? 'Server Error');
                 }
             })
-            .catch(err => {
-                // hideLoader();
-                let msg = err.message.replace('<br />', '').trim();
-                if (msg.indexOf('Stack trace') !== -1) {
-                    let parts = msg.split('Stack trace:', 2);
-                    msg = `<pre style="white-space:pre-wrap;">${parts[0]}</pre>
-                           <pre class="m-0">Stack trace:\n${parts[1].trim()}</pre>`;
-                } else {
-                    msg = `<pre style="white-space:pre-wrap;" class="m-0">${msg}</pre>`;
-                }
-                console.warn(msg);
-                // message(msg, 'danger');
-                throw Error(err);
-            });
     }
 
     get(url) {
