@@ -51,7 +51,25 @@ class Domains
 
     public function toGroups(): array
     {
-        return $this->groupDomains();
+        $result = [];
+
+        foreach ($this->filterDomains() as $item) {
+            if (str_contains($item->host, '.')) {
+                [, $group] = explode('.', $item->host, 2);
+            } else {
+                $group = TLD;
+            }
+
+            if (!array_key_exists($group, $result)) $result[$group] = [];
+
+            $result[$group][$item->host] = $item;
+        }
+
+        $result = $this->groupSubDomains($result);
+
+        ksort($result);
+
+        return $result;
     }
 
     public function has(string $host): bool
@@ -163,42 +181,6 @@ DOMAIN;
     {
         return array_filter($this->domains, static fn(Domain $d) => $d->host !== API_DOMAIN);
     }
-
-    /**
-     * @param  bool  $filter
-     *
-     * @return array
-     */
-    private function groupDomains(): array
-    {
-        $result = [];
-
-        foreach ($this->filterDomains() as $item) {
-            if (str_contains($item->host, '.')) {
-                [, $group] = explode('.', $item->host, 2);
-            } else {
-                $group = TLD;
-            }
-
-            if (!array_key_exists($group, $result)) $result[$group] = [];
-
-            $result[$group][$item->host] = $item;
-        }
-
-        $result = $this->groupSubDomains($result);
-        //$result = array_filter($result, static fn($d) => !empty($d));
-
-        ksort($result);
-
-
-        // if (array_key_exists(TLD, $result)) {
-        //     $first = array_shift($result);
-        //     $result[TLD] = $first;
-        // }
-
-        return $result;
-    }
-
 
     private function groupSubdomains(array $input): array
     {
