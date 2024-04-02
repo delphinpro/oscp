@@ -34,7 +34,7 @@ export default {
       if (!this.isGrouped) return this.allSites;
 
       if (!this.currentGroup) return [];
-      return this.allSites[this.currentGroup];
+      return this.allSites[this.currentGroup]['domains'];
     },
 
     filteredSites() {

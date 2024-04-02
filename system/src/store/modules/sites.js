@@ -18,7 +18,11 @@ const getters = {
     groupNames(state) {
         if (!state.grouped) return [];
 
-        return Object.keys(state.sites);
+        return Object.values(state.sites).map(group => ({
+            name     : group.name,
+            count    : group.domains.length,
+            hasActive: group.hasActive,
+        }));
     },
 };
 
@@ -38,16 +42,14 @@ const mutations = {
 const actions = {
     loadSites(ctx) {
         http.get('/sites').then(({ grouped, sites }) => {
-            console.log(grouped, sites);
             ctx.commit('setSites', sites);
             ctx.commit('setGrouped', grouped);
             if (grouped) {
                 let savedGroup = localStorage.getItem(LS_KEY_SITES_GROUP);
-                console.log({ savedGroup });
-                if (!savedGroup || ctx.getters.groupNames.indexOf(savedGroup) === -1) {
-                    savedGroup = ctx.getters.groupNames.shift();
+                if (!savedGroup || !ctx.getters.groupNames.map(g => g.name).includes(savedGroup)) {
+                    savedGroup = ctx.getters.groupNames.shift()['name'];
                 }
-                ctx.commit('selectGroup', savedGroup);
+                if (savedGroup) ctx.commit('selectGroup', savedGroup);
             }
         });
     },

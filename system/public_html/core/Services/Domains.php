@@ -190,10 +190,8 @@ DOMAIN;
             $result[$groupName] = $group;
             if ((count($parts) > 1) && isset($input[$parts[1]][$groupName])) {
                 $result[$groupName][$groupName] = $input[$parts[1]][$groupName] ?? null;
-                // dd($groupName, $parts, $result);
             }
         }
-        // dd($input);
 
         foreach ($result as $groupName => &$group) {
             foreach ($group as $domainName => $domain) {
@@ -204,7 +202,7 @@ DOMAIN;
         unset($group);
 
 
-        foreach ($result as &$group) {
+        foreach ($result as $name => $group) {
             usort($group, static function (?Domain $a, ?Domain $b) {
                 if (!$a || !$b) return 0;
                 $d1 = $a->host;
@@ -216,11 +214,22 @@ DOMAIN;
 
                 return $l1 - $l2;
             });
-            $group = array_map(static fn(Domain $d) => $d->toArray(), $group);
-        }
-        unset($group);
 
-        return $result;
+            $hasActive = false;
+            $group = array_map(static function (Domain $d) use (&$hasActive) {
+                if ($d->enabled && $d->isAvailable() && $d->isValidRoot()) $hasActive = true;
+
+                return $d->toArray();
+            }, $group);
+
+            $result[$name] = [
+                'name'      => $name,
+                'hasActive' => $hasActive,
+                'domains'   => $group,
+            ];
+        }
+
+        return array_filter($result, static fn(array $group) => count($group['domains']));
     }
 
     private function readConfig(): void
