@@ -101,20 +101,22 @@ export default {
 <template>
   <div>
     <div class="error" v-if="error || noHost">
-      <pre v-if="error">{{ error }}</pre>
-      <div v-if="noHost">
-        <Alert :title="'Хост '+ apiHost +' недоступен'">
-          Необходимо добавить домен <code>{{ apiDomain }}</code>
-          и включить модуль <code>{{ apiEngine }}</code>.
-        </Alert>
-        <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
-        <pre class="text-bg-dark p-3">[{{ apiDomain }}]
+      <div class="wnd">
+        <pre v-if="error">{{ error }}</pre>
+        <div v-if="noHost">
+          <Alert :title="'Хост '+ apiHost +' недоступен'" danger>
+            Необходимо добавить домен <code>{{ apiDomain }}</code>
+            и включить модуль <code>{{ apiEngine }}</code>.
+          </Alert>
+          <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
+          <pre class="text-bg-dark p-3">[{{ apiDomain }}]
 enabled         = on
 engine          = {{ apiEngine }}
 public_dir      = &#123;root_dir&#125;\system\public_html</pre>
-        <p>2. Откройте интерфейс командной строки и выполните команду:</p>
-        <pre class="text-bg-dark p-3">osp on {{ apiEngine }}</pre>
-        <p>3. Обновите эту страницу</p>
+          <p>2. Откройте интерфейс командной строки и выполните команду:</p>
+          <pre class="text-bg-dark p-3">osp on {{ apiEngine }}</pre>
+          <p>3. Обновите эту страницу</p>
+        </div>
       </div>
     </div>
     <template v-else>
@@ -141,6 +143,16 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 </template>
 
 <style lang="scss">
+.error {
+  min-height: 100vh;
+  display: flex;
+  padding: 3rem 0;
+  .wnd {
+    max-width: 60%;
+    margin: 0 auto;
+  }
+}
+
 .app {
   width: 100%;
   min-height: 100vh;
