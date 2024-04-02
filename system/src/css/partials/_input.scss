@@ -15,3 +15,16 @@
   font-family: monospace;
   outline: none !important;
 }
+
+.select {
+  width: 100%;
+  background: #374151;
+  border-radius: var(--radius);
+  border: 1px solid #374151;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--body-color);
+  font-family: monospace;
+  outline: none !important;
+}

@@ -26,8 +26,16 @@
 
 .justify-end { justify-content: flex-end; }
 
+.space-between { justify-content: space-between; }
+
+.col-span-2 { grid-column: span 2; }
+
 .gap-0\.25 { gap: 0.25rem; }
 
 .gap-0\.5 { gap: 0.5rem; }
 
 .gap-1 { gap: 1rem; }
+
+.mb-1 { margin-bottom: 1rem; }
+
+.mb-2 { margin-bottom: 2rem; }
