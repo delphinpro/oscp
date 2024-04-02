@@ -6,6 +6,7 @@
 
 <script>
 import Alert from '@/components/Alert';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'SystemMessage',
@@ -15,17 +16,21 @@ export default {
   },
 
   computed: {
-    title() {
-      return '';
-    },
-    message() {
-      return this.$store.state.sysMessage;
-    },
+    ...mapState({
+      sysMessage: state => state.sysMessage,
+    }),
+
+    title() { return this.sysMessage?.title; },
+    message() { return this.sysMessage?.message; },
+    style() { return this.sysMessage?.style; },
   },
 
   methods: {
+    ...mapActions({
+      hideSystemMessage: 'hideMessage',
+    }),
     closeMessage() {
-
+      this.hideSystemMessage();
     },
   },
 };
@@ -33,9 +38,12 @@ export default {
 
 <template>
   <div class="system-message">
-    <Alert :title="title" success>
-      {{ message }}
-    </Alert>
+    <Alert
+        :title="title"
+        :message="message"
+        :success="style==='success'"
+        :danger="style==='danger'"
+    />
     <i class="bi bi-x-lg system-message__closer" @click="closeMessage()"></i>
   </div>
 </template>
@@ -47,6 +55,7 @@ export default {
   right: 0;
   top: 0;
   max-width: 60%;
+  min-width: 30rem;
   z-index: 99999;
 
   &__closer {
@@ -62,6 +71,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: 0.25s ease;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 </style>

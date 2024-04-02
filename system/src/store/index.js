@@ -10,7 +10,7 @@ import sites from './modules/sites';
 
 const isDebug = process.env.NODE_ENV !== 'production';
 
-let timeout;
+let sysMessageTimeout;
 
 export default createStore({
     state: {
@@ -59,14 +59,9 @@ export default createStore({
         showLoader(state) { state.isLoading = true; },
         hideLoader(state) { state.isLoading = false; },
 
-        showMessage(state, msg) {
-            state.sysMessage = msg;
-            clearTimeout(timeout);
-            setTimeout(() => {
-                state.sysMessage = null;
-            }, 5000);
+        setSystemMessage(state, systemMessage) {
+            state.sysMessage = systemMessage;
         },
-        hideMessage(state) { state.sysMessage = null; },
     },
 
     actions: {
@@ -75,6 +70,17 @@ export default createStore({
                 // console.log(res.settings.main);
                 store.commit('setMainData', res);
             });
+        },
+
+        showMessage({ commit, dispatch }, { message, title = null, style = 'info', timeout = false }) {
+            commit('setSystemMessage', { message, title, style });
+            clearTimeout(sysMessageTimeout);
+            if (typeof timeout === 'number') {
+                sysMessageTimeout = setTimeout(() => dispatch('hideMessage'), timeout * 1000);
+            }
+        },
+        hideMessage({ commit }) {
+            commit('setSystemMessage', null);
         },
     },
 
