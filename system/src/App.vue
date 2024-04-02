@@ -7,9 +7,10 @@
 
 import Alert from '@/components/Alert';
 import Loader from '@/components/Loader';
+import SideBar from '@/components/SideBar.vue';
 import SystemMessage from '@/components/SystemMessage';
 import http from '@/services/http';
-import { mapGetters, mapMutations, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 const PING_INTERVAL = 1000;
 let pingInterval;
@@ -18,6 +19,7 @@ export default {
   name: 'App',
 
   components: {
+    SideBar,
     Alert,
     Loader,
     SystemMessage,
@@ -32,8 +34,6 @@ export default {
 
   computed: {
     ...mapState({
-      selectedGroup: state => state.sites.selected,
-
       isLoading: state => state.isLoading,
 
       apiEngine : state => state.apiEngine,
@@ -41,9 +41,6 @@ export default {
       ospVersion: state => state.ospVersion,
       pageTitle : state => state.pageTitle,
       sysMessage: state => state.sysMessage,
-    }),
-    ...mapGetters({
-      groupNames: 'groupNames',
     }),
 
     apiHost() { return 'http://' + this.apiDomain; },
@@ -91,9 +88,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations({
-      selectGroup: 'selectGroup',
-    }),
     systemReload() {
       http.get('/restart').then(res => {
         console.log(res);
@@ -134,23 +128,7 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
           <button class="btn" @click="systemReload">Перезагрузить</button>
         </div>
         <div class="app__navigation">
-          <nav>
-            <router-link to="/">Сводка</router-link>
-            <router-link to="/modules">Модули</router-link>
-            <router-link to="/sites">Сайты</router-link>
-          </nav>
-          <div v-if="selectedGroup && groupNames.length">
-            <hr>
-            <nav>
-              <span class="text-muted">Группы сайтов:</span>
-              <button v-for="name in groupNames"
-                  @click="selectGroup(name)"
-                  class="mono"
-                  :class="{active: selectedGroup === name}"
-              ><span v-if="name!=='TLD'">.</span>{{ name }}
-              </button>
-            </nav>
-          </div>
+          <side-bar/>
         </div>
         <div class="app__main">
           <router-view/>
@@ -222,39 +200,5 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 
 #title {
   font-size: 1.5rem;
-}
-
-nav {
-  display: grid;
-  gap: 4px;
-  a,
-  button {
-    cursor: pointer;
-    background: none;
-    border: none;
-    text-align: left;
-    font-size: 1rem;
-    line-height: 1.4;
-    color: var(--body-color);
-    text-decoration: none;
-    border-radius: 8px;
-    padding: 0.5rem 1.5rem;
-    max-width: 100%;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    &.router-link-exact-active,
-    &.active {
-      background: #374151;
-    }
-
-    &:hover {
-      background: #4b5563;
-    }
-  }
-  > span {
-    font-size: 0.9rem;
-  }
 }
 </style>
