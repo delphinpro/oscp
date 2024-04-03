@@ -80,7 +80,7 @@ export default {
 
     }, PING_INTERVAL);
 
-    this.$store.dispatch('loadMainData');
+    this.loadMainData();
   },
 
   unmounted() {
@@ -89,7 +89,8 @@ export default {
 
   methods: {
     ...mapActions({
-      showMessage: 'showMessage',
+      loadMainData: 'loadMainData',
+      showMessage : 'showMessage',
     }),
     systemReload() {
       this.showMessage({ title: 'Выполняется перезагрузка', style: 'danger', timeout: 5 });

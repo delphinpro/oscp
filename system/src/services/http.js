@@ -13,10 +13,11 @@ function parseResponse(res) {
 
 export default new class {
     #baseUrl;
+    #cliApiUrl;
 
-    configure({ baseUrl }) {
-        this.#baseUrl = baseUrl;
-        //     console.log({ baseUrl: this.#baseUrl });
+    configure(options = {}) {
+        this.#baseUrl = options.baseUrl || this.#baseUrl;
+        this.#cliApiUrl = options.cliApiUrl || this.#cliApiUrl;
     }
 
     makeUrl(url) {
@@ -56,7 +57,7 @@ export default new class {
                 } else {
                     throw Error(res['message'] ?? 'Server Error');
                 }
-            })
+            });
     }
 
     get(url) {
