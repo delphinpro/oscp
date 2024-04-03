@@ -43,6 +43,7 @@ try {
     $router->get('/ping', static fn() => Response::json());
 
     $router->get('/api/main', IndexController::class);
+    $router->get('/api/restart', [IndexController::class, 'restart']);
 
     $router->get('/api/modules', ModuleController::class);
 

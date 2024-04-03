@@ -10,7 +10,7 @@ import Loader from '@/components/Loader';
 import SideBar from '@/components/SideBar.vue';
 import SystemMessage from '@/components/SystemMessage';
 import http from '@/services/http';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 const PING_INTERVAL = 1000;
 let pingInterval;
@@ -88,10 +88,12 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      showMessage: 'showMessage',
+    }),
     systemReload() {
-      http.get('/restart').then(res => {
-        console.log(res);
-      });
+      this.showMessage({ title: 'Выполняется перезагрузка', style: 'danger', timeout: 5 });
+      http.get('/restart').then();
     },
   },
 
@@ -100,7 +102,7 @@ export default {
 
 <template>
   <div>
-    <div class="error" v-if="error || noHost">
+    <div v-if="error || noHost" class="error">
       <div class="wnd">
         <pre v-if="error">{{ error }}</pre>
         <div v-if="noHost">
@@ -122,7 +124,7 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
     <template v-else>
       <div class="app">
         <div class="app__brand">
-          <img class="" src="/assets/icon.svg" alt="">
+          <img alt="" class="" src="/assets/icon.svg">
           <span>OSPanel <span class="text-muted">{{ ospVersion }}</span></span>
         </div>
         <div class="app__header">
@@ -130,7 +132,18 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
           <button class="btn" @click="systemReload">Перезагрузить</button>
         </div>
         <div class="app__navigation">
-          <side-bar/>
+          <side-bar class="app__sidebar"/>
+          <div class="app__footer">
+            <nav class="nav nav_compact">
+              <button class="nav__item active" style="padding-block:0.5rem" @click="systemReload">Перезагрузка</button>
+              <a class="nav__item muted" href="https://ospanel.io/forum/" target="_blank">Форум
+                <i class="font-small bi bi-box-arrow-up-right"></i>
+              </a>
+              <a class="nav__item muted" href="https://t.me/ospanel_chat" target="_blank">
+                Telegram <i class="font-small bi bi-box-arrow-up-right"></i>
+              </a>
+            </nav>
+          </div>
         </div>
         <div class="app__main">
           <router-view/>
@@ -144,8 +157,8 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 
 <style lang="scss">
 .error {
-  min-height: 100vh;
   display: flex;
+  min-height: 100vh;
   padding: 3rem 0;
   .wnd {
     max-width: 60%;
@@ -154,15 +167,15 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 }
 
 .app {
+  display: grid;
   width: 100%;
   min-height: 100vh;
-  display: grid;
   grid-template-columns: 17rem 1fr;
   grid-template-rows: auto 1fr;
 
   &__brand, &__navigation {
-    background: #1f2937;
     border-right: 1px solid var(--hr-color);
+    background: var(--app-side-bg);
   }
 
   &__brand, &__header {
@@ -170,9 +183,9 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
   }
 
   &__brand {
-    padding: 1rem 1.5rem;
     display: flex;
     align-items: center;
+    padding: var(--app-header-padding-y) var(--app-header-padding-x);
     gap: 1rem;
     img {
       flex-shrink: 0;
@@ -183,30 +196,43 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
     span {
       font-size: 1.2rem;
       span {
-        font-size: 1rem;
         font-family: monospace;
+        font-size: 1rem;
       }
     }
   }
 
   &__header {
-    padding: 1rem 1.5rem;
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
+    justify-content: space-between;
+    padding: var(--app-header-padding-y) var(--app-header-padding-x);
   }
 
   &__navigation {
-    padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     hr {
-      --hr-color: var(--hr-color-light);
       margin: 1rem -0.5rem;
+      --hr-color: var(--hr-color-light);
     }
+  }
+  &__sidebar {
+    padding: 1rem 0.5rem;
+  }
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    padding: 1rem 0.5rem;
+    border-top: 1px solid var(--hr-color);
+    background: var(--app-side-bg);
+    box-shadow: -5px 0 10px rgba(#000, 0.7);
   }
 
   &__main {
-    padding: 1rem 1.5rem;
     min-width: 0;
+    padding: 1rem 1.5rem;
   }
 }
 

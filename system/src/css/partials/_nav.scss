@@ -1,0 +1,70 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+.nav {
+  display: grid;
+  gap: 4px;
+
+  &__title {
+    font-size: 0.9rem;
+    display: block;
+    margin: 0.5rem 0;
+    color: var(--muted-color);
+  }
+
+  &__item {
+    font-size: 1rem;
+    line-height: 1.4;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    color: var(--body-color);
+    border: none;
+    border-radius: 8px;
+    background: none;
+    gap: 0.5rem;
+
+    &.muted {
+      color: var(--muted-color);
+    }
+
+    &.router-link-exact-active,
+    &.active {
+      color: var(--body-color);
+      background: #374151;
+    }
+
+    &:hover {
+      color: var(--body-color);
+      background: #4b5563;
+    }
+  }
+
+  &_compact {
+    gap: 2px;
+    .nav__item {
+      padding-block: 0.25rem;
+    }
+  }
+}
+
+.nav-item {
+  display: flex;
+  align-items: baseline;
+  &__text {
+    overflow: hidden;
+    min-width: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &__right {
+    font-size: 0.8em;
+    margin-left: auto;
+    color: var(--muted-color);
+  }
+}

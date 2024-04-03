@@ -19,6 +19,12 @@
   --table-radius: 0.5rem;
   --table-body-bg: #2c3541;
   --table-header-bg: #171f2a;
+
+  --app-header-padding-y: 1rem;
+  --app-header-padding-x: 1.5rem;
+  --app-side-padding-y: 1rem;
+  --app-side-padding-x: 0.5rem;
+  --app-side-bg: #1f2937;
 }
 
 @import "./partials/scrollbars";
@@ -27,4 +33,5 @@
 @import "./partials/input";
 @import "./partials/table";
 @import "./partials/bulb";
+@import "./partials/nav";
 @import "./partials/helpers";
