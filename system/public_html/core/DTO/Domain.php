@@ -69,6 +69,7 @@ class Domain
         ];
 
         $this->data['public_dir'] = $this->resolvePath($this->data['public_dir']);
+        $this->data['project_home_dir'] = $this->resolvePath($this->data['project_home_dir']);
 
         $this->module = Modules::make()->get($this->engine);
     }
@@ -111,7 +112,8 @@ class Domain
     public function update(array $data): void
     {
         $this->data['host'] = $data['host'];
-        $data['public_dir'] = templatePath($data['public_dir'] ?? null, $data['host']);
+        $data['public_dir'] = templatePath($data['public_dir'] ?? null);
+        $data['project_home_dir'] = templatePath($data['project_home_dir'] ?? null);
 
         $sslEnabled = (bool)($data['ssl'] ?? false);
 
@@ -131,8 +133,11 @@ class Domain
             $defaultCgiDir = $this->resolvePath(self::DEFAULT_CGI_DIR);
 
             if ($key === 'public_dir' &&
-                $defaultPublicDir === $this->public_dir
+                $defaultPublicDir === $value
             ) {
+                return false;
+            }
+            if ($key === 'public_dir' && $defaultPublicDir === $this->resolvePath($value)) {
                 return false;
             }
 

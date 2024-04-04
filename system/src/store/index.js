@@ -84,6 +84,7 @@ export default createStore({
             dispatch('showMessage', { message, title, style, timeout });
         },
         hideMessage({ commit }) {
+            clearTimeout(sysMessageTimeout);
             commit('setSystemMessage', null);
         },
 

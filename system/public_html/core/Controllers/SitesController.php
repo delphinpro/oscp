@@ -68,6 +68,30 @@ class SitesController extends Controller
         );
     }
 
+    public function delete(Request $request): Response
+    {
+        try {
+            $host = $request->input('host');
+
+            if (!$this->domains->has($host)) {
+                return Response::json()->status(404)->message('Хост не найден');
+            }
+
+            $this->domains
+                ->delete($host)
+                ->save();
+
+            return Response::json()->message('Сайт удалён');
+
+        } catch (\Exception $e) {
+
+            return Response::json()
+                ->status(500)
+                ->message($e->getMessage());
+
+        }
+    }
+
     public function openConsole(Request $request): Response
     {
         $host = $request->input('host');

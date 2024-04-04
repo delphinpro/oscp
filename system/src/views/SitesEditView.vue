@@ -136,8 +136,42 @@ export default {
       this.$router.push('/sites');
     },
 
-    deleteSite() {
-      if (confirm('Вы уверены, что хотите удалить сайт?')) {}
+    async deleteSite() {
+      if (confirm('Вы уверены, что хотите удалить сайт?')) {
+
+        this.showLoader();
+
+        await http.post('sites/delete', {
+          host: this.oldHost,
+        });
+
+        let requiredRestart = [];
+        if (this.engines.find(engine => engine.name === this.prevEngine)?.enabled) requiredRestart.push(this.prevEngine);
+
+        let timeout = 3;
+        let message = `Сайт ${this.site.host} удалён.`;
+
+        if (this.restartAfterSave && requiredRestart.length) {
+          message += `<br>Выполняется перезагрузка ` +
+              (requiredRestart.length > 1 ? 'модулей: ' : 'модуля: ') +
+              requiredRestart.join(', ') + '.';
+          timeout = 10;
+        }
+
+        await this.showMessage({ message, style: 'success', timeout });
+        await this.loadSites();
+
+        if (this.restartAfterSave && requiredRestart.length) {
+          for (let engine of requiredRestart) {
+            await this.modRestart(engine);
+          }
+          await this.hideMessage();
+        }
+
+        this.hideLoader();
+
+        this.$router.push('/sites');
+      }
     },
   },
 

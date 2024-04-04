@@ -52,6 +52,7 @@ try {
     $router->post('/api/sites/console', [SitesController::class, 'openConsole']);
     $router->post('/api/sites/data', [SitesController::class, 'getSite']);
     $router->post('/api/sites/save', [SitesController::class, 'save']);
+    $router->post('/api/sites/delete', [SitesController::class, 'delete']);
 
     $router->resolve();
 

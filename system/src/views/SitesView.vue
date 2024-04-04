@@ -5,6 +5,7 @@
   --------------------------->
 
 <script>
+import Checkbox from '@/components/Checkbox.vue';
 import DomainsList from '@/components/DomainsList';
 import { mapActions, mapState } from 'vuex';
 
@@ -12,11 +13,13 @@ export default {
   name: 'SitesView',
 
   components: {
+    Checkbox,
     DomainsList,
   },
 
   data: () => ({
-    filter: null,
+    filter      : null,
+    hideDisabled: false,
   }),
 
   computed: {
@@ -55,7 +58,14 @@ export default {
     },
   },
 
+  watch: {
+    hideDisabled(v) {
+      localStorage.setItem('sites_hideDisabled', v);
+    },
+  },
+
   async created() {
+    this.hideDisabled = localStorage.getItem('sites_hideDisabled') === 'true';
     this.$store.commit('setPageTitle', 'Сайты');
     await this.showLoader();
     await this.loadSites();
@@ -80,8 +90,9 @@ export default {
 
 <template>
   <div v-if="isReady">
-    <div class="d-flex gap-0.5">
+    <div class="sites-bar">
       <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
+      <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
       <a class="btn">
         <i class="bi bi-plus-lg"></i>
         <span class="text-nowrap">Добавить сайт</span>
@@ -94,11 +105,20 @@ export default {
       <h4>Сайты с ошибками</h4>
       <DomainsList :domains="problemDomains"/>
     </div>
-    <div v-if="disabledDomains.length" class="domains">
+    <div v-if="(disabledDomains.length && !hideDisabled) || (!activeDomains.length && !problemDomains.length)"
+        class="domains"
+    >
       <h4>Отключённые сайты</h4>
       <DomainsList :domains="disabledDomains"/>
     </div>
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.sites-bar {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.5rem;
+}
+</style>

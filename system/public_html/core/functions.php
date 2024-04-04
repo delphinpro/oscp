@@ -153,17 +153,11 @@ function readIniFile(string $filename): array
     return $data;
 }
 
-function templatePath(?string $path, string $host)
+function templatePath(?string $path): ?string
 {
     if ($path === null) return null;
 
-    return str_replace([
-        str_replace('/', '\\', ROOT_DIR),
-        $host,
-    ], [
-        '{root_dir}',
-        '{host}',
-    ], $path);
+    return str_replace(str_replace('/', '\\', ROOT_DIR), '{root_dir}', $path);
 }
 
 function iniValue(mixed $value): string
