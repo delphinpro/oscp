@@ -24,18 +24,19 @@ export default {
 </script>
 
 <template>
-  <div class="alert" :class="classes">
-    <div class="alert__heading" v-if="title">{{ title }}</div>
-    <div class="alert__body" v-if="message" v-html="message"></div>
+  <div :class="classes" class="alert">
+    <div v-if="title" class="alert__heading">{{ title }}</div>
+    <div v-if="message" class="alert__body" v-html="message"></div>
   </div>
 </template>
 
 <style lang="scss">
 .alert {
-  background: #1f2937;
+  overflow: hidden;
+  padding: 1rem 3.25rem 1rem 1rem;
   border: 1px solid #10161d;
-  padding: 1rem 2.25rem 1rem 1rem;
   border-radius: var(--radius);
+  background: #1f2937;
   box-shadow: 0 3px 10px rgba(#000, 0.5);
 
   &__heading {
@@ -46,13 +47,17 @@ export default {
     margin-top: 0.5em;
   }
 
+  &__body {
+    opacity: 0.7;
+  }
+
   &_danger {
-    background: #b53c3c;
     border-color: #b53c3c;
+    background: #b53c3c;
   }
   &_success {
-    background: #347618;
     border-color: #347618;
+    background: #347618;
   }
 }
 </style>

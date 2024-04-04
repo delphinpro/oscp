@@ -39,10 +39,10 @@ export default {
 <template>
   <div class="system-message">
     <Alert
-        :title="title"
+        :danger="style==='danger'"
         :message="message"
         :success="style==='success'"
-        :danger="style==='danger'"
+        :title="title"
     />
     <i class="bi bi-x-lg system-message__closer" @click="closeMessage()"></i>
   </div>
@@ -50,30 +50,30 @@ export default {
 
 <style lang="scss">
 .system-message {
-  padding: 1rem 0.25rem 1rem 1rem;
   position: fixed;
-  right: 0;
-  top: 0;
-  max-width: 60%;
-  min-width: 30rem;
   z-index: 99999;
+  top: 0;
+  right: 0;
+  min-width: 30rem;
+  max-width: 60%;
+  padding: 1rem 0.25rem 1rem 1rem;
 
   &__closer {
-    position: absolute;
-    right: 0.25rem;
-    top: 1rem;
-    background: rgba(#000, 0.1);
-    border-top-right-radius: var(--radius);
-    width: 2rem;
-    height: 2rem;
-    font-size: 1.5rem;
+    font-size: 1rem;
     line-height: 1;
+    position: absolute;
+    top: 1rem;
+    right: 0.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 2.5rem;
+    height: 3.2rem;
     cursor: pointer;
-    opacity: 0.4;
     transition: 0.25s ease;
+    opacity: 0.4;
+    border-top-right-radius: var(--radius);
+
     &:hover {
       opacity: 0.8;
     }
