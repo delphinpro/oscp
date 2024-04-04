@@ -66,7 +66,7 @@ export default {
         </button>
       </nav>
 
-      <nav v-if="activeGroups.length" class="nav">
+      <nav v-if="inactiveGroups.length" class="nav">
         <span class="nav__title">Неактивные:</span>
         <button v-for="group in inactiveGroups"
             :class="{active: selectedGroup === group.name}"
