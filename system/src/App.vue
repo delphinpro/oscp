@@ -53,7 +53,6 @@ export default {
   },
 
   mounted() {
-    console.log('App mounted');
     pingInterval = setInterval(() => {
       if (!window.ping || !this.apiDomain) return;
       fetch(this.apiHost + '/ping')
@@ -93,8 +92,11 @@ export default {
       showMessage : 'showMessage',
     }),
     systemReload() {
+      this.noHost = true;
       this.showMessage({ title: 'Выполняется перезагрузка', style: 'danger', timeout: 5 });
+      window.ping = false;
       http.get('/restart').then();
+      setTimeout(() => window.ping = true, 5000);
     },
   },
 
@@ -105,12 +107,12 @@ export default {
   <div>
     <div v-if="error || noHost" class="error">
       <div class="wnd">
-        <pre v-if="error">{{ error }}</pre>
+        <alert v-if="error" :message="error"/>
         <div v-if="noHost">
-          <Alert :title="'Хост '+ apiHost +' недоступен'" danger>
-            Необходимо добавить домен <code>{{ apiDomain }}</code>
-            и включить модуль <code>{{ apiEngine }}</code>.
-          </Alert>
+          <alert :message="'Необходимо добавить домен <code>'+apiDomain+'</code> и включить модуль <code>'+apiEngine+'</code>.'"
+              :title="'Хост '+ apiHost +' недоступен'"
+              danger
+          />
           <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
           <pre class="text-bg-dark p-3">[{{ apiDomain }}]
 enabled         = on

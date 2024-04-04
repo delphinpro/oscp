@@ -16,7 +16,7 @@ let sysMessageTimeout;
 export default createStore({
     state: {
         apiDomain : 'api.ospanel',
-        apiEngine : null,
+        apiEngine : 'PHP-8.1',
         webApiUrl : null,
         cliApiUrl : null,
         ospVersion: null,
