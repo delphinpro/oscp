@@ -18,7 +18,7 @@ class ModuleController extends Controller
         try {
 
             return Response::json([
-                'modules' => Modules::make()->getList(),
+                'modules' => Modules::make()->toArray(),
             ])->asJson();
 
         } catch (\Exception $e) {

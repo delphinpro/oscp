@@ -11,10 +11,15 @@ use OpenServer\DTO\Module;
 
 class Modules
 {
+    private static ?Modules $instance = null;
+
     /** @var \OpenServer\DTO\Module[] */
     protected array $modules;
 
-    private static ?Modules $instance = null;
+    public function __construct()
+    {
+        $this->readConfig();
+    }
 
     public static function make(): Modules
     {
@@ -25,17 +30,19 @@ class Modules
         return self::$instance;
     }
 
-    public function __construct()
-    {
-        $this->readConfig();
-    }
-
     /**
      * @return \OpenServer\DTO\Module[]
      */
-    public function getList(): array
+    public function toArray(): array
     {
         return array_map(static fn(Module $module) => $module->toArray(), $this->modules);
+    }
+
+    public function getWebEngines(): array
+    {
+        return array_values(
+            array_filter($this->modules, static fn(Module $module) => $module->compatible === 'Web')
+        );
     }
 
     public function get($moduleName): ?Module
@@ -71,18 +78,18 @@ class Modules
             $settings = parse_ini_file(ROOT_DIR.'/config/'.$name.'/'.$profile.'/settings.ini', true, INI_SCANNER_RAW);
 
             return Module::make(
-                name      : $name,
-                status    : $cols[1],
-                enabled   : in_array($cols[1], ['Включён', 'Enabled', 'Уключаны', 'Включений']),
-                init      : in_array($cols[1], ['Инициализирован', 'Initialized', 'Ініцыялізаваны', 'Ініціалізовано']),
-                version   : $cols[2],
-                type      : $cols[3],
+                name: $name,
+                status: $cols[1],
+                enabled: in_array($cols[1], ['Включён', 'Enabled', 'Уключаны', 'Включений']),
+                init: in_array($cols[1], ['Инициализирован', 'Initialized', 'Ініцыялізаваны', 'Ініціалізовано']),
+                version: $cols[2],
+                type: $cols[3],
                 compatible: $cols[4],
-                params    : [
+                params: [
                     'ip'   => $settings['main']['ip'] ?? null,
                     'port' => $settings['main']['port'] ?? null,
                 ]
             );
-        }, $modules);
+        }, array_values($modules));
     }
 }

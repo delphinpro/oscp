@@ -5,8 +5,9 @@
  */
 
 import http from '@/services/http';
-import { createLogger, createStore } from 'vuex';
-import sites from './modules/sites';
+import modules from '@/store/modules/modules';
+import sites from '@/store/modules/sites';
+import { createStore } from 'vuex';
 
 const isDebug = process.env.NODE_ENV !== 'production';
 
@@ -23,8 +24,6 @@ export default createStore({
         settings  : {},
 
         pageTitle: null,
-
-        modules: null,
 
         isLoading : false,
         sysMessage: null,
@@ -55,8 +54,6 @@ export default createStore({
 
         setPageTitle(state, value) { state.pageTitle = value; },
 
-        setModules(state, value) { state.modules = value; },
-
         showLoader(state) { state.isLoading = true; },
         hideLoader(state) { state.isLoading = false; },
 
@@ -83,14 +80,18 @@ export default createStore({
         hideMessage({ commit }) {
             commit('setSystemMessage', null);
         },
+
+        showLoader({ commit }) { commit('showLoader'); },
+        hideLoader({ commit }) { commit('hideLoader'); },
     },
 
     modules: {
         sites,
+        modules,
     },
 
     strict : isDebug,
     plugins: isDebug ? [
-        createLogger(),
+        // createLogger(),
     ] : [],
 });
