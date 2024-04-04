@@ -30,12 +30,22 @@ export default {
     inactiveGroups() {
       return this.groupNames.filter(group => !group['hasActive']);
     },
+
+    inSitePages() {
+      return this.$route.name === 'sites' ||
+          this.$route.name === 'siteEdit';
+    },
   },
 
   methods: {
     ...mapMutations({
-      selectGroup: 'selectGroup',
+      selectSiteGroup: 'selectGroup',
     }),
+
+    selectGroup(name) {
+      this.selectSiteGroup(name);
+      this.$router.push('/sites');
+    },
   },
 };
 </script>
@@ -55,7 +65,7 @@ export default {
       <nav v-if="activeGroups.length" class="nav">
         <span class="nav__title">Группы сайтов:</span>
         <button v-for="group in activeGroups"
-            :class="{active: selectedGroup === group.name}"
+            :class="{active: selectedGroup === group.name && inSitePages}"
             class="nav__item nav-item mono"
             @click="selectGroup(group.name)"
         >
@@ -69,7 +79,7 @@ export default {
       <nav v-if="inactiveGroups.length" class="nav">
         <span class="nav__title">Неактивные:</span>
         <button v-for="group in inactiveGroups"
-            :class="{active: selectedGroup === group.name}"
+            :class="{active: selectedGroup === group.name && inSitePages}"
             class="nav__item nav-item mono muted"
             @click="selectGroup(group.name)"
         >
