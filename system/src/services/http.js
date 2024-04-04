@@ -37,23 +37,12 @@ export default new class {
                     body.append(key, data[key]);
                 }
             }
-            // if (body instanceof FormData) {
-            //   for (var pair of body.entries()) {
-            //     console.log(pair[0] + ' = ' + pair[1]);
-            //   }
-            // }
         }
-
-        // showLoader();
 
         return fetch(url, { method, body })
             .then(parseResponse)
             .then(res => {
-                // hideLoader();
                 if (res.status === 200) {
-                    if (res.message) {
-                        // message(res.message);
-                    }
                     return res['payload'];
                 } else {
                     throw Error(res['message'] ?? 'Server Error');

@@ -7,6 +7,7 @@
 
 namespace OpenServer;
 
+use OpenServer\Controllers\FilesController;
 use OpenServer\Controllers\IndexController;
 use OpenServer\Controllers\ModuleController;
 use OpenServer\Controllers\SitesController;
@@ -53,6 +54,9 @@ try {
     $router->post('/api/sites/data', [SitesController::class, 'getSite']);
     $router->post('/api/sites/save', [SitesController::class, 'save']);
     $router->post('/api/sites/delete', [SitesController::class, 'delete']);
+
+    $router->post('/api/fs', FilesController::class);
+    $router->post('/api/fs/create', [FilesController::class, 'create']);
 
     $router->resolve();
 

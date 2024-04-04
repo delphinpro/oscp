@@ -11,16 +11,20 @@
 
 body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  color: var(--body-color);
+  background: #111827;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  background: #111827;
-  color: var(--body-color);
+
+  &:has(.modal-wrapper) {
+    overflow: hidden;
+  }
 }
 
 a {
-  color: #42b983;
   text-decoration: none;
+  color: #42b983;
   &:hover {
     color: #7fbca1;
   }
@@ -35,15 +39,15 @@ hr {
 
 dl {
   display: grid;
+  overflow: hidden;
+  border-radius: var(--table-radius);
   grid-template-columns: max-content 1fr;
   gap: 2px 0;
-  border-radius: var(--table-radius);
-  overflow: hidden;
   dt, dd {
     margin: 0;
+    background: var(--table-body-bg);
     padding-block: 0.75rem;
     padding-inline: 1rem;
-    background: var(--table-body-bg);
   }
   dd {
     padding-left: 2rem;
@@ -54,9 +58,9 @@ dl {
 pre {
   width: 100%;
   min-width: 0;
-  word-break: break-all;
   max-width: 100%;
-  white-space: pre-wrap;
-  border: 1px solid var(--hr-color);
   padding: 0.5rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border: 1px solid var(--hr-color);
 }

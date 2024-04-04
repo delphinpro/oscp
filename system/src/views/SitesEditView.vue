@@ -6,6 +6,7 @@
 
 <script>
 import Checkbox from '@/components/Checkbox';
+import FileSelector from '@/components/FileSelector.vue';
 import http from '@/services/http';
 import { mapActions, mapMutations, mapState } from 'vuex';
 
@@ -13,6 +14,7 @@ export default {
   name: 'SiteEditView',
 
   components: {
+    FileSelector,
     Checkbox,
   },
 
@@ -259,12 +261,7 @@ export default {
           <br><code class="text-muted">public_dir</code>
         </label>
         <div>
-          <input v-model="site.public_dir"
-              :class="{withError: !this.site.isValidRoot}"
-              class="input monospace"
-              required
-              type="text"
-          >
+          <file-selector v-model="site.public_dir" :error="!site.isValidRoot" :required="true"/>
         </div>
       </div>
       <div class="row">
@@ -273,7 +270,7 @@ export default {
           <br><code class="text-muted">project_home_dir</code>
         </label>
         <div>
-          <input v-model="site.project_home_dir" class="input monospace" type="text">
+          <file-selector v-model="site.project_home_dir" :initial-path="site.public_dir"/>
         </div>
       </div>
       <div class="row">
