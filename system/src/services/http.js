@@ -67,4 +67,27 @@ export default new class {
     post(url, data = {}) {
         return this.request(url, 'POST', data);
     }
+
+    apiCall(action) {
+        let url = this.#cliApiUrl + action;
+        return fetch(url, { method: 'GET' })
+            .then(res => res.text())
+            .then(res => {
+                const hasError = res.includes('ПРЕДУПРЕЖДЕНИЕ');
+                res = res.trim()
+                    .replaceAll('[93m', '')
+                    .replaceAll('[0m', '')
+                    .split('\n')
+                    .map(s => s.trim())
+                    .filter(s => !s || (!s.startsWith('ПРЕДУПРЕЖДЕНИЕ') && !s.startsWith('———')))
+                    .join('<br>');
+
+                if (hasError) {
+                    throw Error(res);
+                }
+
+                return res;
+            });
+
+    }
 };
