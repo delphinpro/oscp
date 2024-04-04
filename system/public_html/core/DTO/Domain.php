@@ -110,6 +110,7 @@ class Domain
 
     public function update(array $data): void
     {
+        $this->data['host'] = $data['host'];
         $data['public_dir'] = templatePath($data['public_dir'] ?? null, $data['host']);
 
         $sslEnabled = (bool)($data['ssl'] ?? false);
@@ -130,7 +131,6 @@ class Domain
             $defaultCgiDir = $this->resolvePath(self::DEFAULT_CGI_DIR);
 
             if ($key === 'public_dir' &&
-                !array_key_exists($key, $this->rawData) &&
                 $defaultPublicDir === $this->public_dir
             ) {
                 return false;
@@ -153,7 +153,6 @@ class Domain
         }, ARRAY_FILTER_USE_BOTH);
 
         $this->rawData = $data;
-        $this->data['host'] = $data['host'];
     }
 
     public function getRawData(): array

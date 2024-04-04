@@ -54,10 +54,10 @@ export default {
             <span v-else class="text-muted">{{ showDomain(domain.siteUrl) }}</span>
           </div>
         </td>
-        <td class="text-muted"><small>{{ domain.engine }}</small></td>
+        <td class="text-muted text-nowrap"><small>{{ domain.engine }}</small></td>
         <td class="text-success"><small v-if="domain.ssl"><i class="bi bi-lock-fill"></i></small></td>
         <td class="ps-4">
-          <div class="d-flex align-items-center gap-1 justify-end">
+          <div class="d-flex align-items-center gap-1 justify-end text-end">
             <div v-if="!domain.enabled" class="d-flex align-items-center gap-0.5 justify-end">
               <span class="text-muted">Сайт отключён</span>
               <i class="bi bi-exclamation-triangle-fill text-danger"></i>

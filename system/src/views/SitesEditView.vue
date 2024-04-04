@@ -7,7 +7,7 @@
 <script>
 import Checkbox from '@/components/Checkbox';
 import http from '@/services/http';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'SiteEditView',
@@ -17,8 +17,8 @@ export default {
   },
 
   data: () => ({
-    engines       : [],
-    selectedEngine: null,
+    engines         : [],
+    restartAfterSave: true,
 
     oldHost   : null,
     prevEngine: null,
@@ -48,6 +48,12 @@ export default {
     },
   }),
 
+  watch: {
+    restartAfterSave(v) {
+      localStorage.setItem('restartAfterSave', v);
+    },
+  },
+
   computed: {
     ...mapState({
       isGrouped   : state => state.sites.grouped,
@@ -58,14 +64,12 @@ export default {
   },
 
   created() {
+    this.restartAfterSave = localStorage.getItem('restartAfterSave') === 'true';
     this.$store.commit('setPageTitle', 'Настройка сайта ' + this.$route.params.host);
     this.showLoader();
     Promise.all([
       http.get('modules/engines').then(({ engines }) => {
         this.engines = engines;
-        if (engines.length) {
-          this.selectedEngine = engines[0]?.name;
-        }
       }),
       http.post('sites/data', { host: this.$route.params.host }).then(({ site }) => {
         this.site = site;
@@ -81,21 +85,53 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      showLoader: 'showLoader',
+      hideLoader: 'hideLoader',
+    }),
     ...mapActions({
-      showLoader : 'showLoader',
-      hideLoader : 'hideLoader',
+      modRestart : 'moduleRestart',
       showMessage: 'showMessage',
+      hideMessage: 'hideMessage',
       loadSites  : 'loadSites',
     }),
 
     async save() {
+
+      let requiredRestart = [];
+      if (this.engines.find(engine => engine.name === this.prevEngine)?.enabled) requiredRestart.push(this.prevEngine);
+      if (this.prevEngine !== this.site.engine) {
+        if (this.engines.find(engine => engine.name === this.site.engine)?.enabled) requiredRestart.push(this.site.engine);
+      }
+
+      this.showLoader();
+
       await http.post('sites/save', {
         old_host: this.oldHost,
         ...this.site,
       });
 
-      await this.showMessage({ message: `Сайт ${this.site.host} сохранён`, style: 'success', timeout: 3 });
+      let timeout = 3;
+      let message = `Сайт ${this.site.host} сохранён.`;
+
+      if (this.restartAfterSave && requiredRestart.length) {
+        message += `<br>Выполняется перезагрузка ` +
+            (requiredRestart.length > 1 ? 'модулей: ' : 'модуля: ') +
+            requiredRestart.join(', ') + '.';
+        timeout = 10;
+      }
+
+      await this.showMessage({ message, style: 'success', timeout });
       await this.loadSites();
+
+      if (this.restartAfterSave && requiredRestart.length) {
+        for (let engine of requiredRestart) {
+          await this.modRestart(engine);
+        }
+        await this.hideMessage();
+      }
+
+      this.hideLoader();
 
       this.$router.push('/sites');
     },
@@ -112,12 +148,13 @@ export default {
 <template>
   <div>
     <div class="d-flex align-items-center space-between gap-0.5 mb-2">
-      <div class="d-flex gap-0.5">
+      <div class="d-flex align-items-center gap-0.5">
         <router-link :to="{ name: 'sites' }" class="btn">
           <i class="bi bi-arrow-left"></i>
           <span class="text-nowrap">Назад</span>
         </router-link>
         <button v-if="ready" class="btn" @click="save">Сохранить</button>
+        <checkbox v-if="ready" v-model="restartAfterSave" label="Выполнить перезагрузку"/>
       </div>
       <button v-if="ready" class="btn" @click="deleteSite">Удалить</button>
     </div>
