@@ -104,7 +104,7 @@ export default {
 <template>
   <div>
 
-    <Checkbox v-model="hideDisabled" label="Скрывать отключённые"/>
+    <Checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
 
     <alert v-if="!filteredModules.length" class="mt-1" message="Модули не загружены"/>
 
@@ -147,13 +147,13 @@ export default {
                   class="btn btn-icon"
                   title="Выключить модуль"
                   @click="moduleAction('off', module.name)"
-              ><i class="bi bi-power"></i>
+              ><i class="bi bi-power text-danger"></i>
               </button>
               <button v-else
                   class="btn btn-icon"
                   title="Включить модуль"
                   @click="moduleAction('on', module.name)"
-              ><i class="bi bi-power"></i>
+              ><i class="bi bi-power text-success"></i>
               </button>
               <!--<a
                   class="btn btn-icon"

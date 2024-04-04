@@ -91,8 +91,8 @@ export default {
 <template>
   <div v-if="isReady">
     <div class="sites-bar">
-      <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
       <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
+      <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
       <a class="btn">
         <i class="bi bi-plus-lg"></i>
         <span class="text-nowrap">Добавить сайт</span>
@@ -118,7 +118,7 @@ export default {
 .sites-bar {
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: auto 1fr auto;
   gap: 0.5rem;
 }
 </style>
