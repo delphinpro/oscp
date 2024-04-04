@@ -12,7 +12,7 @@ export default {
   name: 'FileSelector',
 
   props: ['modelValue', 'required', 'error', 'showFiles', 'initialPath'],
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'selectValue'],
 
   data: () => ({
     isOpenBrowser: false,
@@ -27,9 +27,9 @@ export default {
     }),
     openBrowser() {
       this.isOpenBrowser = true;
-      this.currentDir = this.modelValue;
+      this.currentDir = this.modelValue ?? '';
       if (!this.currentDir) {
-        this.currentDir = this.initialPath;
+        this.currentDir = this.initialPath ?? '';
       }
       this.readFs();
     },
@@ -41,7 +41,6 @@ export default {
     async readFs() {
       let directory = this.currentDir;
       let res = await http.post('fs', { directory, files: !!this.showFiles });
-      console.log(res);
       this.files = res.list;
       this.currentDir = res.directory;
     },
@@ -53,6 +52,7 @@ export default {
 
     selectDir() {
       this.$emit('update:modelValue', this.currentDir);
+      this.$emit('selectValue');
       this.closeBrowser();
     },
 

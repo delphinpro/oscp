@@ -27,6 +27,11 @@ const routes = [
         component: SitesEditView,
     },
     {
+        path     : '/sites/create',
+        name     : 'siteCreate',
+        component: SitesEditView,
+    },
+    {
         path     : '/modules',
         name     : 'modules',
         component: ModulesView,

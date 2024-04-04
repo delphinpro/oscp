@@ -19,6 +19,8 @@ export default {
   },
 
   data: () => ({
+    isCreating: false,
+
     engines         : [],
     restartAfterSave: true,
 
@@ -28,7 +30,7 @@ export default {
     ready: false,
 
     site: {
-      host                : null,
+      host                : '',
       aliases             : null,
       auto_configure      : null,
       enabled             : null,
@@ -65,25 +67,37 @@ export default {
 
   },
 
-  created() {
+  async created() {
     this.restartAfterSave = localStorage.getItem('restartAfterSave') === 'true';
-    this.$store.commit('setPageTitle', 'Настройка сайта ' + this.$route.params.host);
+
+    this.isCreating = this.$route.name === 'siteCreate';
+    let pageTitle = this.isCreating ? 'Новый сайт' : 'Настройка сайта ' + this.$route.params.host;
+
+    this.$store.commit('setPageTitle', pageTitle);
+
     this.showLoader();
-    Promise.all([
-      http.get('modules/engines').then(({ engines }) => {
-        this.engines = engines;
-      }),
-      http.post('sites/data', { host: this.$route.params.host }).then(({ site }) => {
-        this.site = site;
-        this.prevEngine = site.engine;
-        this.oldHost = site.host;
+
+    this.engines = (await http.get('modules/engines'))?.engines ?? [];
+
+    if (!this.isCreating) {
+      try {
+        const res = await http.post('sites/data', { host: this.$route.params.host });
+        this.site = res.site;
+        this.prevEngine = res.site.engine;
+        this.oldHost = res.site.host;
         this.ready = true;
-      }).catch(err => {
-        this.showMessage({ message: err, style: 'danger', timeout: 5 });
-      }),
-    ]).then(() => {
-      this.hideLoader();
-    });
+      } catch (message) {
+        this.showMessage({ message, style: 'danger', timeout: 5 }).then();
+      }
+    } else {
+      this.ready = true;
+      this.site.prevEngine = this.engines[0].name;
+      this.site.engine = this.engines[0].name;
+    }
+
+
+    this.hideLoader();
+
   },
 
   methods: {
@@ -92,13 +106,19 @@ export default {
       hideLoader: 'hideLoader',
     }),
     ...mapActions({
-      modRestart : 'moduleRestart',
-      showMessage: 'showMessage',
-      hideMessage: 'hideMessage',
-      loadSites  : 'loadSites',
+      modRestart      : 'moduleRestart',
+      showErrorMessage: 'showErrorMessage',
+      showMessage     : 'showMessage',
+      hideMessage     : 'hideMessage',
+      loadSites       : 'loadSites',
     }),
 
     async save() {
+
+      if (this.site.host.trim().length === 0) {
+        this.showErrorMessage({ message: 'Не заполнено поле "Хост"' }).then();
+        return;
+      }
 
       let requiredRestart = [];
       if (this.engines.find(engine => engine.name === this.prevEngine)?.enabled) requiredRestart.push(this.prevEngine);
@@ -108,10 +128,16 @@ export default {
 
       this.showLoader();
 
-      await http.post('sites/save', {
-        old_host: this.oldHost,
-        ...this.site,
-      });
+      try {
+        await http.post('sites/save', {
+          old_host: this.oldHost,
+          ...this.site,
+        });
+      } catch (message) {
+        await this.showMessage({ message, style: 'danger', timeout: 5 });
+        this.hideLoader();
+        return;
+      }
 
       let timeout = 3;
       let message = `Сайт ${this.site.host} сохранён.`;
@@ -192,7 +218,7 @@ export default {
         <button v-if="ready" class="btn" @click="save">Сохранить</button>
         <checkbox v-if="ready" v-model="restartAfterSave" label="Выполнить перезагрузку"/>
       </div>
-      <button v-if="ready" class="btn" @click="deleteSite">Удалить</button>
+      <button v-if="ready && !isCreating" class="btn" @click="deleteSite">Удалить</button>
     </div>
 
     <div v-if="ready" class="form">
@@ -261,7 +287,12 @@ export default {
           <br><code class="text-muted">public_dir</code>
         </label>
         <div>
-          <file-selector v-model="site.public_dir" :error="!site.isValidRoot" :required="true"/>
+          <file-selector
+              v-model="site.public_dir"
+              :error="!site.isValidRoot && !isCreating"
+              :required="true"
+              @select-value="site.isValidRoot = true"
+          />
         </div>
       </div>
       <div class="row">

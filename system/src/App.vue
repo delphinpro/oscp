@@ -47,6 +47,7 @@ export default {
   },
 
   created() {
+    document.title = 'OSPanel';
     http.configure({
       baseUrl: this.apiHost,
     });
@@ -93,7 +94,6 @@ export default {
               this.noHost = false;
             })
             .catch(err => {
-              console.log('CHECK API HOST:', err.message);
               if (err.message === 'Failed to fetch') {
                 this.noHost = true;
               } else {

@@ -93,10 +93,10 @@ export default {
     <div class="sites-bar">
       <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
       <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
-      <a class="btn">
+      <router-link :to="{ name: 'siteCreate' }" class="btn">
         <i class="bi bi-plus-lg"></i>
         <span class="text-nowrap">Добавить сайт</span>
-      </a>
+      </router-link>
     </div>
     <div v-if="activeDomains.length" class="domains">
       <DomainsList :domains="activeDomains"/>

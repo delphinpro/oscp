@@ -52,18 +52,35 @@ class SitesController extends Controller
 
     public function save(Request $request): Response
     {
+        $oldHost = $request->input('old_host');
+        $host = $request->input('host');
+
+        $data = $request->except([
+            'old_host',
+            'adminUrl',
+            'siteUrl',
+            'isValidRoot',
+            'isAvailable',
+            'isActive',
+            'isProblem',
+            'isDisabled',
+        ]);
+
+        if (!$oldHost) {
+            if ($this->domains->has($host)) {
+                return Response::json()->status(500)->message("Хост <code>$host</code> уже существует");
+            }
+
+            $this->domains
+                ->create($host, $data)
+                ->save();
+
+            return Response::json()->message('Сайт создан');
+        }
+
         return $this->updateDomain(
             $request->input('host'),
-            $request->except([
-                'old_host',
-                'adminUrl',
-                'siteUrl',
-                'isValidRoot',
-                'isAvailable',
-                'isActive',
-                'isProblem',
-                'isDisabled',
-            ]),
+            $data,
             $request->input('old_host') ?: null
         );
     }

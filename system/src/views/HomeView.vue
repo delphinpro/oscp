@@ -65,7 +65,5 @@ export default {
       </dt>
       <dd></dd>
     </dl>
-
-    <pre>{{ $store.state.settings }}</pre>
   </div>
 </template>

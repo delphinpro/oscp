@@ -69,6 +69,10 @@ class FilesController extends Controller
     {
         if (file_exists($dir)) return $dir;
 
+        if (!$dir) {
+            return str_replace('/', '\\', ROOT_DIR.'/home');
+        }
+
         while (!file_exists($dir)) {
             $dir = dirname($dir);
         }

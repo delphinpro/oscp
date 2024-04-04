@@ -117,6 +117,7 @@ class Domains
 
             foreach ($data as $key => $value) {
                 if ($key === 'host') continue;
+                if ($value === null) continue;
                 $ini .= "$key = ".iniValue($value).PHP_EOL;
             }
         }
