@@ -6,7 +6,7 @@
 
 <script>
 import DomainsList from '@/components/DomainsList';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'SitesView',
@@ -55,9 +55,11 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.$store.commit('setPageTitle', 'Сайты');
-    this.$store.dispatch('loadSites');
+    await this.showLoader();
+    await this.loadSites();
+    await this.hideLoader();
     this.filter = JSON.parse(localStorage.getItem('site_filter') ?? '');
   },
 
@@ -66,6 +68,11 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      showLoader: 'showLoader',
+      hideLoader: 'hideLoader',
+      loadSites : 'loadSites',
+    }),
     saveFilter() {
       localStorage.setItem('site_filter', JSON.stringify(this.filter));
     },

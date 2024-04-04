@@ -41,7 +41,7 @@ const mutations = {
 
 const actions = {
     loadSites(ctx) {
-        http.get('/sites').then(({ grouped, sites }) => {
+        return http.get('/sites').then(({ grouped, sites }) => {
             ctx.commit('setSites', sites);
             ctx.commit('setGrouped', grouped);
             if (grouped) {
