@@ -94,18 +94,12 @@ class Domain
         return 'http'.($this->ssl ? 's' : '').'://'.$this->host.'/'.ltrim($this->admin_path, '/');
     }
 
-    public function console(): string
-    {
-        return '/cli/'.$this->host;
-    }
-
     public function toArray(): array
     {
         return [
             ...$this->data,
             'adminUrl'    => $this->admin_path ? $this->adminUrl() : null,
             'siteUrl'     => $this->siteUrl(),
-            'consoleUrl'  => $this->console(),
             'isValidRoot' => $this->isValidRoot(),
             'isAvailable' => $this->isAvailable(),
 

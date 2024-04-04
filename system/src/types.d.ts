@@ -25,7 +25,6 @@ type Domain = {
 
     siteUrl: string
     adminUrl: string
-    consoleUrl: string
     isValidRoot: boolean
     isAvailable: boolean
 
