@@ -132,7 +132,6 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
         </div>
         <div class="app__header">
           <div id="title">{{ pageTitle }}</div>
-          <button class="btn" @click="systemReload">Перезагрузить</button>
         </div>
         <div class="app__navigation">
           <side-bar class="app__sidebar"/>

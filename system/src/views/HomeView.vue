@@ -32,7 +32,7 @@ export default {
   },
 
   mounted() {
-    this.$store.commit('setPageTitle', 'Сводная информация');
+    this.$store.commit('setPageTitle', 'Open Server Panel');
   },
 };
 

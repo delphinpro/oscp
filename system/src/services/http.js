@@ -27,6 +27,7 @@ export default new class {
 
     request(url, method = 'GET', data = null) {
 
+        url = this.makeUrl(url);
         let body = data;
 
         if (method.toUpperCase() === 'POST') {
@@ -45,7 +46,7 @@ export default new class {
 
         // showLoader();
 
-        return fetch(this.makeUrl(url), { method, body })
+        return fetch(url, { method, body })
             .then(parseResponse)
             .then(res => {
                 // hideLoader();

@@ -48,7 +48,7 @@ try {
     $router->get('/api/modules', ModuleController::class);
 
     $router->get('/api/sites', SitesController::class);
-    $router->get('/api/sites/console', [SitesController::class, 'openConsole']);
+    $router->post('/api/sites/console', [SitesController::class, 'openConsole']);
 
     $router->resolve();
 

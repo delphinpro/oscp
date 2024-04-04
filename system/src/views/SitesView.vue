@@ -78,20 +78,20 @@ export default {
 <template>
   <div v-if="isReady">
     <div class="d-flex gap-0.5">
-      <input class="input" type="text" v-model="filter" @change="saveFilter" placeholder="Поиск сайта">
+      <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
       <a class="btn">
         <i class="bi bi-plus-lg"></i>
         <span class="text-nowrap">Добавить сайт</span>
       </a>
     </div>
-    <div class="domains" v-if="activeDomains.length">
+    <div v-if="activeDomains.length" class="domains">
       <DomainsList :domains="activeDomains"/>
     </div>
-    <div class="domains" v-if="problemDomains.length">
+    <div v-if="problemDomains.length" class="domains">
       <h4>Сайты с ошибками</h4>
       <DomainsList :domains="problemDomains"/>
     </div>
-    <div class="domains" v-if="disabledDomains.length">
+    <div v-if="disabledDomains.length" class="domains">
       <h4>Отключённые сайты</h4>
       <DomainsList :domains="disabledDomains"/>
     </div>

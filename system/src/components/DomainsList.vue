@@ -6,6 +6,7 @@
 
 <script>
 import http from '@/services/http';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'DomainsList',
@@ -15,9 +16,25 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      showMessage: 'showMessage',
+    }),
     openConsole(host) {
-      console.log({ host });
-      http.post('sites/console', { host });
+      // http.apiCall('/project/cli/' + host + '/').then(res => {
+      //   console.log(res);
+      // });
+      http.post('sites/console', { host })
+          .catch(message => this.showMessage({
+                message,
+                title  : 'Server error',
+                style  : 'danger',
+                timeout: 5,
+              }),
+          );
+    },
+
+    showDomain(host) {
+      return host.replace('http://', '').replace('https://', '');
     },
   },
 };
@@ -33,43 +50,38 @@ export default {
                 v-if="domain.enabled && domain.isValidRoot && domain.isAvailable"
                 :href="domain.siteUrl"
                 target="_blank"
-            >
-              {{ domain.siteUrl.replace('http://', '').replace('https://', '') }}
-            </a>
-            <span class="text-muted" v-else>{{
-                domain.siteUrl.replace('http://', '').replace('https://', '')
-              }}</span>
+            >{{ showDomain(domain.siteUrl) }}</a>
+            <span v-else class="text-muted">{{ showDomain(domain.siteUrl) }}</span>
           </div>
         </td>
         <td class="text-muted"><small>{{ domain.engine }}</small></td>
         <td class="text-success"><small v-if="domain.ssl"><i class="bi bi-lock-fill"></i></small></td>
         <td class="ps-4">
-          <div class="d-flex align-items-center gap-0.5 justify-end" v-if="!domain.enabled">
-            <span class="text-muted">Сайт отключён</span>
-            <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-          </div>
-          <div class="d-flex align-items-center gap-0.5 justify-end" v-else-if="!domain.isAvailable">
-            <span class="text-muted">Модуль {{ domain.engine }} отсутствует или выключен</span>
-            <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-          </div>
-          <div class="d-flex align-items-center gap-0.5 justify-end" v-else-if="!domain.isValidRoot">
-            <span class="text-muted">Неверная папка домена</span>
-            <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-          </div>
-          <div v-else>
-            <div class="btn-group justify-end">
-              <a v-if="domain.adminUrl"
-                  :href="domain.adminUrl"
-                  class="btn btn-icon"
-                  target="_blank"
-                  title="Админка"
-              ><i class="bi bi-box-arrow-in-right"></i></a>
-              <button @click="openConsole(domain.host)" class="btn btn-icon" title="Консоль">
-                <i class="bi bi-terminal"></i>
-              </button>
-              <!--<button @click="openConsole(domain.consoleUrl)" class="btn btn-icon" title="Настройки">
-                <i class="bi bi-gear"></i>
-              </button>-->
+          <div class="d-flex align-items-center gap-1 justify-end">
+            <div v-if="!domain.enabled" class="d-flex align-items-center gap-0.5 justify-end">
+              <span class="text-muted">Сайт отключён</span>
+              <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+            </div>
+            <div v-else-if="!domain.isAvailable" class="d-flex align-items-center gap-0.5 justify-end">
+              <span class="text-muted">Модуль {{ domain.engine }} отсутствует или выключен</span>
+              <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+            </div>
+            <div v-else-if="!domain.isValidRoot" class="d-flex align-items-center gap-0.5 justify-end">
+              <span class="text-muted">Неверная папка домена</span>
+              <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+            </div>
+            <div v-else>
+              <div class="btn-group justify-end">
+                <a v-if="domain.adminUrl"
+                    :href="domain.adminUrl"
+                    class="btn btn-icon"
+                    target="_blank"
+                    title="Админка"
+                ><i class="bi bi-box-arrow-in-right"></i></a>
+                <button class="btn btn-icon" title="Консоль" @click="openConsole(domain.host)">
+                  <i class="bi bi-terminal"></i>
+                </button>
+              </div>
             </div>
           </div>
         </td>
