@@ -1,0 +1,23 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+.bulb {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 100px;
+
+  &.bg-danger {
+    background: var(--danger-color);
+  }
+
+  &.bg-success {
+    background: var(--success-color);
+  }
+
+  &.bg-white {
+    background: transparent !important;
+  }
+}

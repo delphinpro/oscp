@@ -1,21 +1,25 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
 namespace OpenServer\Services;
 
 use OpenServer\DTO\Module;
-use OpenServer\Traits\Makeable;
 
 class Modules
 {
+    private static ?Modules $instance = null;
+
     /** @var \OpenServer\DTO\Module[] */
     protected array $modules;
 
-    private static ?Modules $instance = null;
+    public function __construct()
+    {
+        $this->readConfig();
+    }
 
     public static function make(): Modules
     {
@@ -26,17 +30,19 @@ class Modules
         return self::$instance;
     }
 
-    public function __construct()
-    {
-        $this->readConfig();
-    }
-
     /**
      * @return \OpenServer\DTO\Module[]
      */
-    public function getList(): array
+    public function toArray(): array
     {
-        return $this->modules;
+        return array_map(static fn(Module $module) => $module->toArray(), $this->modules);
+    }
+
+    public function getWebEngines(): array
+    {
+        return array_values(
+            array_filter($this->modules, static fn(Module $module) => $module->compatible === 'Web')
+        );
     }
 
     public function get($moduleName): ?Module
@@ -55,7 +61,11 @@ class Modules
         $modules = httpRequest('/modules');
         $modules = explode("\n", $modules);
         $modules = array_filter($modules, static function ($str) {
-            return !(str_contains($str, 'МОДУЛЬ') || str_contains($str, '—————'));
+            return !(
+                str_contains($str, 'МОДУЛЬ') ||
+                str_contains($str, 'MODULE') ||
+                str_contains($str, '—————')
+            );
         });
         $this->modules = array_map(static function ($str) {
             $str = trim($str);
@@ -70,8 +80,8 @@ class Modules
             return Module::make(
                 name: $name,
                 status: $cols[1],
-                enabled: $cols[1] === 'Включён',
-                init: $cols[1] === 'Инициализирован',
+                enabled: in_array($cols[1], ['Включён', 'Enabled', 'Уключаны', 'Включений']),
+                init: in_array($cols[1], ['Инициализирован', 'Initialized', 'Ініцыялізаваны', 'Ініціалізовано']),
                 version: $cols[2],
                 type: $cols[3],
                 compatible: $cols[4],
@@ -80,6 +90,6 @@ class Modules
                     'port' => $settings['main']['port'] ?? null,
                 ]
             );
-        }, $modules);
+        }, array_values($modules));
     }
 }

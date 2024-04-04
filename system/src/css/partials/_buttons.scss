@@ -1,0 +1,67 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+.btn {
+  font-size: 0.85rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+
+  height: 2.5rem;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  vertical-align: middle;
+  color: var(--btn-color);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius);
+  background: var(--btn-bg);
+  --btn-color: var(--body-color);
+  --btn-bg: #374151;
+  --btn-hover-bg: #4b5563;
+  --btn-border: #4b5563;
+  gap: 0.5em;
+
+  td & {
+    height: auto;
+  }
+
+  &:hover {
+    color: var(--btn-color);
+    background: var(--btn-hover-bg);
+  }
+}
+
+.btn-danger {
+  --btn-color: var(--body-color);
+  --btn-bg: #d85656;
+  --btn-hover-bg: #f53c3c;
+  --btn-border: #f53c3c;
+}
+
+.btn-icon {
+  color: #92a5c0;
+  padding-inline: 0.75em;
+  padding-block: 0.3em;
+  .bi {
+    font-size: 1rem;
+  }
+}
+
+
+.btn-group {
+  display: flex;
+  gap: 1px;
+  .btn {
+    border-radius: 0;
+    &:first-child {
+      border-top-left-radius: var(--radius-half);
+      border-bottom-left-radius: var(--radius-half);
+    }
+    &:last-child {
+      border-top-right-radius: var(--radius-half);
+      border-bottom-right-radius: var(--radius-half);
+    }
+  }
+}

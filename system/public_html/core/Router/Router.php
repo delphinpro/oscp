@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -32,7 +32,7 @@ class Router
         [$route, $method] = $args;
 
         if (!in_array(strtoupper($name), $this->supportedHttpMethods, true)) {
-            $this->invalidMethodHandler();
+            $this->invalidMethodHandler($name);
         }
 
         $this->routes[strtolower($name)][$this->formatRoute($route)] = $method;
@@ -45,7 +45,7 @@ class Router
     {
         $methodDictionary = $this->routes[strtolower($this->request->requestMethod)];
         $formattedRoute = $this->formatRoute($this->request->requestUri);
-        $callable = $methodDictionary[$formattedRoute];
+        $callable = $methodDictionary[$formattedRoute] ?? null;
 
         switch (true) {
             case is_string($callable):
@@ -68,9 +68,12 @@ class Router
         }
     }
 
-    private function invalidMethodHandler(): void
+    private function invalidMethodHandler(string $method): void
     {
-        header("{$this->request->serverProtocol} 405 Method Not Allowed");
+        echo Response::json()
+            ->headers(["{$this->request->serverProtocol} 405 Method Not Allowed"])
+            ->message('405 Method Not Allowed: '.$method)
+            ->status(405);
     }
 
     /**
@@ -88,6 +91,9 @@ class Router
 
     private function defaultRequestHandler(): void
     {
-        header("{$this->request->serverProtocol} 404 Not Found");
+        echo Response::json()
+            ->headers(["{$this->request->serverProtocol} 404 Not Found"])
+            ->message('404 Not Found: '.$this->request->requestUri)
+            ->status(404);
     }
 }

@@ -1,0 +1,47 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+.mono {
+  font-family: "Fira Code", Consolas, monospace;
+  font-size: 1.05em;
+}
+
+.monospace { font-family: monospace !important; }
+
+.text-end { text-align: right; }
+
+.text-nowrap { white-space: nowrap !important; }
+
+.text-muted { color: var(--muted-color); }
+
+.text-danger { color: var(--danger-color); }
+
+.text-success { color: var(--success-color); }
+
+.font-small { font-size: 0.75em; }
+
+.d-flex { display: flex;}
+
+.align-items-center { align-items: center; }
+
+.justify-end { justify-content: flex-end; }
+
+.space-between { justify-content: space-between; }
+
+.col-span-2 { grid-column: span 2; }
+
+.gap-0\.25 { gap: 0.25rem; }
+
+.gap-0\.5 { gap: 0.5rem; }
+
+.gap-1 { gap: 1rem; }
+
+.mb-1 { margin-bottom: 1rem; }
+
+.mt-1 { margin-top: 1rem; }
+
+.mb-2 { margin-bottom: 2rem; }
+
+.mt-2 { margin-top: 2rem; }

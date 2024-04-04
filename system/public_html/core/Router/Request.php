@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -88,7 +88,14 @@ class Request
         if ($this->requestMethod === "POST") {
             $this->body = [];
             foreach ($_POST as $key => $value) {
-                $this->body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                $value = match ($value) {
+                    'true'  => true,
+                    'false' => false,
+                    'null'  => null,
+                    default => $value,
+                };
+                $this->body[$key] = $value;
             }
         }
     }

@@ -1,7 +1,7 @@
 <?php
 /*
- * OSPanel Web Dashboard
- * Copyright (c) 2023.
+ * Web OSP by delphinpro
+ * Copyright (c) 2023-2024.
  * Licensed under MIT License
  */
 
@@ -38,6 +38,9 @@ class Module
             'version'    => $this->version,
             'type'       => $this->type,
             'compatible' => $this->compatible,
+
+            'ip'   => $this->ip(),
+            'port' => $this->port(),
         ];
     }
 
