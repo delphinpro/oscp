@@ -77,6 +77,12 @@ export default createStore({
                 sysMessageTimeout = setTimeout(() => dispatch('hideMessage'), timeout * 1000);
             }
         },
+        showSuccessMessage({ dispatch }, { message, title = null, style = 'success', timeout = 5 }) {
+            dispatch('showMessage', { message, title, style, timeout });
+        },
+        showErrorMessage({ dispatch }, { message, title = null, style = 'danger', timeout = 5 }) {
+            dispatch('showMessage', { message, title, style, timeout });
+        },
         hideMessage({ commit }) {
             commit('setSystemMessage', null);
         },

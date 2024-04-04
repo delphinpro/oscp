@@ -8,7 +8,7 @@
 import Alert from '@/components/Alert';
 import Checkbox from '@/components/Checkbox';
 import http from '@/services/http';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'ModulesView',
@@ -51,48 +51,49 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      showLoader: 'showLoader',
+      hideLoader: 'hideLoader',
+    }),
     ...mapActions({
-      loadModules: 'loadModules',
-      showLoader : 'showLoader',
-      hideLoader : 'hideLoader',
-      showMessage: 'showMessage',
-      hideMessage: 'hideMessage',
+      loadModules       : 'loadModules',
+      modRestart        : 'moduleRestart',
+      showSuccessMessage: 'showSuccessMessage',
+      showErrorMessage  : 'showErrorMessage',
+      hideMessage       : 'hideMessage',
     }),
 
-    loadData() {
+    async loadData() {
       this.showLoader();
-      this.loadModules().then(() => this.hideLoader());
+      await this.loadModules();
+      this.hideLoader();
     },
 
-    moduleAction(command, module) {
+    async moduleAction(command, module) {
       this.showLoader();
-      http.apiCall(`/${command}/${module}/`)
-          .then(res => {
-            this.showSuccessMessage(res);
-            this.loadData();
-          }).catch(err => this.showErrorMessage(err.message));
+
+      try {
+        let message = await http.apiCall(`/${command}/${module}/`);
+        await this.showSuccessMessage({ message });
+        await this.loadData();
+      } catch (message) {
+        await this.showErrorMessage({ message, title: 'Ошибка' });
+      }
+
+      this.hideLoader();
     },
 
-    moduleRestart(module) {
+    async moduleRestart(module) {
       this.showLoader();
-      http.apiCall(`/off/${module}/`)
-          .then(res => {
-            this.showSuccessMessage(res);
-            http.apiCall(`/on/${module}/`)
-                .then(res => {
-                  this.showSuccessMessage(res);
-                  this.loadData();
-                }).catch(err => this.showErrorMessage(err.message));
-          }).catch(err => this.showErrorMessage(err.message));
-    },
 
-    showSuccessMessage(message) {
-      this.showMessage({ message, style: 'success', timeout: 5 });
-    },
+      try {
+        let message = await this.modRestart(module);
+        await this.showSuccessMessage({ message });
+      } catch (message) {
+        await this.showErrorMessage({ message, title: 'Ошибка' });
+      }
 
-    showErrorMessage(message) {
-      this.showMessage({ title: 'Ошибка', message, style: 'danger', timeout: 5 });
-      this.loadData();
+      this.hideLoader();
     },
   },
 
