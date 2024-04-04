@@ -22,11 +22,17 @@
   --btn-border: #4b5563;
   gap: 0.5em;
 
-
   &:hover {
     color: var(--btn-color);
     background: var(--btn-hover-bg);
   }
+}
+
+.btn-danger {
+  --btn-color: var(--body-color);
+  --btn-bg: #d85656;
+  --btn-hover-bg: #f53c3c;
+  --btn-border: #f53c3c;
 }
 
 .btn-icon {

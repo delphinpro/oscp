@@ -132,6 +132,11 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
         </div>
         <div class="app__header">
           <div id="title">{{ pageTitle }}</div>
+          <div v-if="$route.params.host">
+            <a href="https://github.com/OSPanel/OpenServerPanel/wiki/Документация/c31bf93751abb63672d5627a31d896f7f751ab65#настройка-доменов"
+                target="_blank"
+            >Справка <small class="bi bi-box-arrow-up-right"></small></a>
+          </div>
         </div>
         <div class="app__navigation">
           <side-bar class="app__sidebar"/>
@@ -206,7 +211,7 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 
   &__header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     padding: var(--app-header-padding-y) var(--app-header-padding-x);
   }
