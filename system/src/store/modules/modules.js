@@ -20,7 +20,6 @@ const actions = {
     loadModules({ commit }) {
         return http.get('/modules').then(res => {
             commit('setModules', res.modules);
-            return res.modules;
         });
     },
 };

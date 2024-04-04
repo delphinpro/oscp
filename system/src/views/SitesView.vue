@@ -63,10 +63,6 @@ export default {
     this.filter = JSON.parse(localStorage.getItem('site_filter') ?? '');
   },
 
-  unmounted() {
-    this.$store.commit('resetGroup');
-  },
-
   methods: {
     ...mapActions({
       showLoader: 'showLoader',

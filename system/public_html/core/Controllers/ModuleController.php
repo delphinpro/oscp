@@ -7,7 +7,6 @@
 
 namespace OpenServer\Controllers;
 
-use OpenServer\Router\Request;
 use OpenServer\Router\Response;
 use OpenServer\Services\Modules;
 
@@ -28,5 +27,14 @@ class ModuleController extends Controller
                 ->message($e->getMessage());
 
         }
+    }
+
+    public function engines(): Response
+    {
+        $modules = Modules::make();
+
+        return Response::json([
+            'engines' => $modules->getWebEngines(),
+        ]);
     }
 }

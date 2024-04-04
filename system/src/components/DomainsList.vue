@@ -83,6 +83,14 @@ export default {
                 </button>
               </div>
             </div>
+            <div class="btn-group justify-end">
+              <router-link :to="{ name: 'siteEdit', params: { host: domain.host } }"
+                  class="btn btn-icon"
+                  title="Настройки"
+              >
+                <i class="bi bi-gear"></i>
+              </router-link>
+            </div>
           </div>
         </td>
       </tr>

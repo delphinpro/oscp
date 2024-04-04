@@ -6,6 +6,7 @@
 
 import HomeView from '@/views/HomeView.vue';
 import ModulesView from '@/views/ModulesView';
+import SitesEditView from '@/views/SitesEditView.vue';
 import SitesView from '@/views/SitesView';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
@@ -19,6 +20,11 @@ const routes = [
         path     : '/sites',
         name     : 'sites',
         component: SitesView,
+    },
+    {
+        path     : '/sites/:host',
+        name     : 'siteEdit',
+        component: SitesEditView,
     },
     {
         path     : '/modules',

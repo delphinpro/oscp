@@ -46,9 +46,12 @@ try {
     $router->get('/api/restart', [IndexController::class, 'restart']);
 
     $router->get('/api/modules', ModuleController::class);
+    $router->get('/api/modules/engines', [ModuleController::class, 'engines']);
 
     $router->get('/api/sites', SitesController::class);
     $router->post('/api/sites/console', [SitesController::class, 'openConsole']);
+    $router->post('/api/sites/data', [SitesController::class, 'getSite']);
+    $router->post('/api/sites/save', [SitesController::class, 'save']);
 
     $router->resolve();
 

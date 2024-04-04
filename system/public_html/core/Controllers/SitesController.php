@@ -35,6 +35,39 @@ class SitesController extends Controller
         ]);
     }
 
+    public function getSite(Request $request): Response
+    {
+        $host = $request->input('host');
+        if (!$this->domains->has($host)) {
+            return Response::json()->status(404)->message('Хост не найден');
+        }
+
+        $site = $this->domains->get($host)->toArray();
+
+        return Response::json([
+            'host' => $host,
+            'site' => $site,
+        ]);
+    }
+
+    public function save(Request $request): Response
+    {
+        return $this->updateDomain(
+            $request->input('host'),
+            $request->except([
+                'old_host',
+                'adminUrl',
+                'siteUrl',
+                'isValidRoot',
+                'isAvailable',
+                'isActive',
+                'isProblem',
+                'isDisabled',
+            ]),
+            $request->input('old_host') ?: null
+        );
+    }
+
     public function openConsole(Request $request): Response
     {
         $host = $request->input('host');
@@ -47,5 +80,28 @@ class SitesController extends Controller
         pclose(popen("start $cmd", 'r'));
 
         return Response::json();
+    }
+
+    private function updateDomain(string $host, array $data, ?string $oldHost = null): Response
+    {
+        try {
+
+            if (!$this->domains->has($oldHost ?? $host)) {
+                throw new \RuntimeException('Ошибка: Хост ['.htmlspecialchars($oldHost ?? $host).'] отсутствует.');
+            }
+
+            $this->domains
+                ->update($oldHost, $data)
+                ->save();
+
+            return Response::json()->message('Сайт сохранён');
+
+        } catch (\Exception $e) {
+
+            return Response::json()
+                ->status(500)
+                ->message($e->getMessage());
+
+        }
     }
 }

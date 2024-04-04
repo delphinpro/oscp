@@ -96,12 +96,12 @@ class Domains
         return $this;
     }
 
-    public function update(string $host, array $data): static
+    public function update(string $oldHost, array $data): static
     {
-        $this->domains[$host] = new Domain([
-            ...($this->domains[$host]->toArray()),
-            ...$data,
-        ]);
+        $domain = new Domain($this->domains[$oldHost]->getRawData());
+        $domain->update($data);
+        unset($this->domains[$oldHost]);
+        $this->domains[$domain->host] = $domain;
 
         return $this;
     }
@@ -111,66 +111,16 @@ class Domains
         $ini = '';
 
         foreach ($this->domains as $domain) {
-            $cgiDirectory = $this->path($domain->cgi_dir);
-            $rootDirectory = $this->path($domain->public_dir);
-            $projectDir = $this->path($domain->project_home_dir);
-            $sslCertFile = $this->path($domain->ssl_cert_file);
-            $sslKeyFile = $this->path($domain->ssl_key_file);
-            $enabled = $domain->enabled ? 'on' : 'off';
-            $ssl = $domain->ssl ? 'on' : 'off';
-            $autoConfigure = $domain->auto_configure ? 'on' : 'off';
-            $projectUseSysEnv = $domain->project_use_sys_env ? 'on' : 'off';
+            $data = $domain->getRawData();
+            $host = $data['host'];
+            $ini .= PHP_EOL.'['.$host.']'.PHP_EOL;
 
-            $ini .= PHP_EOL;
-            $ini .= <<<DOMAIN
-[$domain->host]
-
-aliases              = $domain->aliases
-enabled              = $enabled
-engine               = $domain->engine
-ip                   = $domain->ip
-log_format           = $domain->log_format
-cgi_dir              = $cgiDirectory
-public_dir           = $rootDirectory
-project_home_dir     = $projectDir
-auto_configure       = $autoConfigure
-ssl                  = $ssl
-ssl_cert_file        = $sslCertFile
-ssl_key_file         = $sslKeyFile
-project_add_modules  = $domain->project_add_modules
-project_add_commands = $domain->project_add_commands
-project_use_sys_env  = $projectUseSysEnv
-DOMAIN;
-            $ini .= PHP_EOL;
-            foreach ($domain->toArray() as $key => $value) {
-                if (!in_array($key, [
-                    'host',
-                    'aliases',
-                    'enabled',
-                    'engine',
-                    'ip',
-                    'log_format',
-                    'cgi_dir',
-                    'public_dir',
-                    'project_home_dir',
-                    'auto_configure',
-                    'ssl',
-                    'ssl_cert_file',
-                    'ssl_key_file',
-                    'project_add_modules',
-                    'project_add_commands',
-                    'project_use_sys_env',
-                ])) {
-                    if (is_bool($value)) {
-                        $value = $value ? 'on' : 'off';
-                    }
-                    if (is_null($value)) {
-                        $value = 'null';
-                    }
-                    $ini .= $key.' = '.$value.PHP_EOL;
-                }
+            foreach ($data as $key => $value) {
+                if ($key === 'host') continue;
+                $ini .= "$key = ".iniValue($value).PHP_EOL;
             }
         }
+
         file_put_contents(ROOT_DIR.'/config/domains.ini', $ini);
     }
 
@@ -239,10 +189,5 @@ DOMAIN;
         foreach ($domainsData as $host => $domain) {
             $this->domains[$host] = new Domain(['host' => $host, ...$domain]);
         }
-    }
-
-    private function path(string $path): string
-    {
-        return toWindowsPath(localPath($path));
     }
 }

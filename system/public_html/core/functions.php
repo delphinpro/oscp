@@ -113,26 +113,6 @@ function httpRequest($url): array|string|null
     return clearString($data);
 }
 
-function toUnixPath(string $path): string
-{
-    return str_replace('\\', '/', $path);
-}
-
-function toWindowsPath(string $path): string
-{
-    return str_replace('/', '\\', $path);
-}
-
-function absolutePath(string $path): string
-{
-    return str_replace('{root_dir}', ROOT_DIR, $path);
-}
-
-function localPath(string $path): string
-{
-    return str_ireplace(ROOT_DIR, '{root_dir}', $path);
-}
-
 /**
  * @param  string  $filename
  *
@@ -171,4 +151,26 @@ function readIniFile(string $filename): array
     }
 
     return $data;
+}
+
+function templatePath(?string $path, string $host)
+{
+    if ($path === null) return null;
+
+    return str_replace([
+        str_replace('/', '\\', ROOT_DIR),
+        $host,
+    ], [
+        '{root_dir}',
+        '{host}',
+    ], $path);
+}
+
+function iniValue(mixed $value): string
+{
+    return match (true) {
+        is_bool($value)   => $value ? 'on' : 'off',
+        is_string($value) => str_replace('\\\\', '\\', $value),
+        default           => $value
+    };
 }

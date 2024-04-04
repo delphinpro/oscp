@@ -52,34 +52,10 @@ export default {
     });
   },
 
-  mounted() {
-    pingInterval = setInterval(() => {
-      if (!window.ping || !this.apiDomain) return;
-      fetch(this.apiHost + '/ping')
-          .then(res => {
-            if (res.ok) return res.json();
-            return res.text();
-          })
-          .then(res => {
-            if (typeof res === 'string') {
-              throw new Error(res.toString());
-            }
-            this.error = null;
-            this.noHost = false;
-          })
-          .catch(err => {
-            console.log('CHECK API HOST:', err.message);
-            if (err.message === 'Failed to fetch') {
-              this.noHost = true;
-            } else {
-              this.noHost = false;
-              this.error = err.message;
-            }
-          });
-
-    }, PING_INTERVAL);
-
-    this.loadMainData();
+  async mounted() {
+    this.startPing();
+    await this.loadMainData();
+    await this.loadSites();
   },
 
   unmounted() {
@@ -90,13 +66,43 @@ export default {
     ...mapActions({
       loadMainData: 'loadMainData',
       showMessage : 'showMessage',
+      loadSites   : 'loadSites',
     }),
+
     systemReload() {
       this.noHost = true;
       this.showMessage({ title: 'Выполняется перезагрузка', style: 'danger', timeout: 5 });
       window.ping = false;
       http.get('/restart').then();
       setTimeout(() => window.ping = true, 5000);
+    },
+
+    startPing() {
+      pingInterval = setInterval(() => {
+        if (!window.ping || !this.apiDomain) return;
+        fetch(this.apiHost + '/ping')
+            .then(res => {
+              if (res.ok) return res.json();
+              return res.text();
+            })
+            .then(res => {
+              if (typeof res === 'string') {
+                throw new Error(res.toString());
+              }
+              this.error = null;
+              this.noHost = false;
+            })
+            .catch(err => {
+              console.log('CHECK API HOST:', err.message);
+              if (err.message === 'Failed to fetch') {
+                this.noHost = true;
+              } else {
+                this.noHost = false;
+                this.error = err.message;
+              }
+            });
+
+      }, PING_INTERVAL);
     },
   },
 
