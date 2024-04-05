@@ -69,15 +69,18 @@ class FilesController extends Controller
     {
         if (file_exists($dir)) return $dir;
 
+        $defaultStartDirectory = str_replace('/', '\\', ROOT_DIR.'/home');
+
         if (!$dir) {
-            return str_replace('/', '\\', ROOT_DIR.'/home');
+            return $defaultStartDirectory;
         }
 
-        while (!file_exists($dir)) {
+        $protect = 0;
+        while (!file_exists($dir) && $protect++ < 100) {
             $dir = dirname($dir);
         }
 
-        if (strlen($dir) < 4) return str_replace('/', '\\', ROOT_DIR.'/home');
+        if (strlen($dir) < 4) return $defaultStartDirectory;
 
         return $dir;
     }
