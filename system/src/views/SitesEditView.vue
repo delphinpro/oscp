@@ -65,6 +65,9 @@ export default {
       currentGroup: state => state.sites.selected,
     }),
 
+    defaultEngine() {
+      return this.engines.filter(e => e.enabled).sort((a, b) => b.name.localeCompare(a.name))[0];
+    },
   },
 
   async created() {
@@ -91,8 +94,8 @@ export default {
       }
     } else {
       this.ready = true;
-      this.site.prevEngine = this.engines[0].name;
-      this.site.engine = this.engines[0].name;
+      this.site.prevEngine = this.defaultEngine.name;
+      this.site.engine = this.defaultEngine.name;
     }
 
 
