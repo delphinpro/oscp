@@ -94,7 +94,7 @@ export default {
       <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
       <div class="d-flex filter">
         <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
-        <button class="btn" @click="filter=''"><i class="bi bi-x-lg"></i></button>
+        <button class="btn" @click="filter='';saveFilter()"><i class="bi bi-x-lg"></i></button>
       </div>
       <router-link :to="{ name: 'siteCreate' }" class="btn">
         <i class="bi bi-plus-lg"></i>
