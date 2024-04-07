@@ -92,7 +92,10 @@ export default {
   <div v-if="isReady">
     <div class="sites-bar">
       <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
-      <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
+      <div class="d-flex filter">
+        <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
+        <button class="btn" @click="filter=''"><i class="bi bi-x-lg"></i></button>
+      </div>
       <router-link :to="{ name: 'siteCreate' }" class="btn">
         <i class="bi bi-plus-lg"></i>
         <span class="text-nowrap">Добавить сайт</span>
@@ -114,11 +117,22 @@ export default {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .sites-bar {
   display: grid;
   align-items: center;
   grid-template-columns: auto 1fr auto;
   gap: 0.5rem;
+}
+
+.filter {
+  input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .btn {
+    border-radius: 0 var(--radius-half) var(--radius-half) 0;
+    padding-inline: 0.75rem;
+  }
 }
 </style>
