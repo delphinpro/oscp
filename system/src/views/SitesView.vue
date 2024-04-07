@@ -67,10 +67,17 @@ export default {
   async created() {
     this.hideDisabled = localStorage.getItem('sites_hideDisabled') === 'true';
     this.$store.commit('setPageTitle', 'Сайты');
-    await this.showLoader();
-    await this.loadSites();
-    await this.hideLoader();
     this.filter = JSON.parse(localStorage.getItem('site_filter') ?? '""');
+  },
+
+  async mounted() {
+    try {
+      await this.showLoader();
+      await this.loadSites();
+    } catch (err) {
+      console.log(err);
+    }
+    await this.hideLoader();
   },
 
   methods: {

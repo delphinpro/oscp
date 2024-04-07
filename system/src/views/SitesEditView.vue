@@ -78,26 +78,27 @@ export default {
 
     this.$store.commit('setPageTitle', pageTitle);
 
-    this.showLoader();
+    try {
 
-    this.engines = (await http.get('modules/engines'))?.engines ?? [];
+      this.showLoader();
 
-    if (!this.isCreating) {
-      try {
+      this.engines = (await http.get('modules/engines'))?.engines ?? [];
+
+      if (!this.isCreating) {
         const res = await http.post('sites/data', { host: this.$route.params.host });
         this.site = res.site;
         this.prevEngine = res.site.engine;
         this.oldHost = res.site.host;
         this.ready = true;
-      } catch (message) {
-        this.showMessage({ message, style: 'danger', timeout: 5 }).then();
+      } else {
+        this.ready = true;
+        this.site.prevEngine = this.defaultEngine.name;
+        this.site.engine = this.defaultEngine.name;
       }
-    } else {
-      this.ready = true;
-      this.site.prevEngine = this.defaultEngine.name;
-      this.site.engine = this.defaultEngine.name;
-    }
 
+    } catch (message) {
+      this.showMessage({ message, style: 'danger', timeout: 5 }).then();
+    }
 
     this.hideLoader();
 

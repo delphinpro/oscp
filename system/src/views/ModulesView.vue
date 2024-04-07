@@ -64,8 +64,12 @@ export default {
     }),
 
     async loadData() {
-      this.showLoader();
-      await this.loadModules();
+      try {
+        this.showLoader();
+        await this.loadModules();
+      } catch (err) {
+        console.log(err);
+      }
       this.hideLoader();
     },
 
@@ -87,7 +91,10 @@ export default {
       this.showLoader();
 
       try {
+        window.ping = false;
+        await this.showSuccessMessage({ message: 'Выполняется перезагрузка модуля ' + module });
         let message = await this.modRestart(module);
+        window.ping = true;
         await this.showSuccessMessage({ message });
       } catch (message) {
         await this.showErrorMessage({ message, title: 'Ошибка' });

@@ -114,7 +114,7 @@ export default {
                   <span>{{ name }}</span>
                 </div>
               </div>
-              <div class="actions">
+              <div class="modal__actions">
                 <input v-model="newDir" class="input" type="text">
                 <button class="btn text-nowrap" @click="createDir">Создать здесь</button>
               </div>
@@ -149,49 +149,6 @@ export default {
   overscroll-behavior: none;
 }
 
-.modal {
-  width: 80vw;
-  max-width: 40rem;
-  //border: 1px solid var(--hr-color);
-  margin: 0 auto;
-  border-radius: var(--radius);
-  background: #111827;
-  box-shadow: 0 0 10px rgba(black, 0.3);
-
-  &__header {
-    line-height: 2rem;
-    position: relative;
-    display: flex;
-    height: 2rem;
-    padding: 0 0 0 1rem;
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
-    background: darken(#111827, 2%);
-  }
-
-  &__closer {
-    //position: absolute;
-    //top: 0;
-    //right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    height: 2rem;
-    cursor: pointer;
-    &:last-child {
-      border-top-right-radius: var(--radius);
-    }
-    &:hover {
-      background: var(--danger-color);
-    }
-  }
-
-  &__body {
-    //padding: 1rem 1rem 2rem;
-  }
-}
-
 .files {
   overflow: auto;
   height: 25rem;
@@ -199,13 +156,6 @@ export default {
   padding: 1rem;
   user-select: none;
   border-top: 1px solid var(--hr-color);
-}
-
-.actions {
-  display: flex;
-  padding: 2rem 2rem 2rem;
-  border-top: 1px solid var(--hr-color);
-  gap: 3px;
 }
 
 .top {

@@ -33,15 +33,18 @@ export default createStore({
 
     mutations: {
         setMainData(state, params) {
-            let cliApiUrl = new URL(params.cliApiUrl);
-
             state.apiDomain = params.apiDomain;
             state.apiEngine = params.apiEngine;
             state.webApiUrl = params.webApiUrl;
-            state.cliApiUrl = cliApiUrl.pathname;
             state.ospVersion = params.version;
             state.ospDate = params.releaseDate;
             state.settings = params.settings;
+        },
+
+        setCliApiUrl(state, value) {
+            let cliApiUrl = new URL(value);
+            state.cliApiUrl = cliApiUrl.pathname;
+            http.configure({ cliApiUrl: cliApiUrl.pathname });
         },
 
         updateSetting(state, { key, value }) {
@@ -66,7 +69,6 @@ export default createStore({
         loadMainData({ commit, state }) {
             return http.get('/main').then(res => {
                 commit('setMainData', res);
-                http.configure({ cliApiUrl: state.cliApiUrl });
             });
         },
 

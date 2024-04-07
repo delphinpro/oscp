@@ -10,7 +10,7 @@ import Loader from '@/components/Loader';
 import SideBar from '@/components/SideBar.vue';
 import SystemMessage from '@/components/SystemMessage';
 import http from '@/services/http';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 const PING_INTERVAL = 1000;
 let pingInterval;
@@ -27,9 +27,6 @@ export default {
 
   data: () => ({
     noHost: false,
-    error : null,
-
-    temp: null,
   }),
 
   computed: {
@@ -48,6 +45,7 @@ export default {
 
   created() {
     document.title = 'OSPanel';
+    this.setCliApiUrl(window.CLI_API_URL);
     http.configure({
       baseUrl: this.apiHost,
     });
@@ -55,8 +53,15 @@ export default {
 
   async mounted() {
     this.startPing();
-    await this.loadMainData();
-    await this.loadSites();
+    try {
+      this.showLoader();
+      await this.loadMainData();
+      await this.loadSites();
+    } catch (err) {
+      this.noHost = true;
+      console.log(err);
+    }
+    this.hideLoader();
   },
 
   unmounted() {
@@ -64,18 +69,39 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      showLoader  : 'showLoader',
+      hideLoader  : 'hideLoader',
+      setCliApiUrl: 'setCliApiUrl',
+    }),
     ...mapActions({
-      loadMainData: 'loadMainData',
-      showMessage : 'showMessage',
-      loadSites   : 'loadSites',
+      loadMainData      : 'loadMainData',
+      loadSites         : 'loadSites',
+      showSuccessMessage: 'showSuccessMessage',
+      showErrorMessage  : 'showErrorMessage',
     }),
 
     systemReload() {
       this.noHost = true;
-      this.showMessage({ title: 'Выполняется перезагрузка', style: 'danger', timeout: 5 });
+      this.showErrorMessage({ title: 'Выполняется перезагрузка' });
       window.ping = false;
       http.get('/restart').then();
       setTimeout(() => window.ping = true, 5000);
+    },
+
+    async enableEngine() {
+      this.showLoader();
+
+      try {
+        let message = await http.apiCall(`/on/${this.apiEngine}/`);
+        await this.showSuccessMessage({ message });
+        this.noHost = false;
+        location.reload();
+      } catch (message) {
+        await this.showErrorMessage({ message, title: 'Ошибка' });
+      }
+
+      this.hideLoader();
     },
 
     startPing() {
@@ -90,18 +116,14 @@ export default {
               if (typeof res === 'string') {
                 throw new Error(res.toString());
               }
-              this.error = null;
+              if (this.noHost) {
+                location.reload();
+              }
               this.noHost = false;
             })
-            .catch(err => {
-              if (err.message === 'Failed to fetch') {
-                this.noHost = true;
-              } else {
-                this.noHost = false;
-                this.error = err.message;
-              }
+            .catch(() => {
+              this.noHost = true;
             });
-
       }, PING_INTERVAL);
     },
   },
@@ -111,22 +133,28 @@ export default {
 
 <template>
   <div>
-    <div v-if="error || noHost" class="error">
-      <div class="wnd">
-        <alert v-if="error" :message="error"/>
-        <div v-if="noHost">
-          <alert :message="'Необходимо добавить домен <code>'+apiDomain+'</code> и включить модуль <code>'+apiEngine+'</code>.'"
-              :title="'Хост '+ apiHost +' недоступен'"
-              danger
-          />
-          <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
-          <pre class="text-bg-dark p-3">[{{ apiDomain }}]
+    <div v-if="noHost" class="error">
+      <div>
+        <div class="modal modal-danger">
+          <div class="modal__header">
+            <span style="margin-right:auto;">Ошибка</span>
+          </div>
+          <div class="modal__body">
+            <div class="modal-content">
+              <h2 style="margin-top: 0;font-weight:400;">Хост <code>{{ apiHost }}</code> недоступен</h2>
+              <p>Необходимо добавить домен <code>{{ apiDomain }}</code>
+                и включить модуль <code>{{ apiEngine }}</code>. </p>
+              <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
+              <pre class="text-bg-dark p-3" style="font-size:1.3em">[{{ apiDomain }}]
 enabled         = on
 engine          = {{ apiEngine }}
 public_dir      = &#123;root_dir&#125;\system\public_html</pre>
-          <p>2. Откройте интерфейс командной строки и выполните команду:</p>
-          <pre class="text-bg-dark p-3">osp on {{ apiEngine }}</pre>
-          <p>3. Обновите эту страницу</p>
+              <p>2. Откройте интерфейс командной строки и выполните команду:</p>
+              <pre class="text-bg-dark p-3" style="font-size:1.3em">osp on {{ apiEngine }}</pre>
+              <button class="btn text-nowrap" @click="enableEngine">Включить модуль {{ apiEngine }}</button>
+              <p>3. Обновите эту страницу</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -171,8 +199,10 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 <style lang="scss">
 .error {
   display: flex;
+  justify-content: center;
   min-height: 100vh;
   padding: 3rem 0;
+  background: #20344b;
   .wnd {
     max-width: 60%;
     margin: 0 auto;
@@ -251,5 +281,9 @@ public_dir      = &#123;root_dir&#125;\system\public_html</pre>
 
 #title {
   font-size: 1.5rem;
+}
+
+.modal-content {
+  padding: 2rem;
 }
 </style>
