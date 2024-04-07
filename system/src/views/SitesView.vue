@@ -70,7 +70,7 @@ export default {
     await this.showLoader();
     await this.loadSites();
     await this.hideLoader();
-    this.filter = JSON.parse(localStorage.getItem('site_filter') ?? '');
+    this.filter = JSON.parse(localStorage.getItem('site_filter') ?? '""');
   },
 
   methods: {
