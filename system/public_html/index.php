@@ -25,11 +25,7 @@ require_once __DIR__.'/core/functions.php';
 
 spl_autoload_register(static function ($class) {
 
-    $namespace = dirname($class);
-
-    $localPath = $namespace === 'eftec\bladeone'
-        ? str_replace('eftec\bladeone', 'blade', $class)
-        : str_replace('OpenServer\\', '', $class);
+    $localPath = str_replace('OpenServer\\', '', $class);
 
     if (file_exists(__DIR__.'/core/'.$localPath.'.php')) {
         include __DIR__.'/core/'.$localPath.'.php';
