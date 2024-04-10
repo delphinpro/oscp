@@ -63,9 +63,10 @@ export default new class {
         return fetch(url, { method: 'GET' })
             .then(res => res.text())
             .then(res => {
-                const hasError = res.includes('ПРЕДУПРЕЖДЕНИЕ');
+                const hasError = res.includes('ПРЕДУПРЕЖДЕНИЕ') || res.includes('ОШИБКА');
                 res = res.trim()
                     .replaceAll('[93m', '')
+                    .replaceAll('[91m', '')
                     .replaceAll('[0m', '')
                     .split('\n')
                     .map(s => s.trim())
