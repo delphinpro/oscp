@@ -10,6 +10,7 @@ namespace OpenServer\Controllers;
 use OpenServer\Router\Request;
 use OpenServer\Router\Response;
 use OpenServer\Services\Domains;
+use OpenServer\Services\IniFile;
 
 class SitesController extends Controller
 {
@@ -22,7 +23,7 @@ class SitesController extends Controller
 
     public function __invoke(): Response
     {
-        $settings = readIniFile('config/program.ini');
+        $settings = IniFile::open('config/program.ini')->get();
         $isGroupDomains = $settings['menu']['group_projects_by_tld'] ?? false;
 
         $sites = $isGroupDomains

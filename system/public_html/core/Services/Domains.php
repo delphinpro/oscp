@@ -108,21 +108,17 @@ class Domains
 
     public function save(): void
     {
-        $ini = '';
+        $iniData = [];
 
         foreach ($this->domains as $domain) {
-            $data = $domain->getRawData();
-            $host = $data['host'];
-            $ini .= PHP_EOL.'['.$host.']'.PHP_EOL;
-
-            foreach ($data as $key => $value) {
-                if ($key === 'host') continue;
-                if ($value === null) continue;
-                $ini .= "$key = ".iniValue($value).PHP_EOL;
-            }
+            $iniData[$domain->host] = array_filter(
+                $domain->getRawData(),
+                static fn($value, $key) => $key !== 'host' && $value !== null,
+                ARRAY_FILTER_USE_BOTH
+            );
         }
 
-        file_put_contents(ROOT_DIR.'/config/domains.ini', $ini);
+        IniFile::open('config/domains.ini')->set($iniData)->write(20);
     }
 
     /**
@@ -185,7 +181,7 @@ class Domains
 
     private function readConfig(): void
     {
-        $domainsData = readIniFile('config/domains.ini');
+        $domainsData = IniFile::open('config/domains.ini')->get();
 
         foreach ($domainsData as $host => $domain) {
             $this->domains[$host] = new Domain(['host' => $host, ...$domain]);

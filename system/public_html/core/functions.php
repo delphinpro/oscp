@@ -113,58 +113,9 @@ function httpRequest($url): array|string|null
     return clearString($data);
 }
 
-/**
- * @param  string  $filename
- *
- * @return array{menu:array}
- */
-function readIniFile(string $filename): array
-{
-    if (!file_exists($file = ROOT_DIR.'/'.ltrim($filename, '/'))) {
-        return [];
-    }
-
-    $iniSections = parse_ini_file($file, true, INI_SCANNER_RAW);
-    $data = [];
-
-    foreach ($iniSections as $section => $params) {
-        $data[$section] = [];
-        foreach ($params as $key => $value) {
-            if (in_array(strtolower($value), ['on', 'true', 'yes'])) {
-                $value = true;
-            }
-            if (in_array(strtolower($value), ['off', 'false', 'no'])) {
-                $value = false;
-            }
-            if (strtolower($value) === 'null') {
-                $value = null;
-            }
-            if (is_numeric($value)) {
-                if (str_contains($value, '.')) {
-                    $value = (float)$value;
-                } else {
-                    $value = (int)$value;
-                }
-            }
-            $data[$section][$key] = $value;
-        }
-    }
-
-    return $data;
-}
-
 function templatePath(?string $path): ?string
 {
     if ($path === null) return null;
 
     return str_replace(str_replace('/', '\\', ROOT_DIR), '{root_dir}', $path);
-}
-
-function iniValue(mixed $value): string
-{
-    return match (true) {
-        is_bool($value)   => $value ? 'on' : 'off',
-        is_string($value) => str_replace('\\\\', '\\', $value),
-        default           => $value
-    };
 }

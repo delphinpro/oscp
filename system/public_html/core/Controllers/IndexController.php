@@ -9,6 +9,7 @@ namespace OpenServer\Controllers;
 
 use OpenServer\Router\Response;
 use OpenServer\Services\Domains;
+use OpenServer\Services\IniFile;
 
 class IndexController extends Controller
 {
@@ -23,7 +24,7 @@ class IndexController extends Controller
             'apiEngine'   => $domain->engine,
             'webApiUrl'   => WEB_API_URL,
             'cliApiUrl'   => CLI_API_URL,
-            'settings'    => readIniFile('config/program.ini'),
+            'settings'    => IniFile::open('config/program.ini')->get(),
         ]);
     }
 
