@@ -41,7 +41,7 @@ class Modules
     public function getWebEngines(): array
     {
         return array_values(
-            array_filter($this->modules, static fn(Module $module) => $module->compatible === 'Web')
+            array_filter($this->modules, static fn(Module $module) => $module->category === 'Web')
         );
     }
 
@@ -58,38 +58,23 @@ class Modules
 
     private function readConfig(): void
     {
-        $modules = httpRequest('/modules');
-        $modules = explode("\n", $modules);
-        $modules = array_filter($modules, static function ($str) {
-            return !(
-                str_contains($str, 'МОДУЛЬ') ||
-                str_contains($str, 'MODULE') ||
-                str_contains($str, '—————')
-            );
-        });
-        $this->modules = array_map(static function ($str) {
-            $str = trim($str);
-            $cols = explode('  ', $str);
-            $cols = array_filter($cols, static fn($col) => (bool)$col);
-            $cols = array_values(array_map(static fn($col) => trim($col), $cols));
-            $name = $cols[0];
-            $config = parse_ini_file(ROOT_DIR.'/config/'.$name.'/module.ini');
-            $profile = $config['profile'];
-            $settings = parse_ini_file(ROOT_DIR.'/config/'.$name.'/'.$profile.'/settings.ini', true, INI_SCANNER_RAW);
+        $modules = Http::getJson('getmodules');
+        $this->modules = array_map(static function ($item, $name) {
+            $profile = $item['profile'];
+            $settings = $item['profiles'][$profile];
 
             return Module::make(
                 name: $name,
-                status: $cols[1],
-                enabled: in_array($cols[1], ['Включён', 'Enabled', 'Уключаны', 'Включений']),
-                init: in_array($cols[1], ['Инициализирован', 'Initialized', 'Ініцыялізаваны', 'Ініціалізовано']),
-                version: $cols[2],
-                type: $cols[3],
-                compatible: $cols[4],
+                enabled: $item['enabled'],
+                init: $item['inited'],
+                version: $item['version'],
+                arch: $item['architecture'],
+                category: $item['category'],
                 params: [
-                    'ip'   => $settings['main']['ip'] ?? null,
-                    'port' => $settings['main']['port'] ?? null,
+                    'ip'   => $settings['ip'] ?? null,
+                    'port' => $settings['port'] ?? null,
                 ]
             );
-        }, array_values($modules));
+        }, array_values($modules), array_keys($modules));
     }
 }

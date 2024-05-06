@@ -19,7 +19,8 @@ export default {
   },
 
   data: () => ({
-    hideDisabled: false,
+    hideDisabled   : false,
+    categoryForView: 'all',
   }),
 
   computed: {
@@ -27,11 +28,19 @@ export default {
       modules: state => state.modules.modules,
     }),
 
+    categories() {
+      const array = this.modules ? this.modules.map(m => m.category) : [];
+      return array.filter((value, index, self) => self.indexOf(value) === index);
+    },
+
     filteredModules() {
       if (this.modules === null) return [];
 
       return Object.values(this.modules)
-          .filter(module => !(this.hideDisabled && !module.enabled));
+          .filter(module => {
+            if (this.hideDisabled && !module.enabled) return false;
+            return !(this.categoryForView !== 'all' && module.category !== this.categoryForView);
+          });
     },
   },
 
@@ -39,10 +48,14 @@ export default {
     hideDisabled(v) {
       localStorage.setItem('modules_hideDisabled', v);
     },
+    categoryForView(v) {
+      localStorage.setItem('modules_category', v);
+    },
   },
 
   created() {
     this.hideDisabled = localStorage.getItem('modules_hideDisabled') === 'true';
+    this.categoryForView = localStorage.getItem('modules_category') ?? 'all';
   },
 
   mounted() {
@@ -111,7 +124,15 @@ export default {
 <template>
   <div>
 
-    <Checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
+    <div class="d-flex align-items-center gap-1">
+      <Checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
+      <select v-model="categoryForView" class="select" style="width:300px">
+        <option value="all">Показать все категории</option>
+        <option v-for="option in categories" :value="option">
+          {{ option }}
+        </option>
+      </select>
+    </div>
 
     <alert v-if="!filteredModules.length" class="mt-1" message="Модули не загружены"/>
 
@@ -121,7 +142,7 @@ export default {
           <th>Модуль</th>
           <th>IP</th>
           <th>Версия</th>
-          <th>Тип</th>
+          <th>Категория</th>
           <th></th>
         </tr>
       </thead>
@@ -129,15 +150,17 @@ export default {
         <tr v-for="module in filteredModules">
           <td>
             <span class="d-flex align-items-center gap-0.5">
-              <span :class="{'bg-success': module.enabled, 'bg-danger': !module.enabled, 'bg-white': module.init}"
+              <span :class="{'bg-success': module.enabled, 'bg-danger': !module.enabled, '-bg-white': module.init}"
                   class="bulb"
               ></span>
               <span class="mono text-nowrap">{{ module.name }}</span>
             </span>
           </td>
-          <td class="text-muted monospace">{{ module.ip }}{{ module.port ? ':' + module.port : '' }}</td>
+          <td class="text-muted monospace">
+            {{ module.ip }}{{ (module.port && module.port !== '0') ? ':' + module.port : '' }}
+          </td>
           <td class="text-muted monospace">{{ module.version }}</td>
-          <td class="text-muted">{{ module.compatible }}</td>
+          <td class="text-muted">{{ module.category }}</td>
           <td class="text-end">
             <div class="btn-group justify-end">
               <button

@@ -22,10 +22,10 @@ export default {
     },
     groupDomains: {
       get() {
-        return this.settings.menu?.group_projects_by_tld || false;
+        return this.settings.menu?.show_projects_in_groups || false;
       },
       set(val) {
-        this.$store.commit('updateSetting', { key: 'menu.group_projects_by_tld', value: val });
+        this.$store.commit('updateSetting', { key: 'menu.show_projects_in_groups', value: val });
       },
     },
 

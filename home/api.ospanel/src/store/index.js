@@ -42,9 +42,10 @@ export default createStore({
         },
 
         setCliApiUrl(state, value) {
-            let cliApiUrl = new URL(value);
-            state.cliApiUrl = cliApiUrl.pathname;
-            http.configure({ cliApiUrl: cliApiUrl.pathname });
+            let cliApiUrl = value;
+            // let cliApiUrl = (new URL(value)).pathname;
+            state.cliApiUrl = cliApiUrl;
+            http.configure({ cliApiUrl: cliApiUrl });
         },
 
         updateSetting(state, { key, value }) {

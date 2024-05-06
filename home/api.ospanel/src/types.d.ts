@@ -39,8 +39,8 @@ type Module = {
     enabled: boolean
     init: boolean
     version: string
-    type: string
-    compatible: string
+    arch: string
+    category: string
 
     ip: string | null
     port: string | null
