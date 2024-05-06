@@ -59,7 +59,10 @@ export default new class {
     }
 
     apiCall(action) {
-        let url = this.#cliApiUrl + action;
+        if (action.startsWith('/')) {
+            action = action.slice(1);
+        }
+        let url = this.#cliApiUrl + '/' + action;
         return fetch(url, { method: 'GET' })
             .then(res => res.text())
             .then(res => {
