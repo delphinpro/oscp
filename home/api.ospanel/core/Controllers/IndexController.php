@@ -27,17 +27,4 @@ class IndexController extends Controller
             'settings'    => IniFile::open('config/program.ini')->get(),
         ]);
     }
-
-    public function restart(): Response
-    {
-        if (!file_exists($file = ROOT_DIR.'/bin/osp__restart.bat')) {
-            file_put_contents($file, 'osp exit & ospanel'.PHP_EOL);
-        }
-
-        $cmd = str_replace('/', DIRECTORY_SEPARATOR, $file);
-
-        pclose(popen("start /B $cmd", 'r'));
-
-        return Response::json();
-    }
 }

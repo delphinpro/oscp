@@ -85,7 +85,7 @@ export default {
       this.noHost = true;
       this.showErrorMessage({ title: 'Выполняется перезагрузка' });
       window.ping = false;
-      http.get('/restart').then();
+      http.apiCall('restart');
       setTimeout(() => window.ping = true, 5000);
     },
 
