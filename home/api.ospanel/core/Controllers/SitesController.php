@@ -24,7 +24,7 @@ class SitesController extends Controller
     public function __invoke(): Response
     {
         $settings = IniFile::open('config/program.ini')->get();
-        $isGroupDomains = $settings['menu']['group_projects_by_tld'] ?? false;
+        $isGroupDomains = $settings['menu']['show_projects_in_groups'] ?? false;
 
         $sites = $isGroupDomains
             ? $this->domains->toGroups()

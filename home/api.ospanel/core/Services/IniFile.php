@@ -13,14 +13,16 @@ class IniFile
 
     private array $data = [];
 
-    public function __construct(string $filename)
+    public function __construct(string $filename, bool $absolute = false)
     {
-        $this->filename = ROOT_DIR.'/'.ltrim($filename, '/');
+        $this->filename = $absolute
+            ? $filename
+            : ROOT_DIR.'/'.ltrim($filename, '/');
     }
 
-    public static function open(string $filename): IniFile
+    public static function open(string $filename, bool $absolute = false): IniFile
     {
-        return (new self($filename))
+        return (new self($filename, $absolute))
             ->read();
     }
 
