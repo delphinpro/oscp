@@ -11,9 +11,9 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 module.exports = defineConfig({
     transpileDependencies: true,
-    outputDir            : path.resolve(__dirname, 'public_html'),
-    filenameHashing: false,
-    chainWebpack   : config => {
+    outputDir            : path.resolve(__dirname, '../../system/public_html'),
+    filenameHashing      : false,
+    chainWebpack         : config => {
         config.plugin('define').tap((definitions) => {
             Object.assign(definitions[0], {
                 __VUE_OPTIONS_API__                    : 'true',
@@ -39,7 +39,7 @@ module.exports = defineConfig({
             },
             proxy  : {
                 '/api/*': {
-                    target: 'http://ospanel',
+                    target      : 'http://ospanel',
                     secure      : false,
                     changeOrigin: false,
                 },

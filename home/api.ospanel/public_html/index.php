@@ -15,20 +15,16 @@ use OpenServer\Router\Request;
 use OpenServer\Router\Response;
 use OpenServer\Router\Router;
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type');
 
-require_once __DIR__.'/data.php';
-require_once __DIR__.'/core/functions.php';
+require_once __DIR__.'/../data.php';
+require_once __DIR__.'/../core/functions.php';
 
 spl_autoload_register(static function ($class) {
 
     $localPath = str_replace('OpenServer\\', '', $class);
 
-    if (file_exists(__DIR__.'/core/'.$localPath.'.php')) {
-        include __DIR__.'/core/'.$localPath.'.php';
+    if (file_exists(__DIR__.'/../core/'.$localPath.'.php')) {
+        include __DIR__.'/../core/'.$localPath.'.php';
     }
 
 });
