@@ -142,17 +142,14 @@ export default {
           <div class="modal__body">
             <div class="modal-content">
               <h2 style="margin-top: 0;font-weight:400;">Хост <code>{{ apiHost }}</code> недоступен</h2>
-              <p>Необходимо добавить домен <code>{{ apiDomain }}</code>
-                и включить модуль <code>{{ apiEngine }}</code>. </p>
-              <p>1. Добавьте в файл <code>OSPanel/config/domains.ini</code> секцию следующего содержания:</p>
-              <pre class="text-bg-dark p-3" style="font-size:1.3em">[{{ apiDomain }}]
-enabled         = on
-engine          = {{ apiEngine }}
-public_dir      = &#123;root_dir&#125;\system\public_html</pre>
-              <p>2. Откройте интерфейс командной строки и выполните команду:</p>
+              <p>Выполните правильную установку web-панели.
+                Проверьте наличие всех необходимых файлов в директории <code>OSPanel\home\api.ospanel</code>.</p>
+              <p>Если хост сконфигурирован правильно, проверьте, не отключён ли модуль <code>{{ apiEngine }}</code></p>
+              <p>Включить модуль можно используя соответствующий пункт меню программы или в консоли, выполнив
+                команду:</p>
               <pre class="text-bg-dark p-3" style="font-size:1.3em">osp on {{ apiEngine }}</pre>
+              <p>Или просто нажмите кнопку:</p>
               <button class="btn text-nowrap" @click="enableEngine">Включить модуль {{ apiEngine }}</button>
-              <p>3. Обновите эту страницу</p>
             </div>
           </div>
         </div>
