@@ -32,16 +32,15 @@ module.exports = defineConfig({
     configureWebpack: {
         devServer: {
             headers: {
-                'Access-Control-Allow-Origin'     : '*',
-                'Access-Control-Allow-Methods'    : 'OPTIONS, GET, POST, PUT, DELETE',
-                'Access-Control-Allow-Headers'    : 'Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type',
-                'Access-Control-Allow-Credentials': 'true',
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Methods': '*',
+                'Access-Control-Allow-Headers': '*',
             },
             proxy  : {
                 '/api/*': {
                     target      : 'http://ospanel',
                     secure      : false,
-                    changeOrigin: false,
+                    changeOrigin: true,
                 },
             },
         },

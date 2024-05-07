@@ -42,8 +42,7 @@ export default createStore({
         },
 
         setCliApiUrl(state, value) {
-            let cliApiUrl = value;
-            // let cliApiUrl = (new URL(value)).pathname;
+            let cliApiUrl = (new URL(value)).pathname;
             state.cliApiUrl = cliApiUrl;
             http.configure({ cliApiUrl: cliApiUrl });
         },

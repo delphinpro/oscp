@@ -22,7 +22,7 @@ export default new class {
 
     makeUrl(url) {
         url = url.startsWith('/') ? url.slice(1) : url;
-        return this.#baseUrl + '/api/' + url;
+        return this.#baseUrl + '/' + url;
     }
 
     request(url, method = 'GET', data = null) {

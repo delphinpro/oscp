@@ -35,19 +35,19 @@ try {
 
     $router->get('/ping', static fn() => Response::json());
 
-    $router->get('/api/main', IndexController::class);
+    $router->get('/main', IndexController::class);
 
-    $router->get('/api/modules', ModuleController::class);
-    $router->get('/api/modules/engines', [ModuleController::class, 'engines']);
+    $router->get('/modules', ModuleController::class);
+    $router->get('/modules/engines', [ModuleController::class, 'engines']);
 
-    $router->get('/api/sites', SitesController::class);
-    $router->post('/api/sites/console', [SitesController::class, 'openConsole']);
-    $router->post('/api/sites/data', [SitesController::class, 'getSite']);
-    $router->post('/api/sites/save', [SitesController::class, 'save']);
-    $router->post('/api/sites/delete', [SitesController::class, 'delete']);
+    $router->get('/sites', SitesController::class);
+    $router->post('/sites/console', [SitesController::class, 'openConsole']);
+    $router->post('/sites/data', [SitesController::class, 'getSite']);
+    $router->post('/sites/save', [SitesController::class, 'save']);
+    $router->post('/sites/delete', [SitesController::class, 'delete']);
 
-    $router->post('/api/fs', FilesController::class);
-    $router->post('/api/fs/create', [FilesController::class, 'create']);
+    $router->post('/fs', FilesController::class);
+    $router->post('/fs/create', [FilesController::class, 'create']);
 
     $router->resolve();
 
