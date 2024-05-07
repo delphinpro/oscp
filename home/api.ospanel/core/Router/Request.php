@@ -36,6 +36,8 @@ class Request
 
     protected ?array $body = null;
 
+    protected ?array $queryParams = null;
+
     public function __construct()
     {
         $this->bootstrapSelf();
@@ -45,6 +47,11 @@ class Request
     public function __get(string $name)
     {
         return $this->requestVariables[$name] ?? null;
+    }
+
+    public function get(string $key, string|int|bool|null $default = null): string|int|bool|null
+    {
+        return $this->queryParams[$key] ?? $default;
     }
 
     public function input(string $key, string|int|bool|null $default = null): string|int|bool|null
@@ -81,6 +88,9 @@ class Request
         foreach ($_SERVER as $key => $value) {
             $this->requestVariables[$this->toCamelCase($key)] = $value;
         }
+        [$requestUri] = explode('?', $this->requestUri);
+        $this->requestVariables['requestUri'] = $requestUri;
+        $this->queryParams = $_GET;
     }
 
     private function parseBody(): void

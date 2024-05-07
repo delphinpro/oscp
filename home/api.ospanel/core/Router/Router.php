@@ -81,7 +81,7 @@ class Router
      */
     private function formatRoute(string $route): string
     {
-        $result = rtrim($route, '/');
+        $result = trim($route, '/');
         if ($result === '') {
             return '/';
         }
