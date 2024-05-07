@@ -34,7 +34,8 @@ class ModuleController extends Controller
         $modules = Modules::make();
 
         return Response::json([
-            'engines' => $modules->getWebEngines(),
+            'php_engines'   => $modules->getPhpEngines(),
+            'nginx_engines' => $modules->getNginxEngines(),
         ]);
     }
 }

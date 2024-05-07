@@ -38,10 +38,17 @@ class Modules
         return array_map(static fn(Module $module) => $module->toArray(), $this->modules);
     }
 
-    public function getWebEngines(): array
+    public function getPhpEngines(): array
     {
         return array_values(
-            array_filter($this->modules, static fn(Module $module) => $module->category === 'Web')
+            array_filter($this->modules, static fn(Module $module) => $module->category === 'PHP')
+        );
+    }
+
+    public function getNginxEngines(): array
+    {
+        return array_values(
+            array_filter($this->modules, static fn(Module $module) => $module->category === 'Nginx')
         );
     }
 
