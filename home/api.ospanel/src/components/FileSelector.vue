@@ -115,7 +115,7 @@ export default {
                 </div>
               </div>
               <div class="modal__actions">
-                <input v-model="newDir" class="input" type="text">
+                <input v-model="newDir" class="input" placeholder="Новая папка..." type="text">
                 <button class="btn text-nowrap" @click="createDir">Создать здесь</button>
               </div>
             </div>
