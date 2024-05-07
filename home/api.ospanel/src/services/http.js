@@ -20,14 +20,10 @@ export default new class {
         this.#cliApiUrl = options.cliApiUrl || this.#cliApiUrl;
     }
 
-    makeUrl(url) {
-        url = url.startsWith('/') ? url.slice(1) : url;
-        return this.#baseUrl + '/' + url;
-    }
-
     request(url, method = 'GET', data = null) {
 
-        url = this.makeUrl(url);
+        url = this.#baseUrl + '/' + (url.startsWith('/') ? url.slice(1) : url);
+
         let body = data;
 
         if (method.toUpperCase() === 'POST') {

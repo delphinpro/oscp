@@ -93,7 +93,7 @@ class Router
     {
         echo Response::json()
             ->headers(["{$this->request->serverProtocol} 404 Not Found"])
-            ->message('404 Not Found: '.$this->request->requestUri)
+            ->message('404 Not Found: '.$this->request->requestMethod.' '.$this->request->requestUri)
             ->status(404);
     }
 }
