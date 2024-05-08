@@ -58,9 +58,9 @@ class IniFile
         };
     }
 
-    public function get(): array
+    public function get(string $section = null): array
     {
-        return $this->data;
+        return $section ? $this->data[$section] ?? [] : $this->data;
     }
 
     public function set(array $data): IniFile
