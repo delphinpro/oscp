@@ -4,21 +4,21 @@
 //////////////////////////////
 
 table {
-  margin: 1rem 0;
-
   width: 100%;
-  border: none;
+
+  margin: 1rem 0;
   border-spacing: 0;
   border-collapse: collapse;
+  border: none;
   th, td {
+    padding: 0.75rem var(--table-td-x-padding);
     text-align: left;
     border: none;
-    padding: 0.75rem 1.25rem;
   }
 
   thead {
-    color: #717a89;
     font-size: 0.9rem;
+    color: #717a89;
     > tr:first-child {
       > th:first-child { border-top-left-radius: var(--table-radius); }
       > th:last-child { border-top-right-radius: var(--table-radius); }
@@ -30,8 +30,8 @@ table {
   }
 
   tfoot {
-    color: #717a89;
     font-size: 0.9rem;
+    color: #717a89;
     > tr:last-child {
       > td:first-child { border-bottom-left-radius: var(--table-radius); }
       > td:last-child { border-bottom-right-radius: var(--table-radius); }
@@ -44,11 +44,8 @@ table {
 
   tbody {
     td {
+      padding: 1rem var(--table-td-x-padding);
       background: var(--table-body-bg);
-      padding: 1rem 1.25rem;
-      &:has(.btn) {
-        padding-block: 0.75rem;
-      }
     }
     tr:nth-child(even) {
       td {
@@ -67,7 +64,7 @@ table {
   }
   &:has(.btn) {
     td {
-      padding: 0.75rem 1.25rem;
+      padding: 0.75rem var(--table-td-x-padding);
     }
   }
   &:has(thead) {
@@ -85,5 +82,8 @@ table {
         > td:last-child { border-bottom-right-radius: 0; }
       }
     }
+  }
+  td, th {
+    &:first-child { padding-left: 1.25rem; }
   }
 }

@@ -4,33 +4,67 @@
  * Licensed under MIT License
  */
 
-type Domain = {
-    host: string
+type DomainConfigData = {
     aliases: string
     enabled: boolean
-    engine: string
+    environment: string
     ip: string
-    log_format: string
-    cgi_dir: string
+    nginx_engine: string
+    node_engine: string
+    php_engine: string
+    project_dir: string
     public_dir: string
-    project_home_dir: string
-    auto_configure: boolean
+    project_url: string
     ssl: boolean
     ssl_cert_file: string
     ssl_key_file: string
-    project_add_modules: string
-    project_add_commands: string
-    project_use_sys_env: boolean
+    start_command: string
+    terminal_codepage: string
+
     admin_path: string
+};
 
-    siteUrl: string
-    adminUrl: string
-    isValidRoot: boolean
-    isAvailable: boolean
+type DomainComputedData = {
+    aliases: string
+    enabled: boolean
+    environment: string
+    ip: string
+    nginx_engine: string
+    node_engine: string
+    php_engine: string
+    project_dir: string
+    public_dir: string
+    project_url: string
+    ssl: boolean
+    ssl_cert_file: string
+    ssl_key_file: string
+    start_command: string
+    terminal_codepage: string
 
+    base_dir: string
+    host_aliases: Array<string>
+    host_modules: Array<string>
+    realhost: string
+    webhost: string
+    // defected: boolean
+    // dip: string
+    // tag: string
+};
+
+type Domain = {
+    host: string
     isActive: boolean
     isProblem: boolean
     isDisabled: boolean
+    adminUrl: string
+    siteUrl: string
+    isValidRoot: boolean
+    isAvailable: boolean
+    isReadyPhpEngine: boolean
+    isReadyNginxEngine: boolean
+
+    config: DomainConfigData
+    computed: DomainComputedData
 }
 
 type Module = {

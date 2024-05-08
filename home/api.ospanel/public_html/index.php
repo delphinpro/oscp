@@ -40,9 +40,9 @@ try {
     $router->get('/modules', ModuleController::class);
     $router->get('/modules/engines', [ModuleController::class, 'engines']);
 
-    $router->get('/sites', SitesController::class);
     $router->post('/sites/console', [SitesController::class, 'openConsole']);
     $router->post('/sites/data', [SitesController::class, 'getSite']);
+    $router->get('/sites', [SitesController::class, 'index']);
     $router->post('/sites/save', [SitesController::class, 'save']);
     $router->post('/sites/delete', [SitesController::class, 'delete']);
 

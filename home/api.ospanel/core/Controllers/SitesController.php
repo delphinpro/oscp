@@ -21,7 +21,7 @@ class SitesController extends Controller
         $this->domains = Domains::make();
     }
 
-    public function __invoke(): Response
+    public function index(): Response
     {
         $settings = IniFile::open('config/program.ini')->get();
         $isGroupDomains = $settings['menu']['show_projects_in_groups'] ?? false;

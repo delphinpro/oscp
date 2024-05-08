@@ -109,17 +109,17 @@ export default {
       </router-link>
     </div>
     <div v-if="activeDomains.length" class="domains">
-      <DomainsList :domains="activeDomains"/>
+      <domains-list :domains="activeDomains"/>
     </div>
     <div v-if="problemDomains.length" class="domains">
       <h4>Сайты с ошибками</h4>
-      <DomainsList :domains="problemDomains"/>
+      <domains-list :domains="problemDomains"/>
     </div>
     <div v-if="(disabledDomains.length && !hideDisabled) || (!activeDomains.length && !problemDomains.length)"
         class="domains"
     >
       <h4>Отключённые сайты</h4>
-      <DomainsList :domains="disabledDomains"/>
+      <domains-list :domains="disabledDomains"/>
     </div>
   </div>
 </template>

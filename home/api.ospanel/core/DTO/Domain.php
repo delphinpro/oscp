@@ -7,26 +7,36 @@
 
 namespace OpenServer\DTO;
 
+use OpenServer\Services\IniFile;
 use OpenServer\Services\Modules;
 
 /**
- * @property-read string host
- * @property-read string aliases
- * @property-read string engine
- * @property-read string public_dir
- * @property-read string project_home_dir
- * @property-read bool   enabled
- * @property-read string cgi_dir
- * @property-read string ip
- * @property-read string log_format
- * @property-read bool   auto_configure
- * @property-read bool   ssl
- * @property-read string ssl_cert_file
- * @property-read string ssl_key_file
- * @property-read string admin_path
- * @property-read string project_add_modules
- * @property-read string project_add_commands
- * @property-read bool   project_use_sys_env
+ * @property-read string        host
+ * @property-read string        aliases
+ * @property-read string        base_dir
+ * @property-read bool          defected
+ * @property-read string        dip
+ * @property-read bool          enabled
+ * @property-read string        environment
+ * @property-read Array<string> host_aliases
+ * @property-read Array<string> host_modules
+ * @property-read string        ip
+ * @property-read string        nginx_engine
+ * @property-read string        node_engine
+ * @property-read string        php_engine
+ * @property-read string        project_dir
+ * @property-read string        project_url
+ * @property-read string        public_dir
+ * @property-read string        realhost
+ * @property-read bool          ssl
+ * @property-read string        ssl_cert_file
+ * @property-read string        ssl_key_file
+ * @property-read string        start_command
+ * @property-read string        tag
+ * @property-read string        terminal_codepage
+ * @property-read string        webhost
+ *
+ * @property-read string        admin_path
  */
 class Domain
 {
@@ -39,44 +49,28 @@ class Domain
     // private const DEFAULT_AUTO_CERT_FILE = '{root_dir}/data/ssl/domains/{host}/cert.crt';
     // private const DEFAULT_AUTO_CERT_KEY  = '{root_dir}/data/ssl/domains/{host}/cert.key';
 
-    protected array $data;
+    protected array $config;
 
-    protected array $rawData;
+    protected array $computed = [];
 
-    protected ?Module $module;
+    protected ?Module $phpEngine;
+
+    protected ?Module $nginxEngine;
 
     public function __construct(array $data)
     {
-        $this->rawData = $data;
-        $this->data = [
-            ...$data,
-            'host'                 => $data['host'],
-            'aliases'              => $data['aliases'] ?? null,
-            'engine'               => $data['engine'],
-            'public_dir'           => $data['public_dir'] ?? self::DEFAULT_PUBLIC_DIR,
-            'project_home_dir'     => $data['project_home_dir'] ?? null,
-            'enabled'              => (bool)($data['enabled'] ?? true),
-            'cgi_dir'              => $data['cgi_dir'] ?? null,
-            'ip'                   => $data['ip'] ?? null,
-            'log_format'           => $data['log_format'] ?? null,
-            'auto_configure'       => (bool)($data['auto_configure'] ?? true),
-            'ssl'                  => (bool)($data['ssl'] ?? false),
-            'ssl_cert_file'        => $data['ssl_cert_file'] ?? null,
-            'ssl_key_file'         => $data['ssl_key_file'] ?? null,
-            'project_add_modules'  => $data['project_add_modules'] ?? null,
-            'project_add_commands' => str_replace('&#38;', '&', $data['project_add_commands'] ?? '') ?: null,
-            'project_use_sys_env'  => (bool)($data['project_use_sys_env'] ?? false),
-        ];
+        $this->computed = $this->normalizeData($data);
+        $this->config = IniFile::open($data['base_dir'].'/.osp/project.ini', absolute: true)->get()[$this->host] ?? [];
 
-        $this->data['public_dir'] = $this->resolvePath($this->data['public_dir']);
-        $this->data['project_home_dir'] = $this->resolvePath($this->data['project_home_dir']);
 
-        $this->module = Modules::make()->get($this->engine);
+        $modules = Modules::make();
+        $this->phpEngine = $modules->get($this->php_engine);
+        $this->nginxEngine = $modules->get($this->nginx_engine);
     }
 
     public function __get(string $name)
     {
-        return $this->data[$name] ?? null;
+        return $this->computed[$name] ?? $this->config[$name] ?? null;
     }
 
     public function isValidRoot(): bool
@@ -86,17 +80,28 @@ class Domain
 
     public function isAvailable(): bool
     {
-        return (bool)$this->module?->enabled;
+        return $this->isReadyPhpEngine()
+            && $this->isReadyNginxEngine();
+    }
+
+    public function isReadyPhpEngine(): bool
+    {
+        return !$this->php_engine || $this->phpEngine?->enabled;
+    }
+
+    public function isReadyNginxEngine(): bool
+    {
+        return !$this->nginx_engine || $this->nginxEngine?->enabled;
     }
 
     public function realIp(): string
     {
-        return (string)$this->module?->ip();
+        return (string)$this->phpEngine?->ip();
     }
 
     public function realPort(): string
     {
-        return (string)$this->module?->port();
+        return (string)$this->phpEngine?->port();
     }
 
     public function siteUrl(): string
@@ -157,26 +162,33 @@ class Domain
             return true;
         }, ARRAY_FILTER_USE_BOTH);
 
-        $this->rawData = $data;
+        $this->config = $data;
     }
 
-    public function getRawData(): array
-    {
-        return $this->rawData;
-    }
 
     public function toArray(): array
     {
         return [
-            ...$this->data,
-            'adminUrl'    => $this->admin_path ? $this->adminUrl() : null,
-            'siteUrl'     => $this->siteUrl(),
-            'isValidRoot' => $this->isValidRoot(),
-            'isAvailable' => $this->isAvailable(),
+            'host' => $this->host,
 
-            'isActive'   => $this->enabled && $this->isAvailable() && $this->isValidRoot(),
-            'isProblem'  => $this->enabled && !($this->isAvailable() && $this->isValidRoot()),
-            'isDisabled' => !$this->enabled,
+            'isActive'           => $this->enabled && $this->isAvailable() && $this->isValidRoot(),
+            'isProblem'          => $this->enabled && !($this->isAvailable() && $this->isValidRoot()),
+            'isDisabled'         => !$this->enabled,
+            'adminUrl'           => $this->admin_path ? $this->adminUrl() : null,
+            'siteUrl'            => $this->siteUrl(),
+            'isValidRoot'        => $this->isValidRoot(),
+            'isAvailable'        => $this->isAvailable(),
+            'isReadyPhpEngine'   => $this->isReadyPhpEngine(),
+            'isReadyNginxEngine' => $this->isReadyNginxEngine(),
+
+            'config' => [
+                ...$this->config,
+                'admin_path' => $this->admin_path,
+            ],
+
+            'computed' => [
+                ...$this->computed,
+            ],
         ];
     }
 
@@ -194,5 +206,34 @@ class Domain
         ];
 
         return str_replace(array_keys($replace), array_values($replace), $path ?? '');
+    }
+
+    private function normalizeData(array $data): array
+    {
+        $result = [];
+
+        foreach ($data as $key => $value) {
+            $result[$key] = match ($value) {
+                'False' => false,
+                'True'  => true,
+                default => $value,
+            };
+        }
+
+        return $result;
+    }
+
+    private function has(string $key): bool
+    {
+        return array_key_exists($key, $this->config);
+    }
+
+    private function isDefault(string $key, $value): bool
+    {
+        if (array_key_exists($key, $this->computed)) {
+            return $this->computed[$key] === $value;
+        }
+
+        return false;
     }
 }

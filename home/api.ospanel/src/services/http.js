@@ -24,7 +24,14 @@ export default new class {
 
         url = this.#baseUrl + '/' + (url.startsWith('/') ? url.slice(1) : url);
 
-        let body = data;
+        let body = null;
+
+        if (method.toUpperCase() === 'GET') {
+            const queryString = this.buildQueryString(data ?? {});
+            if (queryString) {
+                url += '?' + queryString;
+            }
+        }
 
         if (method.toUpperCase() === 'POST') {
             if (!(data instanceof FormData) && data !== null) {
@@ -46,8 +53,8 @@ export default new class {
             });
     }
 
-    get(url) {
-        return this.request(url);
+    get(url, data = {}) {
+        return this.request(url, 'GET', data);
     }
 
     post(url, data = {}) {
@@ -79,5 +86,11 @@ export default new class {
                 return res;
             });
 
+    }
+
+    buildQueryString(obj) {
+        return Object.keys(obj)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
+            .join('&');
     }
 };

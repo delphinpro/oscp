@@ -7,6 +7,7 @@
 
 namespace OpenServer\Services;
 
+use JsonException;
 use OpenServer\DTO\Domain;
 use OpenServer\Traits\Makeable;
 
@@ -18,7 +19,7 @@ class Domains
     use Makeable;
 
     /** @var \OpenServer\DTO\Domain[] */
-    private array $domains;
+    private array $domains = [];
 
     public function __construct()
     {
@@ -181,7 +182,11 @@ class Domains
 
     private function readConfig(): void
     {
-        $domainsData = IniFile::open('config/domains.ini')->get();
+        try {
+            $domainsData = Api::make()->getProjects();
+        } catch (JsonException $e) {
+            $domainsData = [];
+        }
 
         foreach ($domainsData as $host => $domain) {
             $this->domains[$host] = new Domain(['host' => $host, ...$domain]);

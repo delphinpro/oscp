@@ -8,10 +8,12 @@
 import http from '@/services/http';
 import { mapActions } from 'vuex';
 
+// noinspection JSValidateTypes
 export default {
   name: 'DomainsList',
 
   props: {
+    /** @var {Array<Domain>} domains */
     domains: Array,
   },
 
@@ -41,61 +43,83 @@ export default {
 </script>
 
 <template>
-  <table class="table table-borderless">
-    <tbody>
-      <tr v-for="domain in domains">
-        <td style="width: 33%;">
-          <div class="d-flex align-items-center text-nowrap mono">
-            <a
-                v-if="domain.enabled && domain.isValidRoot && domain.isAvailable"
-                :href="domain.siteUrl"
-                target="_blank"
-            >{{ showDomain(domain.siteUrl) }}</a>
-            <span v-else class="text-muted">{{ showDomain(domain.siteUrl) }}</span>
-          </div>
-        </td>
-        <td class="text-muted text-nowrap"><small>{{ domain.engine }}</small></td>
-        <td class="text-success"><small v-if="domain.ssl"><i class="bi bi-lock-fill"></i></small></td>
-        <td class="ps-4">
-          <div class="d-flex align-items-center gap-1 justify-end text-end">
-            <div v-if="!domain.enabled" class="d-flex align-items-center gap-0.5 justify-end">
-              <span class="text-muted">Сайт отключён</span>
-              <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+  <div>
+    <table class="table table-borderless">
+      <tbody>
+        <tr v-for="domain in domains">
+          <td style="width: 33%;">
+            <div class="d-flex align-items-center text-nowrap mono">
+              <a
+                  v-if="domain.computed.enabled && domain.isValidRoot && domain.isAvailable"
+                  :href="domain.siteUrl"
+                  target="_blank"
+              >{{ showDomain(domain.siteUrl) }}</a>
+              <span v-else class="text-muted">{{ showDomain(domain.siteUrl) }}</span>
             </div>
-            <div v-else-if="!domain.isAvailable" class="d-flex align-items-center gap-0.5 justify-end">
-              <span class="text-muted">Модуль {{ domain.engine }} отсутствует или выключен</span>
-              <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-            </div>
-            <div v-else-if="!domain.isValidRoot" class="d-flex align-items-center gap-0.5 justify-end">
-              <span class="text-muted">Неверная папка домена</span>
-              <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-            </div>
-            <div v-else>
+          </td>
+          <td class="text-success text-center" style="width: 40px;">
+            <small v-if="domain.computed.ssl"><i class="bi bi-lock-fill cursor-help" title="SSL включён"></i></small>
+          </td>
+          <td class="text-muted text-nowrap" style="width: 5%;">
+            <span class="d-flex align-items-center gap-0.5">
+              <i v-if="!domain.isReadyPhpEngine"
+                  :title="'Модуль '+domain.computed.php_engine+' отсутствует или выключен'"
+                  class="bi bi-exclamation-triangle-fill text-danger cursor-help"
+              ></i>
+              <small>{{ domain.computed.php_engine }}</small>
+            </span>
+          </td>
+          <td class="text-muted text-nowrap" style="width: 5%;">
+            <span class="d-flex align-items-center gap-0.5">
+              <i v-if="!domain.isReadyNginxEngine"
+                  :title="'Модуль '+domain.computed.nginx_engine+' отсутствует или выключен'"
+                  class="bi bi-exclamation-triangle-fill text-danger cursor-help"
+              ></i>
+              <small>{{ domain.computed.nginx_engine }}</small>
+            </span>
+          </td>
+          <td class="ps-4">
+            <div class="d-flex align-items-center gap-1 justify-end text-end">
+              <div v-if="!domain.computed.enabled" class="d-flex align-items-center gap-0.5 justify-end">
+                <span class="text-muted">Сайт отключён</span>
+                <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+              </div>
+              <!--<div v-else-if="!domain.isAvailable" class="d-flex align-items-center gap-0.5 justify-end">
+                <span class="text-muted">Модуль {{ domain.computed.php_engine }} отсутствует или выключен</span>
+                <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+              </div>-->
+              <div v-else-if="!domain.isValidRoot" class="d-flex align-items-center gap-0.5 justify-end">
+                <span class="text-muted">Неверная папка домена</span>
+                <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+              </div>
+              <div v-if="domain.computed.enabled && domain.isValidRoot && domain.isAvailable">
+                <div class="btn-group justify-end">
+                  <a v-if="domain.adminUrl"
+                      :href="domain.adminUrl"
+                      class="btn btn-icon"
+                      target="_blank"
+                      title="Админка"
+                  ><i class="bi bi-box-arrow-in-right"></i></a>
+                  <button class="btn btn-icon" title="Консоль" @click="openConsole(domain.host)">
+                    <i class="bi bi-terminal"></i>
+                  </button>
+                </div>
+              </div>
               <div class="btn-group justify-end">
-                <a v-if="domain.adminUrl"
-                    :href="domain.adminUrl"
+                <router-link :to="{ name: 'siteEdit', params: { host: domain.host } }"
                     class="btn btn-icon"
-                    target="_blank"
-                    title="Админка"
-                ><i class="bi bi-box-arrow-in-right"></i></a>
-                <button class="btn btn-icon" title="Консоль" @click="openConsole(domain.host)">
-                  <i class="bi bi-terminal"></i>
-                </button>
+                    title="Настройки"
+                >
+                  <i class="bi bi-gear"></i>
+                </router-link>
               </div>
             </div>
-            <div class="btn-group justify-end">
-              <router-link :to="{ name: 'siteEdit', params: { host: domain.host } }"
-                  class="btn btn-icon"
-                  title="Настройки"
-              >
-                <i class="bi bi-gear"></i>
-              </router-link>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+</style>

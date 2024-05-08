@@ -20,6 +20,8 @@
 
 .text-success { color: var(--success-color); }
 
+.text-center { text-align: center; }
+
 .font-small { font-size: 0.75em; }
 
 .d-flex { display: flex;}
@@ -45,3 +47,7 @@
 .mb-2 { margin-bottom: 2rem; }
 
 .mt-2 { margin-top: 2rem; }
+
+.cursor-help {
+  cursor: help;
+}
