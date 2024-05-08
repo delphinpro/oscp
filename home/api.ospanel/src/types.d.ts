@@ -69,6 +69,7 @@ type Domain = {
 
 type Module = {
     name: string
+    alt_name: string
     status: string
     enabled: boolean
     init: boolean

@@ -128,9 +128,7 @@ export default {
       <Checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
       <select v-model="categoryForView" class="select" style="width:300px">
         <option value="all">Показать все категории</option>
-        <option v-for="option in categories" :value="option">
-          {{ option }}
-        </option>
+        <option v-for="option in categories" :value="option">{{ option }}</option>
       </select>
     </div>
 
@@ -153,7 +151,9 @@ export default {
               <span :class="{'bg-success': module.enabled, 'bg-danger': !module.enabled, '-bg-white': module.init}"
                   class="bulb"
               ></span>
-              <span class="mono text-nowrap">{{ module.name }}</span>
+              <span class="mono text-nowrap">
+                {{ module.alt_name }}
+              </span>
             </span>
           </td>
           <td class="text-muted monospace">

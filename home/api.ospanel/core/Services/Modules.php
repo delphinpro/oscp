@@ -40,16 +40,16 @@ class Modules
 
     public function getPhpEngines(): array
     {
-        return array_values(
-            array_filter($this->modules, static fn(Module $module) => $module->category === 'PHP')
-        );
+        $filtered = array_filter($this->modules, static fn(Module $module) => $module->category === 'PHP');
+
+        return array_map(static fn(Module $m) => $m->toArray(), array_values($filtered));
     }
 
     public function getNginxEngines(): array
     {
-        return array_values(
-            array_filter($this->modules, static fn(Module $module) => $module->category === 'Nginx')
-        );
+        $filtered = array_filter($this->modules, static fn(Module $module) => $module->category === 'Nginx');
+
+        return array_map(static fn(Module $m) => $m->toArray(), array_values($filtered));
     }
 
     public function get($moduleName): ?Module
