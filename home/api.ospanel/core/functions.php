@@ -79,40 +79,6 @@ function dd(...$vars): void
     exit;
 }
 
-function clearString(string $string): array|string|null
-{
-    $string = trim($string);
-    $string = str_replace(["\r", ""], "", $string);
-
-    return preg_replace('/\[\d+m/', '', $string);
-}
-
-/**
- * @param $url
- *
- * @return null|array|string|string[]
- * @throws \RuntimeException
- */
-function httpRequest($url): array|string|null
-{
-    $url1 = CLI_API_URL.'/'.ltrim($url, '/');
-    $ch = curl_init($url1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_FAILONERROR, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $data = curl_exec($ch);
-
-    if ($data === false) {
-        $error = curl_error($ch);
-        curl_close($ch);
-        throw new RuntimeException($error.' '.$url1);
-    }
-
-    curl_close($ch);
-
-    return clearString($data);
-}
-
 function templatePath(?string $path): ?string
 {
     if ($path === null) return null;
