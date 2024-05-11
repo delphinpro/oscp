@@ -20,6 +20,11 @@ class IniFile
             : ROOT_DIR.'/'.ltrim($filename, '/');
     }
 
+    public static function make(string $filename, bool $absolute = false): IniFile
+    {
+        return new self($filename, $absolute);
+    }
+
     public static function open(string $filename, bool $absolute = false): IniFile
     {
         return (new self($filename, $absolute))
@@ -76,7 +81,21 @@ class IniFile
             return $this;
         }
 
-        $iniSections = parse_ini_file($this->filename, true, INI_SCANNER_RAW);
+        $iniString = implode(PHP_EOL,
+            array_map(static function ($s) {
+                $s = trim($s);
+                if (!str_contains($s, '=')) return $s;
+                [$k, $v] = explode('=', $s);
+                $v = trim($v);
+
+                if (str_contains($v, ';')) $v = '"'.$v.'"';
+
+                return $k.' = '.$v;
+            }, file($this->filename))
+        );
+
+        $iniSections = parse_ini_string($iniString, true, INI_SCANNER_RAW);
+
         $this->data = [];
 
         foreach ($iniSections as $section => $params) {
@@ -89,16 +108,28 @@ class IniFile
         return $this;
     }
 
-    public function write(int $keyLength = 0): void
+    public function write(bool $totalAlign = true): void
     {
         $ini = '';
 
-        $length = max($this->maxLengthKey($this->data), $keyLength);
+        $length = $this->maxLengthKey($this->data);
+
+        if ($totalAlign) {
+            $lengths = [];
+            foreach ($this->data as $k => $item) {
+                if (is_array($item)) {
+                    $lengths[] = $this->maxLengthKey($item);
+                } else {
+                    $lengths[] = strlen($k);
+                }
+            }
+            $length = max($lengths);
+        }
 
         foreach ($this->data as $k => $item) {
             if (is_array($item)) {
-                $ini .= PHP_EOL.'['.$k.']'.PHP_EOL;
-                $len = max($this->maxLengthKey($item), $keyLength);
+                $ini .= PHP_EOL.'['.$k.']'.PHP_EOL.PHP_EOL;
+                $len = $totalAlign ? $length : max($this->maxLengthKey($item), $length);
                 foreach ($item as $key => $value) {
                     $ini .= $key.str_repeat(' ', $len - strlen($key)).' = '.self::iniValue($value).PHP_EOL;
                 }
@@ -107,7 +138,24 @@ class IniFile
             }
         }
 
-        file_put_contents($this->filename, $ini);
+        file_put_contents($this->filename, ltrim($ini));
+    }
+
+    public function update(string $section, array $data): IniFile
+    {
+        if (!array_key_exists($section, $this->data)) {
+            $this->data[$section] = [];
+        }
+        foreach ($data as $key => $value) {
+            $this->data[$section][$key] = $value;
+        }
+
+        return $this;
+    }
+
+    public function save(): void
+    {
+        $this->write();
     }
 
     private function maxLengthKey(array $array): int

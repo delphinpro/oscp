@@ -36,6 +36,8 @@ try {
     $router->get('/ping', static fn() => Response::json());
 
     $router->get('/main', IndexController::class);
+    $router->get('/settings', [IndexController::class, 'settings']);
+    $router->post('/settings', [IndexController::class, 'saveSettings']);
 
     $router->get('/modules', ModuleController::class);
     $router->get('/modules/engines', [ModuleController::class, 'engines']);

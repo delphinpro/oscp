@@ -54,7 +54,7 @@ export default {
   <div>
 
     <nav class="nav">
-      <router-link :to="{ name: 'home' }" class="nav__item">Сводка</router-link>
+      <router-link :to="{ name: 'home' }" class="nav__item">Настройки</router-link>
       <router-link :to="{ name: 'modules' }" class="nav__item">Модули</router-link>
       <router-link :to="{ name: 'sites' }" class="nav__item">Сайты</router-link>
     </nav>
