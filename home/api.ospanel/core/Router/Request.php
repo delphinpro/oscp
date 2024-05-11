@@ -98,16 +98,25 @@ class Request
         if ($this->requestMethod === "POST") {
             $this->body = [];
             foreach ($_POST as $key => $value) {
-                $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-                $value = match ($value) {
-                    'true'  => true,
-                    'false' => false,
-                    'null'  => null,
-                    default => $value,
-                };
-                $this->body[$key] = $value;
+                $this->body[$key] = $this->castInputValue($value);
             }
         }
+    }
+
+    private function castInputValue(mixed $value)
+    {
+        if (is_array($value)) {
+            return array_map(fn($value) => $this->castInputValue($value), $value);
+        }
+
+        return match (true) {
+            $value === 'true'  => true,
+            $value === 'false' => false,
+            $value === 'null'  => null,
+            is_numeric($value) => (int)$value,
+            default            => $value,
+        };
+
     }
 
     private function toCamelCase($string): array|string

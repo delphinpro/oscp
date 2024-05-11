@@ -11,6 +11,21 @@ function parseResponse(res) {
                .then(message => ({ status: 500, message }));
 }
 
+function arrayToFormData(formData, data, parentKey) {
+    if (data &&
+        typeof data === 'object' &&
+        !(data instanceof Date) &&
+        !(data instanceof File)
+    ) {
+        Object.keys(data).forEach(key => {
+            arrayToFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+        });
+    } else {
+        const value = data == null ? '' : data;
+        formData.append(parentKey, value);
+    }
+}
+
 export default new class {
     #baseUrl;
     #cliApiUrl;
@@ -20,27 +35,11 @@ export default new class {
         this.#cliApiUrl = options.cliApiUrl || this.#cliApiUrl;
     }
 
-    request(url, method = 'GET', data = null) {
+    request(url, method = 'GET', body = null) {
 
         url = this.#baseUrl + '/' + (url.startsWith('/') ? url.slice(1) : url);
 
-        let body = null;
-
-        if (method.toUpperCase() === 'GET') {
-            const queryString = this.buildQueryString(data ?? {});
-            if (queryString) {
-                url += '?' + queryString;
-            }
-        }
-
-        if (method.toUpperCase() === 'POST') {
-            if (!(data instanceof FormData) && data !== null) {
-                body = new FormData();
-                for (let key in data) {
-                    body.append(key, data[key]);
-                }
-            }
-        }
+        console.log(`REQUEST: ${method} ${url}`);
 
         return fetch(url, { method, body })
             .then(parseResponse)
@@ -54,11 +53,21 @@ export default new class {
     }
 
     get(url, data = {}) {
-        return this.request(url, 'GET', data);
+        const queryString = this.buildQueryString(data ?? {});
+
+        if (queryString) {
+            url += '?' + queryString;
+        }
+
+        return this.request(url, 'GET');
     }
 
     post(url, data = {}) {
-        return this.request(url, 'POST', data);
+        let body = new FormData();
+
+        arrayToFormData(body, data);
+
+        return this.request(url, 'POST', body);
     }
 
     apiCall(action) {
