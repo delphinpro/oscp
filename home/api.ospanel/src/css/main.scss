@@ -26,14 +26,19 @@
   --app-side-padding-y: 1rem;
   --app-side-padding-x: 0.5rem;
   --app-side-bg: #1f2937;
+
+  --input-height: 2.5rem;
 }
 
 @import "./partials/scrollbars";
 @import "./partials/base";
 @import "./partials/buttons";
 @import "./partials/input";
+@import "./partials/checkbox";
+@import "./partials/form";
 @import "./partials/table";
 @import "./partials/bulb";
 @import "./partials/nav";
+@import "./partials/tabs";
 @import "./partials/modal";
 @import "./partials/helpers";

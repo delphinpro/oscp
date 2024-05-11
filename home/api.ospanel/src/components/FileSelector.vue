@@ -11,7 +11,7 @@ import { mapActions } from 'vuex';
 export default {
   name: 'FileSelector',
 
-  props: ['modelValue', 'required', 'error', 'showFiles', 'initialPath'],
+  props: ['modelValue', 'required', 'error', 'showFiles', 'initialPath', 'placeholder'],
   emits: ['update:modelValue', 'selectValue'],
 
   data: () => ({
@@ -80,6 +80,7 @@ export default {
   <div class="file">
     <input
         :class="{withError: error}"
+        :placeholder="placeholder"
         :required="required"
         :value="modelValue"
         class="input monospace"
