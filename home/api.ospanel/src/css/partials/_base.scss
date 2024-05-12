@@ -11,6 +11,8 @@
 
 body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  overflow-y: scroll;
   margin: 0;
   color: var(--body-color);
   background: #111827;

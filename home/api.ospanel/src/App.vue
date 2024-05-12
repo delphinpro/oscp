@@ -163,22 +163,33 @@ export default {
         </div>
         <div class="app__header">
           <div id="title">{{ pageTitle }}</div>
-          <div v-if="$route.params.host">
-            <a href="https://github.com/OSPanel/OpenServerPanel/wiki/Документация#настройка-проектов"
-                target="_blank"
-            >Справка <small class="bi bi-box-arrow-up-right"></small></a>
+          <div>
+            <div id="top"></div>
+            <button @click="noHost=true">no host</button>
           </div>
         </div>
         <div class="app__navigation">
           <side-bar class="app__sidebar"/>
           <div class="app__footer">
             <nav class="nav nav_compact">
-              <button class="nav__item active" style="padding-block:0.5rem" @click="systemReload">Перезагрузка</button>
-              <a class="nav__item muted" href="https://ospanel.io/forum/" target="_blank">Форум
-                <i class="font-small bi bi-box-arrow-up-right"></i>
+              <button class="nav__item active" style="padding-block:0.5rem" @click="systemReload">
+                <i class="bi bi-arrow-clockwise"></i>
+                Перезапустить
+              </button>
+              <a class="nav__item muted" href="https://ospanel.io/forum/" target="_blank">
+                <i class="bi bi-box-arrow-up-right"></i>
+                Форум
               </a>
               <a class="nav__item muted" href="https://t.me/ospanel_chat" target="_blank">
-                Telegram <i class="font-small bi bi-box-arrow-up-right"></i>
+                <i class="bi bi-box-arrow-up-right"></i>
+                Telegram
+              </a>
+              <a class="nav__item muted"
+                  href="https://github.com/OSPanel/OpenServerPanel/wiki/Документация"
+                  target="_blank"
+              >
+                <i class="bi bi-box-arrow-up-right"></i>
+                Документация
               </a>
             </nav>
           </div>
@@ -219,13 +230,14 @@ export default {
   }
 
   &__brand, &__header {
+    height: var(--app-header-height);
+    padding: var(--app-header-padding-y) var(--app-header-padding-x);
     border-bottom: 1px solid var(--hr-color);
   }
 
   &__brand {
     display: flex;
     align-items: center;
-    padding: var(--app-header-padding-y) var(--app-header-padding-x);
     gap: 1rem;
     img {
       flex-shrink: 0;
@@ -246,7 +258,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--app-header-padding-y) var(--app-header-padding-x);
   }
 
   &__navigation {
