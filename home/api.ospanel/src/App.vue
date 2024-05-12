@@ -49,6 +49,7 @@ export default {
     http.configure({
       baseUrl: this.apiHost,
     });
+    this.$router.replace({ path: '/sites' });
   },
 
   async mounted() {
@@ -56,7 +57,6 @@ export default {
     try {
       this.showLoader();
       await this.loadMainData();
-      await this.loadSites();
     } catch (err) {
       this.noHost = true;
       console.log(err);
