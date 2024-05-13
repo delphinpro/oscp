@@ -27,11 +27,14 @@ export default createStore({
 
         isLoading : false,
         sysMessage: null,
+        restarting: false,
     },
 
     getters: {},
 
     mutations: {
+        setRestarting(state, value) { state.restarting = value; },
+
         setMainData(state, params) {
             state.apiDomain = params.apiDomain;
             state.apiEngine = params.apiEngine;
@@ -92,6 +95,14 @@ export default createStore({
 
         showLoader({ commit }) { commit('showLoader'); },
         hideLoader({ commit }) { commit('hideLoader'); },
+
+        systemReload({ commit }) {
+            commit('setRestarting', true);
+            window.ping = false;
+            http.apiCall('restart').finally(() => {
+                setTimeout(() => window.ping = true, 3000);
+            });
+        },
     },
 
     modules: {

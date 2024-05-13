@@ -27,12 +27,12 @@ export default {
 
   data: () => ({
     hostIsAvailable: true,
-    restarting     : false,
   }),
 
   computed: {
     ...mapState({
-      isLoading: state => state.isLoading,
+      isLoading : state => state.isLoading,
+      restarting: state => state.restarting,
 
       apiEngine : state => state.apiEngine,
       apiDomain : state => state.apiDomain,
@@ -88,15 +88,8 @@ export default {
       loadSites         : 'loadSites',
       showSuccessMessage: 'showSuccessMessage',
       showErrorMessage  : 'showErrorMessage',
+      systemReload      : 'systemReload',
     }),
-
-    systemReload() {
-      this.restarting = true;
-      window.ping = false;
-      http.apiCall('restart').finally(() => {
-        setTimeout(() => window.ping = true, 3000);
-      });
-    },
 
     async enableEngine() {
       this.showLoader();
