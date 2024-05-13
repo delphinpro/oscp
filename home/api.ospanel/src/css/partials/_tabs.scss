@@ -11,10 +11,10 @@
 }
 
 .tab {
-  flex-grow: 1;
   margin-bottom: -1px;
   padding: 0.75rem 1.25rem;
   cursor: pointer;
+  text-align: center;
   border: 1px solid var(--hr-color-light);
   border-bottom: none;
   border-top-left-radius: var(--radius);
@@ -22,5 +22,9 @@
 
   &.active {
     background: var(--hr-color-light);
+  }
+
+  @media(max-width: 992px) {
+    flex-grow: 1;
   }
 }

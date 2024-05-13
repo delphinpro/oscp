@@ -56,7 +56,7 @@ export default {
     <nav class="nav">
       <router-link :to="{ name: 'sites' }" class="nav__item">Сайты</router-link>
       <router-link :to="{ name: 'modules' }" class="nav__item">Модули</router-link>
-      <router-link :to="{ name: 'home' }" class="nav__item">Настройки</router-link>
+      <router-link :to="{ name: 'settings' }" class="nav__item">Настройки</router-link>
     </nav>
 
     <div v-if="selectedGroup && hasGroups">

@@ -10,6 +10,7 @@ namespace OpenServer;
 use OpenServer\Controllers\FilesController;
 use OpenServer\Controllers\IndexController;
 use OpenServer\Controllers\ModuleController;
+use OpenServer\Controllers\SettingsController;
 use OpenServer\Controllers\SitesController;
 use OpenServer\Router\Request;
 use OpenServer\Router\Response;
@@ -36,8 +37,9 @@ try {
     $router->get('/ping', static fn() => Response::json());
 
     $router->get('/main', IndexController::class);
-    $router->get('/settings', [IndexController::class, 'settings']);
-    $router->post('/settings', [IndexController::class, 'saveSettings']);
+
+    $router->get('/settings', [SettingsController::class, 'edit']);
+    $router->post('/settings', [SettingsController::class, 'save']);
 
     $router->get('/modules', ModuleController::class);
     $router->get('/modules/engines', [ModuleController::class, 'engines']);

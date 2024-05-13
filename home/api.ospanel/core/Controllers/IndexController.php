@@ -7,7 +7,6 @@
 
 namespace OpenServer\Controllers;
 
-use OpenServer\Router\Request;
 use OpenServer\Router\Response;
 use OpenServer\Services\Domains;
 use OpenServer\Services\IniFile;
@@ -28,32 +27,5 @@ class IndexController extends Controller
             'cliApiUrl'   => CLI_API_URL,
             'settings'    => IniFile::open('config/program.ini')->get(),
         ]);
-    }
-
-    public function settings(): Response
-    {
-        $settings = IniFile::open('config/program.ini')->get();
-
-        return Response::json([
-            'settings' => [
-                'main'     => $settings['main'] ?? [],
-                'menu'     => $settings['menu'] ?? [],
-                'projects' => $settings['projects'] ?? [],
-            ],
-        ]);
-    }
-
-    public function saveSettings(Request $request): Response
-    {
-        $settings = IniFile::open('config/program.ini');
-        $input = $request->all();
-
-        $settings
-            ->update('main', $input['main'] ?? [])
-            ->update('menu', $input['menu'] ?? [])
-            ->update('projects', $input['projects'] ?? [])
-            ->save();
-
-        return Response::json();
     }
 }

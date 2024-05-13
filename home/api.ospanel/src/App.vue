@@ -171,7 +171,7 @@ export default {
       <div class="app">
         <div class="app__brand">
           <img alt="" class="" src="/assets/icon.svg">
-          <span>OSPanel <span class="text-muted">{{ ospVersion }}</span></span>
+          <router-link :to="{ name: 'home' }">OSPanel <span class="text-muted">{{ ospVersion }}</span></router-link>
         </div>
         <div class="app__header">
           <div id="title">{{ pageTitle }}</div>
@@ -269,8 +269,9 @@ export default {
       height: 24px;
       object-fit: contain;
     }
-    span {
+    a {
       font-size: 1.2rem;
+      color: currentColor;
       span {
         font-family: monospace;
         font-size: 1rem;
