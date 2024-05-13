@@ -15,13 +15,16 @@ let sysMessageTimeout;
 
 export default createStore({
     state: {
-        apiDomain : 'api.ospanel',
-        apiEngine : 'PHP-8.1',
-        webApiUrl : null,
-        cliApiUrl : null,
-        ospVersion: null,
-        ospDate   : null,
-        settings  : {},
+        /** @var {GeneralInfo} main */
+        main    : {
+            apiDomain : 'api.ospanel',
+            apiEngine : 'PHP-8.1',
+            webApiUrl : null,
+            cliApiUrl : null,
+            ospVersion: null,
+            ospDate   : null,
+        },
+        settings: {},
 
         pageTitle: null,
 
@@ -36,11 +39,7 @@ export default createStore({
         setRestarting(state, value) { state.restarting = value; },
 
         setMainData(state, params) {
-            state.apiDomain = params.apiDomain;
-            state.apiEngine = params.apiEngine;
-            state.webApiUrl = params.webApiUrl;
-            state.ospVersion = params.version;
-            state.ospDate = params.releaseDate;
+            state.main = params.main;
             state.settings = params.settings;
         },
 

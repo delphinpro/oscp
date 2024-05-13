@@ -14,12 +14,16 @@ export default {
 
   computed: {
     ...mapState({
-      ospVersion: (state) => state.ospVersion,
-      ospDate   : (state) => state.ospDate,
-      webApiUrl : (state) => state.webApiUrl,
-      cliApiUrl : (state) => state.cliApiUrl,
-      apiDomain : (state) => state.apiDomain,
-      apiEngine : (state) => state.apiEngine,
+      ospVersion: (state) => state.main.ospVersion,
+      ospDate   : (state) => state.main.ospDate,
+      webApiUrl : (state) => state.main.webApiUrl,
+      cliApiUrl : (state) => state.main.cliApiUrl,
+      apiDomain : (state) => state.main.apiDomain,
+      apiEngine : (state) => state.main.apiEngine,
+
+      totalDomains   : (state) => state.main.totalDomains,
+      disabledDomains: (state) => state.main.disabledDomains,
+      problemDomains : (state) => state.main.problemDomains,
     }),
   },
 
@@ -40,7 +44,20 @@ export default {
 
       <dt>Дата релиза:</dt>
       <dd class="mono">{{ ospDate }}</dd>
+    </dl>
 
+    <dl>
+      <dt>Количество доменов:</dt>
+      <dd class="mono">{{ totalDomains }}</dd>
+
+      <dt>Отключённые:</dt>
+      <dd class="mono">{{ disabledDomains }}</dd>
+
+      <dt>С ошибками:</dt>
+      <dd class="mono">{{ problemDomains }}</dd>
+    </dl>
+
+    <dl>
       <dt>Web API url:</dt>
       <dd class="mono">{{ webApiUrl }}</dd>
 

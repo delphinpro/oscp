@@ -160,3 +160,16 @@ type Settings = {
     modules: ModulesSettings
     smtp: SmtpSettings
 }
+
+type GeneralInfo = {
+    apiDomain: string
+    apiEngine: string
+    webApiUrl: string
+    cliApiUrl: string
+    ospVersion: string
+    ospDate: string
+
+    totalDomains: string
+    disabledDomains: string
+    problemDomains: string
+}

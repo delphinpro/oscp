@@ -122,6 +122,29 @@ class Domains
         IniFile::open('config/domains.ini')->set($iniData)->write(20);
     }
 
+    public function count(): int
+    {
+        return count($this->filterDomains());
+    }
+
+    public function countDisabled(): int
+    {
+        return count(
+            array_filter($this->filterDomains(), static function (Domain $d) {
+                return $d->enabled === false;
+            })
+        );
+    }
+
+    public function countProblems(): int
+    {
+        return count(
+            array_filter($this->filterDomains(), static function (Domain $d) {
+                return !$d->isAvailable() || !$d->isValidRoot();
+            })
+        );
+    }
+
     /**
      * @return \OpenServer\DTO\Domain[]
      */

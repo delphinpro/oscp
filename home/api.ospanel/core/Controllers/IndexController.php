@@ -15,17 +15,24 @@ class IndexController extends Controller
 {
     public function __invoke(): Response
     {
-        $domain = Domains::make()->get(API_DOMAIN);
+        $domains = Domains::make();
+        $apiDomain = $domains->get(API_DOMAIN);
 
         return Response::json([
-            'version'     => OSP_VERSION,
-            'releaseDate' => OSP_DATE,
-            'apiDomain'   => API_DOMAIN,
-            'apiEngine'   => $domain->php_engine,
-            // 'apiEngine'   => 'php-8.1',//$domain->engine,
-            'webApiUrl'   => WEB_API_URL,
-            'cliApiUrl'   => CLI_API_URL,
-            'settings'    => IniFile::open('config/program.ini')->get(),
+            'main'     => [
+                'ospVersion' => OSP_VERSION,
+                'ospDate'    => OSP_DATE,
+                'apiDomain'  => API_DOMAIN,
+                'apiEngine'  => $apiDomain->php_engine,
+                // 'apiEngine'   => 'php-8.1',//$apiDomain->engine,
+                'webApiUrl'  => WEB_API_URL,
+                'cliApiUrl'  => CLI_API_URL,
+
+                'totalDomains'    => $domains->count(),
+                'disabledDomains' => $domains->countDisabled(),
+                'problemDomains'  => $domains->countProblems(),
+            ],
+            'settings' => IniFile::open('config/program.ini')->get(),
         ]);
     }
 }

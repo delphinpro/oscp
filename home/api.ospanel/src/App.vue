@@ -34,9 +34,9 @@ export default {
       isLoading : state => state.isLoading,
       restarting: state => state.restarting,
 
-      apiEngine : state => state.apiEngine,
-      apiDomain : state => state.apiDomain,
-      ospVersion: state => state.ospVersion,
+      apiEngine : state => state.main.apiEngine,
+      apiDomain : state => state.main.apiDomain,
+      ospVersion: state => state.main.ospVersion,
       pageTitle : state => state.pageTitle,
       sysMessage: state => state.sysMessage,
     }),
