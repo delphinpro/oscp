@@ -52,8 +52,8 @@ export default {
 .system-message {
   position: fixed;
   z-index: 99999;
-  top: 0;
   right: 0;
+  bottom: 0;
   min-width: 30rem;
   max-width: 60%;
   padding: 1rem 0.25rem 1rem 1rem;

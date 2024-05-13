@@ -26,7 +26,8 @@ export default {
   },
 
   data: () => ({
-    noHost: false,
+    hostIsAvailable: true,
+    restarting     : false,
   }),
 
   computed: {
@@ -58,8 +59,8 @@ export default {
       this.showLoader();
       await this.loadMainData();
     } catch (err) {
-      this.noHost = true;
-      console.log(err);
+      this.hostIsAvailable = false;
+      console.error(err);
     }
     this.hideLoader();
   },
@@ -82,11 +83,11 @@ export default {
     }),
 
     systemReload() {
-      this.noHost = true;
-      this.showErrorMessage({ title: 'Выполняется перезагрузка' });
+      this.restarting = true;
       window.ping = false;
-      http.apiCall('restart');
-      setTimeout(() => window.ping = true, 5000);
+      http.apiCall('restart').finally(() => {
+        setTimeout(() => window.ping = true, 3000);
+      });
     },
 
     async enableEngine() {
@@ -95,7 +96,6 @@ export default {
       try {
         let message = await http.apiCall(`/on/${this.apiEngine}/`);
         await this.showSuccessMessage({ message });
-        this.noHost = false;
         location.reload();
       } catch (message) {
         await this.showErrorMessage({ message, title: 'Ошибка' });
@@ -108,21 +108,18 @@ export default {
       pingInterval = setInterval(() => {
         if (!window.ping || !this.apiDomain) return;
         fetch(this.apiHost + '/ping')
-            .then(res => {
-              if (res.ok) return res.json();
-              return res.text();
-            })
+            .then(res => res.ok ? res.json() : res.text())
             .then(res => {
               if (typeof res === 'string') {
                 throw new Error(res.toString());
               }
-              if (this.noHost) {
+              this.hostIsAvailable = true;
+              if (this.restarting) {
                 location.reload();
               }
-              this.noHost = false;
             })
             .catch(() => {
-              this.noHost = true;
+              this.hostIsAvailable = false;
             });
       }, PING_INTERVAL);
     },
@@ -133,7 +130,21 @@ export default {
 
 <template>
   <div>
-    <div v-if="noHost" class="error">
+    <div v-if="restarting" class="reload-message">
+      <div class="modal modal-danger">
+        <div class="modal__header">
+          <span style="margin-right:auto;">Перезапуск OSPanel</span>
+        </div>
+        <div class="modal__body">
+          <div class="modal-content">
+            <h2 style="margin-top: 0;font-weight:400;">Выполняется перезапуск программы</h2>
+            <p>Дождитесь завершения</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="!hostIsAvailable && !restarting" class="error">
       <div>
         <div class="modal modal-danger">
           <div class="modal__header">
@@ -163,10 +174,7 @@ export default {
         </div>
         <div class="app__header">
           <div id="title">{{ pageTitle }}</div>
-          <div>
-            <div id="top"></div>
-            <button @click="noHost=true">no host</button>
-          </div>
+          <div id="top"></div>
         </div>
         <div class="app__navigation">
           <side-bar class="app__sidebar"/>
@@ -214,6 +222,21 @@ export default {
   .wnd {
     max-width: 60%;
     margin: 0 auto;
+  }
+}
+
+.reload-message {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: rgba(#111827, 0.4);
+  backdrop-filter: blur(5px);
+  .modal {
+    margin: auto;
   }
 }
 
