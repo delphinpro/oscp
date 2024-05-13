@@ -52,6 +52,7 @@ export default {
     });
     const lastPage = localStorage.getItem('LAST_PAGE');
     if (lastPage) {
+      // noinspection JSUnresolvedReference
       this.$router.replace({ path: lastPage });
     }
   },
@@ -61,6 +62,10 @@ export default {
     try {
       this.showLoader();
       await this.loadMainData();
+      // noinspection JSUnresolvedReference
+      if (this.$router.currentRoute.value.name !== 'sites') {
+        await this.loadSites();
+      }
     } catch (err) {
       this.hostIsAvailable = false;
       console.error(err);
