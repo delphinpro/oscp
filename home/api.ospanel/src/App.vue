@@ -50,7 +50,10 @@ export default {
     http.configure({
       baseUrl: this.apiHost,
     });
-    this.$router.replace({ path: '/sites' });
+    const lastPage = localStorage.getItem('LAST_PAGE');
+    if (lastPage) {
+      this.$router.replace({ path: lastPage });
+    }
   },
 
   async mounted() {

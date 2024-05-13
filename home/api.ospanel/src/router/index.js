@@ -43,4 +43,10 @@ const router = createRouter({
     routes,
 });
 
+router.afterEach((to, from, failure) => {
+    if (!failure) {
+        localStorage.setItem('LAST_PAGE', to.path);
+    }
+});
+
 export default router;
