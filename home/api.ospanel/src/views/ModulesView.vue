@@ -19,8 +19,8 @@ export default {
   },
 
   data: () => ({
-    hideDisabled   : false,
-    categoryForView: 'all',
+    hideDisabled     : false,
+    visibleCategories: [],
   }),
 
   computed: {
@@ -39,7 +39,7 @@ export default {
       return Object.values(this.modules)
           .filter(module => {
             if (this.hideDisabled && !module.enabled) return false;
-            return !(this.categoryForView !== 'all' && module.category !== this.categoryForView);
+            return this.visibleCategories.includes(module.category);
           });
     },
   },
@@ -48,14 +48,21 @@ export default {
     hideDisabled(v) {
       localStorage.setItem('modules_hideDisabled', v);
     },
-    categoryForView(v) {
-      localStorage.setItem('modules_category', v);
+    visibleCategories(v) {
+      localStorage.setItem('modules_categories', JSON.stringify(v));
     },
   },
 
   created() {
     this.hideDisabled = localStorage.getItem('modules_hideDisabled') === 'true';
-    this.categoryForView = localStorage.getItem('modules_category') ?? 'all';
+    this.visibleCategories = [...this.categories];
+
+    try {
+      let vc = JSON.parse(localStorage.getItem('modules_categories'));
+      if (Array.isArray(vc)) {
+        this.visibleCategories = vc;
+      }
+    } catch {}
   },
 
   mounted() {
@@ -124,12 +131,18 @@ export default {
 <template>
   <div>
 
-    <div class="d-flex align-items-center gap-1">
+    <div class="d-flex align-items-center space-between gap-1">
+      <span>Фильтр:</span>
       <Checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
-      <select v-model="categoryForView" class="select" style="width:300px">
-        <option value="all">Показать все категории</option>
-        <option v-for="option in categories" :value="option">{{ option }}</option>
-      </select>
+    </div>
+    <div class="modules-filter">
+      <Checkbox
+          v-for="cat in categories"
+          :key="cat"
+          v-model="visibleCategories"
+          :label="cat"
+          :value="cat"
+      />
     </div>
 
     <alert v-if="!filteredModules.length" class="mt-1" message="Модули не загружены"/>
@@ -177,13 +190,13 @@ export default {
                   class="btn btn-icon"
                   title="Выключить модуль"
                   @click="moduleAction('off', module.name)"
-              ><i class="bi bi-power text-danger"></i>
+              ><i class="bi bi-power text-success"></i>
               </button>
               <button v-else
                   class="btn btn-icon"
                   title="Включить модуль"
                   @click="moduleAction('on', module.name)"
-              ><i class="bi bi-power text-success"></i>
+              ><i class="bi bi-power text-danger"></i>
               </button>
               <!--<a
                   class="btn btn-icon"
@@ -198,5 +211,11 @@ export default {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.modules-filter {
+  display: grid;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 1rem;
+}
 </style>
