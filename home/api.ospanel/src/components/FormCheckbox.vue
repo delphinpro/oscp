@@ -12,16 +12,21 @@ export default {
   components: { Checkbox },
 
   props: {
-    label     : { type: String, default: '' },
-    modelValue: Boolean,
+    label     : String,
+    modelValue: [Array, Boolean],
     hint      : String,
   },
 
   emits: ['update:modelValue'],
 
   computed: {
-    isChecked() {
-      return this.modelValue;
+    model: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit('update:modelValue', value);
+      },
     },
   },
 };
@@ -30,19 +35,7 @@ export default {
 <template>
   <div class="form-row">
     <div class="col-span-2 d-flex gap-1 align-items-center">
-      <div class="checkbox">
-        <label class="checkbox__label">
-          <input :checked="isChecked"
-              class="checkbox__input"
-              type="checkbox"
-              @change="$emit('update:modelValue', $event.target.checked)"
-          >
-          <span class="checkbox__indicator">
-            <i class="bi bi-check"></i>
-          </span>
-          <span v-if="label" class="checkbox__text">{{ label }}</span>
-        </label>
-      </div>
+      <checkbox v-model="model" :label="label"/>
       <code v-if="hint" class="form-hint text-muted">{{ hint }}</code>
     </div>
   </div>
