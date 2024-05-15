@@ -28,7 +28,7 @@ export default {
   },
 
   mounted() {
-    this.$store.commit('setPageTitle', 'Open Server Panel');
+    this.$store.commit('setPageTitle', 'Open Server Control Panel by delphinpro');
   },
 
   methods: {},
@@ -38,41 +38,76 @@ export default {
 <template>
   <div>
 
-    <dl>
-      <dt>Версия:</dt>
-      <dd class="mono">{{ ospVersion }}</dd>
+    <div class="dl-group">
 
-      <dt>Дата релиза:</dt>
-      <dd class="mono">{{ ospDate }}</dd>
-    </dl>
+      <dl>
+        <dt>Версия:</dt>
+        <dd class="mono">{{ ospVersion }}</dd>
 
-    <dl>
-      <dt>Количество доменов:</dt>
-      <dd class="mono">{{ totalDomains }}</dd>
+        <dt>Дата релиза:</dt>
+        <dd class="mono">{{ ospDate }}</dd>
+      </dl>
 
-      <dt>Отключённые:</dt>
-      <dd class="mono">{{ disabledDomains }}</dd>
+      <div class="dl-group-space"></div>
 
-      <dt>С ошибками:</dt>
-      <dd class="mono">{{ problemDomains }}</dd>
-    </dl>
+      <dl>
+        <dt>Количество доменов:</dt>
+        <dd class="mono">{{ totalDomains }}</dd>
 
-    <dl>
-      <dt>Web API url:</dt>
-      <dd class="mono">{{ webApiUrl }}</dd>
+        <dt>Отключённые:</dt>
+        <dd class="mono">{{ disabledDomains }}</dd>
 
-      <dt>CLI API url:</dt>
-      <dd class="mono">{{ cliApiUrl }}</dd>
+        <dt>С ошибками:</dt>
+        <dd class="mono">{{ problemDomains }}</dd>
+      </dl>
 
-      <dt>Рабочий домен панели:</dt>
-      <dd class="mono">{{ apiDomain }}</dd>
+      <div class="dl-group-space"></div>
 
-      <dt>Версия PHP для панели:</dt>
-      <dd class="mono">{{ apiEngine }}</dd>
-    </dl>
+      <dl>
+        <dt>Web API url:</dt>
+        <dd class="mono">{{ webApiUrl }}</dd>
+
+        <dt>CLI API url:</dt>
+        <dd class="mono">{{ cliApiUrl }}</dd>
+
+        <dt>Рабочий домен панели:</dt>
+        <dd class="mono">{{ apiDomain }}</dd>
+
+        <dt>Версия PHP для панели:</dt>
+        <dd class="mono">{{ apiEngine }}</dd>
+      </dl>
+
+    </div>
 
   </div>
 </template>
 
 <style lang="scss" scoped>
+.dl-group {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 1px 0;
+  dl {
+    display: contents;
+  }
+  dt, dd {
+    margin: 0;
+    background: var(--table-body-bg);
+    padding-block: 0.75rem;
+    padding-inline: 1rem;
+  }
+  dt:nth-child(1) { border-top-left-radius: var(--table-radius); }
+  dd:nth-child(2) { border-top-right-radius: var(--table-radius); }
+  dd:nth-last-child(1) { border-bottom-right-radius: var(--table-radius); }
+  dt:nth-last-child(2) { border-bottom-left-radius: var(--table-radius); }
+  dd {
+    padding-left: 2rem;
+    word-break: break-all;
+  }
+}
+
+.dl-group-space {
+  height: 1rem;
+  grid-column: span 2;
+}
 </style>
