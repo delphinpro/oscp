@@ -5,7 +5,7 @@
   --------------------------->
 <script>
 
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'HomeView',
@@ -31,7 +31,15 @@ export default {
     this.$store.commit('setPageTitle', 'Open Server Control Panel by delphinpro');
   },
 
-  methods: {},
+  methods: {
+    ...mapActions({
+      showSuccessMessage: 'showSuccessMessage',
+    }),
+    clearStorage() {
+      window.localStorage.clear();
+      this.showSuccessMessage({ message: 'Локальные настройки очищены' });
+    },
+  },
 };
 
 </script>
@@ -77,6 +85,11 @@ export default {
         <dd class="mono">{{ apiEngine }}</dd>
       </dl>
 
+    </div>
+
+    <div class="d-flex align-items-center gap-1 mt-1">
+      <button class="btn text-nowrap" @click="clearStorage">Очистить локальные настройки</button>
+      <div class="text-muted">Будут сброшены настройки, которые хранятся в локальном хранилище браузера</div>
     </div>
 
   </div>
