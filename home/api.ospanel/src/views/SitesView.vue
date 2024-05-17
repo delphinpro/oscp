@@ -20,6 +20,7 @@ export default {
   data: () => ({
     filter      : null,
     hideDisabled: false,
+    hideAliases : false,
   }),
 
   computed: {
@@ -59,13 +60,13 @@ export default {
   },
 
   watch: {
-    hideDisabled(v) {
-      localStorage.setItem('sites_hideDisabled', v);
-    },
+    hideDisabled(v) { localStorage.setItem('sites_hideDisabled', v); },
+    hideAliases(v) { localStorage.setItem('sites_hideAliases', v); },
   },
 
   async created() {
     this.hideDisabled = localStorage.getItem('sites_hideDisabled') === 'true';
+    this.hideAliases = localStorage.getItem('sites_hideAliases') === 'true';
     this.$store.commit('setPageTitle', 'Сайты');
     this.filter = JSON.parse(localStorage.getItem('site_filter') ?? '""');
   },
@@ -105,24 +106,27 @@ export default {
 
   <div v-if="isReady">
     <div class="sites-bar">
-      <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
+      <div>
+        <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
+        <checkbox v-model="hideAliases" class="mt-0.5" label="Скрыть алиасы"/>
+      </div>
       <div class="d-flex filter">
         <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
         <button class="btn" @click="filter='';saveFilter()"><i class="bi bi-x-lg"></i></button>
       </div>
     </div>
     <div v-if="activeDomains.length" class="domains">
-      <domains-list :domains="activeDomains"/>
+      <domains-list :domains="activeDomains" :hide-aliases="hideAliases"/>
     </div>
     <div v-if="problemDomains.length" class="domains">
       <h4>Сайты с ошибками</h4>
-      <domains-list :domains="problemDomains"/>
+      <domains-list :domains="problemDomains" :hide-aliases="hideAliases"/>
     </div>
     <div v-if="(disabledDomains.length && !hideDisabled) || (!activeDomains.length && !problemDomains.length)"
         class="domains"
     >
       <h4>Отключённые сайты</h4>
-      <domains-list :domains="disabledDomains"/>
+      <domains-list :domains="disabledDomains" :hide-aliases="hideAliases"/>
     </div>
   </div>
 </template>
@@ -130,7 +134,7 @@ export default {
 <style lang="scss" scoped>
 .sites-bar {
   display: grid;
-  align-items: center;
+  align-items: flex-start;
   grid-template-columns: auto auto;
   gap: 0.5rem;
 }

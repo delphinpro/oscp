@@ -14,7 +14,8 @@ export default {
 
   props: {
     /** @var {Array<Domain>} domains */
-    domains: Array,
+    domains    : Array,
+    hideAliases: Boolean,
   },
 
   methods: {
@@ -48,13 +49,25 @@ export default {
       <tbody>
         <tr v-for="domain in domains">
           <td style="width: 33%;">
-            <div class="d-flex align-items-center text-nowrap mono">
-              <a
-                  v-if="domain.computed.enabled && domain.isValidRoot && domain.isAvailable"
-                  :href="domain.siteUrl"
-                  target="_blank"
-              >{{ showDomain(domain.siteUrl) }}</a>
-              <span v-else class="text-muted">{{ showDomain(domain.siteUrl) }}</span>
+            <div class="-d-flex -align-items-center text-nowrap mono">
+              <template v-if="domain.computed.enabled && domain.isValidRoot && domain.isAvailable">
+                <a :href="domain.siteUrl" target="_blank">{{ showDomain(domain.siteUrl) }}</a>
+                <div v-if="!hideAliases && domain.computed.host_aliases" class="mt-0.5">
+                  <div v-for="alias in domain.computed.host_aliases" style="padding-left: 2rem;">
+                    <a :href="domain.computed.ssl ? 'https://' + alias : 'http://' + alias" target="_blank">
+                      {{ alias }}
+                    </a>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <span class="text-muted">{{ showDomain(domain.siteUrl) }}</span>
+                <div v-if="!hideAliases && domain.computed.host_aliases" class="mt-0.5">
+                  <div v-for="alias in domain.computed.host_aliases" class="text-muted" style="padding-left: 2rem;">
+                    {{ alias }}
+                  </div>
+                </div>
+              </template>
             </div>
           </td>
           <td class="text-success text-center" style="width: 40px;">
