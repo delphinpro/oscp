@@ -56,16 +56,16 @@ export default {
   },
 
   watch: {
-    hideDisabled(v) {
-      localStorage.setItem('modules_hideDisabled', v);
-    },
-    visibleCategories(v) {
-      localStorage.setItem('modules_categories', JSON.stringify(v));
-    },
+    hideDisabled(v) { localStorage.setItem('modules_hideDisabled', v); },
+    visibleCategories(v) { localStorage.setItem('modules_categories', JSON.stringify(v)); },
   },
 
-  created() {
+  async mounted() {
     this.hideDisabled = localStorage.getItem('modules_hideDisabled') === 'true';
+
+    this.$store.commit('setPageTitle', 'Модули');
+    await this.loadData();
+
     this.visibleCategories = [...this.categories];
 
     try {
@@ -74,11 +74,6 @@ export default {
         this.visibleCategories = vc;
       }
     } catch {}
-  },
-
-  mounted() {
-    this.$store.commit('setPageTitle', 'Модули');
-    this.loadData();
   },
 
   methods: {

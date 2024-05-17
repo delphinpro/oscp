@@ -37,7 +37,7 @@ export default {
     }),
     clearStorage() {
       window.localStorage.clear();
-      this.showSuccessMessage({ message: 'Локальные настройки очищены' });
+      this.showSuccessMessage({ message: 'Локальные настройки очищены', timeout: 1 });
     },
   },
 };
