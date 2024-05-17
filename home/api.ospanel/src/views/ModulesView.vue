@@ -89,6 +89,7 @@ export default {
     ...mapActions({
       loadModules       : 'loadModules',
       modRestart        : 'moduleRestart',
+      loadSites         : 'loadSites',
       showSuccessMessage: 'showSuccessMessage',
       showErrorMessage  : 'showErrorMessage',
       hideMessage       : 'hideMessage',
@@ -111,6 +112,7 @@ export default {
         let message = await http.apiCall(`/${command}/${module}/`);
         await this.showSuccessMessage({ message });
         await this.loadData();
+        await this.loadSites();
       } catch (message) {
         await this.showErrorMessage({ message, title: 'Ошибка' });
       }
