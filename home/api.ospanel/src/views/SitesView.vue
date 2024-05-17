@@ -96,6 +96,13 @@ export default {
 </script>
 
 <template>
+  <teleport to="#top">
+    <router-link :to="{ name: 'siteCreate' }" class="btn">
+      <i class="bi bi-plus-lg"></i>
+      <span class="text-nowrap">Добавить сайт</span>
+    </router-link>
+  </teleport>
+
   <div v-if="isReady">
     <div class="sites-bar">
       <checkbox v-model="hideDisabled" label="Скрыть отключённые"/>
@@ -103,10 +110,6 @@ export default {
         <input v-model="filter" class="input" placeholder="Поиск сайта" type="text" @change="saveFilter">
         <button class="btn" @click="filter='';saveFilter()"><i class="bi bi-x-lg"></i></button>
       </div>
-      <router-link :to="{ name: 'siteCreate' }" class="btn">
-        <i class="bi bi-plus-lg"></i>
-        <span class="text-nowrap">Добавить сайт</span>
-      </router-link>
     </div>
     <div v-if="activeDomains.length" class="domains">
       <domains-list :domains="activeDomains"/>
@@ -128,7 +131,7 @@ export default {
 .sites-bar {
   display: grid;
   align-items: center;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto;
   gap: 0.5rem;
 }
 

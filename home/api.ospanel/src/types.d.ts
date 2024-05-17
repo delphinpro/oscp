@@ -76,6 +76,7 @@ type Module = {
     version: string
     arch: string
     category: string
+    opt_name: string
 
     ip: string | null
     port: string | null

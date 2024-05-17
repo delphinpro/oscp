@@ -32,6 +32,7 @@ class Module
         return [
             'name'     => $this->name,
             'alt_name' => $this->altName(),
+            'opt_name' => $this->optName(),
             'enabled'  => $this->enabled,
             'init'     => $this->init,
             'version'  => $this->version,
@@ -55,6 +56,11 @@ class Module
         }
 
         return $name;
+    }
+
+    public function optName(): string
+    {
+        return ($this->enabled ? '✅ ' : '❌ ').$this->altName();
     }
 
     public function ip(): ?string

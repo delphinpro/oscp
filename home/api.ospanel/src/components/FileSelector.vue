@@ -11,7 +11,14 @@ import { mapActions } from 'vuex';
 export default {
   name: 'FileSelector',
 
-  props: ['modelValue', 'required', 'error', 'showFiles', 'initialPath', 'placeholder'],
+  props: {
+    modelValue : String,
+    required   : { type: Boolean, default: false },
+    error      : Boolean,
+    showFiles  : Boolean,
+    initialPath: String,
+    placeholder: String,
+  },
   emits: ['update:modelValue', 'selectValue'],
 
   data: () => ({

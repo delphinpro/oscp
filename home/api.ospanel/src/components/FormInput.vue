@@ -15,6 +15,7 @@ export default {
     desc       : String,
     required   : { type: Boolean, default: false },
     placeholder: String,
+    hasError   : { type: Boolean, default: false },
   },
 
   emits: [
@@ -34,6 +35,7 @@ export default {
     </label>
     <div>
       <input
+          :class="{withError: hasError}"
           :placeholder="placeholder"
           :required="required"
           :value="modelValue"
@@ -41,7 +43,7 @@ export default {
           type="text"
           @input="$emit('update:modelValue', $event.target.value)"
       >
-      <div v-if="desc" class="form-desc">{{ desc }}</div>
+      <div v-if="desc" class="form-desc" v-html="desc"></div>
     </div>
   </div>
 </template>
