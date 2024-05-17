@@ -29,8 +29,13 @@ export default {
     }),
 
     categories() {
-      const array = this.modules ? this.modules.map(m => m.category) : [];
-      return array.filter((value, index, self) => self.indexOf(value) === index);
+      let filter = (this.modules ? this.modules.map(m => m.category) : [])
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .filter(v => v !== 'PHP');
+      filter.push('PHP Apache');
+      filter.push('PHP FastCGI');
+      filter = filter.sort();
+      return filter;
     },
 
     filteredModules() {
@@ -39,7 +44,13 @@ export default {
       return Object.values(this.modules)
           .filter(module => {
             if (this.hideDisabled && !module.enabled) return false;
-            return this.visibleCategories.includes(module.category);
+            if (this.visibleCategories.includes(module.category)) return true;
+            if (module.category === 'PHP') {
+              if (this.visibleCategories.includes('PHP Apache') && module.alt_name.includes('Apache')) return true;
+              if (this.visibleCategories.includes('PHP FastCGI') && module.alt_name.includes('FastCGI')) return true;
+            }
+
+            return false;
           });
     },
   },
