@@ -46,58 +46,97 @@ export default {
 <template>
   <div>
 
-    <div class="dl-group">
+    <div class="cards">
 
-      <dl>
-        <dt>Версия:</dt>
-        <dd class="mono">{{ ospVersion }}</dd>
+      <div class="card span-6">
+        <div class="card__label">Версия:</div>
+        <div class="card__value">{{ ospVersion }}</div>
+      </div>
+      <div class="card span-6">
+        <div class="card__label">Дата релиза:</div>
+        <div class="card__value">{{ ospDate }}</div>
+      </div>
 
-        <dt>Дата релиза:</dt>
-        <dd class="mono">{{ ospDate }}</dd>
-      </dl>
+      <div class="card span-6">
+        <div class="card__label">Всего сайтов:</div>
+        <div class="d-flex align-items-center gap-1 space-between">
+          <div class="card__value">{{ totalDomains }}</div>
+          <router-link :to="{ name: 'siteCreate' }" class="btn">
+            <i class="bi bi-plus-lg"></i>
+            <span class="text-nowrap">Добавить сайт</span>
+          </router-link>
+        </div>
+      </div>
+      <div class="card span-3">
+        <div class="card__label">Отключённые:</div>
+        <div class="card__value">{{ disabledDomains }}</div>
+      </div>
+      <div class="card span-3">
+        <div class="card__label">С ошибками:</div>
+        <div class="card__value">{{ problemDomains }}</div>
+      </div>
 
-      <div class="dl-group-space"></div>
+      <div class="card span-12">
+        <div class="card__label">Web API url:</div>
+        <div class="card__content mono">{{ webApiUrl }}</div>
+      </div>
+      <div class="card span-12">
+        <div class="card__label">CLI API url:</div>
+        <div class="card__content mono">{{ cliApiUrl }}</div>
+      </div>
+      <div class="card span-6">
+        <div class="card__label">Рабочий домен панели:</div>
+        <div class="card__content mono">{{ apiDomain }}</div>
+      </div>
+      <div class="card span-6">
+        <div class="card__label">Версия PHP для панели:</div>
+        <div class="card__content mono">{{ apiEngine }}</div>
+      </div>
 
-      <dl>
-        <dt>Количество доменов:</dt>
-        <dd class="mono">{{ totalDomains }}</dd>
-
-        <dt>Отключённые:</dt>
-        <dd class="mono">{{ disabledDomains }}</dd>
-
-        <dt>С ошибками:</dt>
-        <dd class="mono">{{ problemDomains }}</dd>
-      </dl>
-
-      <div class="dl-group-space"></div>
-
-      <dl>
-        <dt>Web API url:</dt>
-        <dd class="mono">{{ webApiUrl }}</dd>
-
-        <dt>CLI API url:</dt>
-        <dd class="mono">{{ cliApiUrl }}</dd>
-
-        <dt>Рабочий домен панели:</dt>
-        <dd class="mono">{{ apiDomain }}</dd>
-
-        <dt>Версия PHP для панели:</dt>
-        <dd class="mono">{{ apiEngine }}</dd>
-      </dl>
+      <div class="d-flex align-items-center gap-1 mt-1 span-12">
+        <button class="btn text-nowrap" @click="clearStorage">Очистить локальные настройки</button>
+        <div class="text-muted" style="font-size: 0.85rem;">
+          Будут сброшены настройки, которые хранятся в локальном хранилище браузера
+        </div>
+      </div>
 
     </div>
 
-    <div class="d-flex align-items-center gap-1 mt-1">
-      <button class="btn text-nowrap" @click="clearStorage">Очистить локальные настройки</button>
-      <div class="text-muted">Будут сброшены настройки, которые хранятся в локальном хранилище браузера</div>
-    </div>
 
   </div>
 </template>
 
 <style lang="scss" scoped>
+.cards {
+  display: grid;
+  max-width: 50rem;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  padding: 1rem;
+  border-radius: var(--table-radius);
+  background: var(--table-body-bg);
+  gap: 0.25rem;
+  &__label {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    color: var(--muted-color);
+  }
+  &__value {
+    font-size: 1.5rem;
+  }
+  &__content {
+    word-break: break-all;
+  }
+}
+
 .dl-group {
   display: grid;
+  margin-top: 1rem;
   grid-template-columns: max-content 1fr;
   gap: 1px 0;
   dl {
