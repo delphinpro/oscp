@@ -61,14 +61,68 @@ class SitesController extends Controller
             return Response::json()->status(500)->message("Не удалось создать каталог <code>$ospDir</code>");
         }
 
-        $defaults = Domain::getDefaults();
-
         $domain = Domain::create($data);
 
         $domain->save();
 
         return Response::json([
         ])->message('Saved');
+    }
+
+    public function edit(Request $request): Response
+    {
+        $host = $request->get('host');
+
+        if (!$this->domains->has($host)) {
+            return Response::json()->status(404)->message('Хост не найден');
+        }
+
+        $site = $this->domains->get($host)->toArray();
+
+        return Response::json([
+            'host' => $host,
+            'site' => $site,
+        ]);
+    }
+
+    public function save(Request $request): Response
+    {
+        $oldHost = $request->input('old_host');
+        $host = $request->input('host');
+
+        $data = $request->only(Domain::$params);
+
+        if ($oldHost !== $host && $this->domains->has($host)) {
+            return Response::json()->status(500)->message("Хост <code>$host</code> уже существует");
+        }
+
+        $this->domains->get($oldHost)->delete();
+        Domain::create($data)->save();
+
+        return Response::json([
+        ])->message('Saved');
+    }
+
+    public function delete(Request $request): Response
+    {
+        try {
+            $host = $request->input('host');
+
+            if (!$this->domains->has($host)) {
+                return Response::json()->status(404)->message('Хост не найден');
+            }
+
+            $this->domains->get($host)->delete();
+
+            return Response::json()->message('Сайт удалён');
+
+        } catch (\Exception $e) {
+
+            return Response::json()
+                ->status(500)
+                ->message($e->getMessage());
+
+        }
     }
 
     public function openConsole(Request $request): Response

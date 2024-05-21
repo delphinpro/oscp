@@ -265,6 +265,13 @@ class Domain
             ->replace($host, $config)
             ->write();
     }
+
+    public function delete(): void
+    {
+        IniFile::open($this->base_dir.'/.osp/project.ini', true)
+            ->delete($this->host)
+            ->write();
+    }
     // public function getRawData(): array
     // {
     //     return $this->rawData;

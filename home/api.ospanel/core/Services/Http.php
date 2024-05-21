@@ -11,6 +11,13 @@ use JsonException;
 
 class Http
 {
+    public static function apiCall(string $command): string
+    {
+        $url = CLI_API_URL.'/'.$command;
+
+        return file_get_contents($url);
+    }
+
     public static function getJson(string $url): array
     {
         $url = 'http://ospanel/'.$url;

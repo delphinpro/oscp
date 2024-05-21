@@ -16,6 +16,9 @@ use OpenServer\Router\Request;
 use OpenServer\Router\Response;
 use OpenServer\Router\Router;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 
 require_once __DIR__.'/../data.php';
 require_once __DIR__.'/../core/functions.php';
@@ -46,10 +49,11 @@ try {
 
     $router->get('/sites', [SitesController::class, 'index']);
     $router->get('/sites/defaults', [SitesController::class, 'defaults']);
+    $router->get('/sites/edit', [SitesController::class, 'edit']);
     $router->post('/sites/store', [SitesController::class, 'store']);
     $router->post('/sites/save', [SitesController::class, 'save']);
-    $router->post('/sites/console', [SitesController::class, 'openConsole']);
     $router->post('/sites/delete', [SitesController::class, 'delete']);
+    $router->post('/sites/console', [SitesController::class, 'openConsole']);
 
     $router->post('/fs', FilesController::class);
     $router->post('/fs/create', [FilesController::class, 'create']);

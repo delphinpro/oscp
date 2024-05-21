@@ -83,20 +83,6 @@ class Domains
         return $this->domains[$host];
     }
 
-    public function create(string $host, array $data): static
-    {
-        $this->domains[$host] = new Domain($data);
-
-        return $this;
-    }
-
-    public function delete(string $host): static
-    {
-        unset($this->domains[$host]);
-
-        return $this;
-    }
-
     public function update(string $oldHost, array $data): static
     {
         $domain = new Domain($this->domains[$oldHost]->getRawData());

@@ -17,6 +17,10 @@
   outline: none !important;
   background: #374151;
 
+  &:disabled {
+    color: var(--muted-color);
+  }
+
   &.withError {
     border-color: var(--danger-color);
   }

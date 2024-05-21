@@ -14,6 +14,7 @@ export default {
     hint       : String,
     desc       : String,
     required   : { type: Boolean, default: false },
+    disabled   : { type: Boolean, default: false },
     placeholder: String,
     hasError   : { type: Boolean, default: false },
   },
@@ -36,6 +37,7 @@ export default {
     <div>
       <input
           :class="{withError: hasError}"
+          :disabled="disabled"
           :placeholder="placeholder"
           :required="required"
           :value="modelValue"

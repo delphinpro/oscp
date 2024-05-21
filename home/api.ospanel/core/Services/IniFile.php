@@ -112,29 +112,31 @@ class IniFile
     {
         $ini = '';
 
-        $length = $this->maxLengthKey($this->data);
+        if (!empty($this->data)) {
+            $length = $this->maxLengthKey($this->data);
 
-        if ($totalAlign) {
-            $lengths = [];
+            if ($totalAlign) {
+                $lengths = [];
+                foreach ($this->data as $k => $item) {
+                    if (is_array($item)) {
+                        $lengths[] = $this->maxLengthKey($item);
+                    } else {
+                        $lengths[] = strlen($k);
+                    }
+                }
+                $length = max($lengths);
+            }
+
             foreach ($this->data as $k => $item) {
                 if (is_array($item)) {
-                    $lengths[] = $this->maxLengthKey($item);
+                    $ini .= PHP_EOL.'['.$k.']'.PHP_EOL.PHP_EOL;
+                    $len = $totalAlign ? $length : max($this->maxLengthKey($item), $length);
+                    foreach ($item as $key => $value) {
+                        $ini .= $key.str_repeat(' ', $len - strlen($key)).' = '.self::iniValue($value).PHP_EOL;
+                    }
                 } else {
-                    $lengths[] = strlen($k);
+                    $ini .= $k.str_repeat(' ', $length - strlen($k)).' = '.self::iniValue($item).PHP_EOL;
                 }
-            }
-            $length = max($lengths);
-        }
-
-        foreach ($this->data as $k => $item) {
-            if (is_array($item)) {
-                $ini .= PHP_EOL.'['.$k.']'.PHP_EOL.PHP_EOL;
-                $len = $totalAlign ? $length : max($this->maxLengthKey($item), $length);
-                foreach ($item as $key => $value) {
-                    $ini .= $key.str_repeat(' ', $len - strlen($key)).' = '.self::iniValue($value).PHP_EOL;
-                }
-            } else {
-                $ini .= $k.str_repeat(' ', $length - strlen($k)).' = '.self::iniValue($item).PHP_EOL;
             }
         }
 
@@ -156,6 +158,13 @@ class IniFile
     public function replace(string $section, array $data): IniFile
     {
         $this->data[$section] = $data;
+
+        return $this;
+    }
+
+    public function delete(string $section): IniFile
+    {
+        unset($this->data[$section]);
 
         return $this;
     }
