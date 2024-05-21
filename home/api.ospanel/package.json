@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-clean",
-    "archive": "cd ../.. & git archive --format=zip --output=release.zip dev --prefix=system/public_html/css/ --add-file=system/public_html/css/app.css --prefix=system/public_html/js/ --add-file=system/public_html/js/app.js --add-file=system/public_html/js/chunk-vendors.js --prefix=system/public_html/assets/ --add-file=system/public_html/assets/bootstrap-icons.css --add-file=system/public_html/assets/bootstrap-icons.woff --add-file=system/public_html/assets/bootstrap-icons.woff2 --add-file=system/public_html/assets/logo.png --add-file=system/public_html/assets/logo.svg --add-file=system/public_html/assets/icon.svg --prefix="
+    "archive": "cd ../.. & git archive --format=zip --output=release.zip master --prefix=system/public_html/css/ --add-file=system/public_html/css/app.css --prefix=system/public_html/js/ --add-file=system/public_html/js/app.js --add-file=system/public_html/js/chunk-vendors.js --prefix=system/public_html/assets/ --add-file=system/public_html/assets/bootstrap-icons.css --add-file=system/public_html/assets/bootstrap-icons.woff --add-file=system/public_html/assets/bootstrap-icons.woff2 --add-file=system/public_html/assets/logo.png --add-file=system/public_html/assets/logo.svg --add-file=system/public_html/assets/icon.svg --prefix="
   },
   "dependencies": {
     "core-js": "^3.8.3",
