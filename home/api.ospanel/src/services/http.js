@@ -26,6 +26,13 @@ function arrayToFormData(formData, data, parentKey) {
     }
 }
 
+export class ServerError {
+    constructor(message) {
+        this.name = 'ServerError';
+        this.message = message;
+    }
+}
+
 export default new class {
     #baseUrl;
     #cliApiUrl;
@@ -47,7 +54,7 @@ export default new class {
                 if (res.status === 200) {
                     return res['payload'];
                 } else {
-                    throw Error(res['message'] ?? 'Server Error');
+                    throw new ServerError(res['message'] ?? 'Server Error');
                 }
             });
     }

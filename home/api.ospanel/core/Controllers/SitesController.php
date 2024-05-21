@@ -7,9 +7,11 @@
 
 namespace OpenServer\Controllers;
 
+use OpenServer\DTO\Domain;
 use OpenServer\Router\Request;
 use OpenServer\Router\Response;
 use OpenServer\Services\Domains;
+use OpenServer\Services\Http;
 use OpenServer\Services\IniFile;
 
 class SitesController extends Controller
@@ -23,8 +25,8 @@ class SitesController extends Controller
 
     public function index(): Response
     {
-        $settings = IniFile::open('config/program.ini')->get();
-        $isGroupDomains = $settings['menu']['show_projects_in_groups'] ?? false;
+        $settings = IniFile::open('config/program.ini')->get('menu');
+        $isGroupDomains = $settings['show_projects_in_groups'] ?? false;
 
         $sites = $isGroupDomains
             ? $this->domains->toGroups()
@@ -36,90 +38,51 @@ class SitesController extends Controller
         ]);
     }
 
-    public function getSite(Request $request): Response
+    public function defaults(): Response
     {
-        $host = $request->input('host');
-        if (!$this->domains->has($host)) {
-            return Response::json()->status(404)->message('Хост не найден');
-        }
-
-        $site = $this->domains->get($host)->toArray();
-
-        return Response::json([
-            'host' => $host,
-            'site' => $site,
-        ]);
-    }
-
-    public function save(Request $request): Response
-    {
-        $oldHost = $request->input('old_host');
-        $host = $request->input('host');
-
-        $data = $request->except([
-            'old_host',
-            'adminUrl',
-            'siteUrl',
-            'isValidRoot',
-            'isAvailable',
-            'isActive',
-            'isProblem',
-            'isDisabled',
-        ]);
-
-        if (!$oldHost) {
-            if ($this->domains->has($host)) {
-                return Response::json()->status(500)->message("Хост <code>$host</code> уже существует");
-            }
-
-            $this->domains
-                ->create($host, $data)
-                ->save();
-
-            return Response::json()->message('Сайт создан');
-        }
-
-        return $this->updateDomain(
-            $request->input('host'),
-            $data,
-            $request->input('old_host') ?: null
+        return Response::json(
+            Domain::getDefaults()
         );
     }
 
-    public function delete(Request $request): Response
+    public function store(Request $request): Response
     {
-        try {
-            $host = $request->input('host');
+        $host = $request->input('host');
+        $data = $request->only(Domain::$params);
 
-            if (!$this->domains->has($host)) {
-                return Response::json()->status(404)->message('Хост не найден');
-            }
-
-            $this->domains
-                ->delete($host)
-                ->save();
-
-            return Response::json()->message('Сайт удалён');
-
-        } catch (\Exception $e) {
-
-            return Response::json()
-                ->status(500)
-                ->message($e->getMessage());
-
+        if ($this->domains->has($host)) {
+            return Response::json()->status(500)->message("Хост <code>$host</code> уже существует");
         }
+
+        $baseDir = $data['base_dir'];
+        $ospDir = $baseDir.'/.osp';
+
+        if (!is_dir($ospDir) && !mkdir($ospDir, true) && !is_dir($ospDir)) {
+            return Response::json()->status(500)->message("Не удалось создать каталог <code>$ospDir</code>");
+        }
+
+        $defaults = Domain::getDefaults();
+
+        $domain = Domain::create($data);
+
+        $domain->save();
+
+        return Response::json([
+        ])->message('Saved');
     }
 
     public function openConsole(Request $request): Response
     {
         $host = $request->input('host');
 
-        $file = ROOT_DIR.'/bin/osp__exec.bat';
-        file_put_contents($file, "osp project $host".PHP_EOL);
+        Http::apiCall('cli/'.$host);
 
-        $cmd = str_replace('/', DIRECTORY_SEPARATOR, $file);
-
-        pclose(popen("start $cmd", 'r'));
+        // $file = ROOT_DIR.'/bin/osp__exec.bat';
+        // file_put_contents($file, "osp project $host".PHP_EOL);
+        //
+        // $cmd = str_replace('/', DIRECTORY_SEPARATOR, $file);
+        //
+        // pclose(popen("start $cmd", 'r'));
 
         return Response::json();
     }

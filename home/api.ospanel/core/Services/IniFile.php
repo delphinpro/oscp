@@ -153,6 +153,13 @@ class IniFile
         return $this;
     }
 
+    public function replace(string $section, array $data): IniFile
+    {
+        $this->data[$section] = $data;
+
+        return $this;
+    }
+
     public function save(): void
     {
         $this->write();

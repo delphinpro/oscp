@@ -71,7 +71,12 @@ export default {
             </div>
           </td>
           <td class="text-success text-center" style="width: 40px;">
-            <small v-if="domain.computed.ssl"><i class="bi bi-lock-fill cursor-help" title="SSL включён"></i></small>
+            <small v-if="domain.computed.ssl">
+              <i :class="{'text-muted': !domain.computed.enabled}"
+                  class="bi bi-lock-fill cursor-help"
+                  title="SSL включён"
+              ></i>
+            </small>
           </td>
           <td class="text-muted text-nowrap" style="width: 5%;">
             <span class="d-flex align-items-center gap-0.5">

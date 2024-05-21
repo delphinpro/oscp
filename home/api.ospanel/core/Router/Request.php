@@ -73,6 +73,15 @@ class Request
         );
     }
 
+    public function only(array $keys): array
+    {
+        return array_filter(
+            $this->body,
+            static fn($key) => in_array($key, $keys, true),
+            ARRAY_FILTER_USE_KEY
+        );
+    }
+
     public function getBody(): ?array
     {
         return $this->body;

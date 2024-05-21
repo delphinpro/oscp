@@ -44,8 +44,9 @@ try {
     $router->get('/modules', ModuleController::class);
     $router->get('/modules/engines', [ModuleController::class, 'engines']);
 
-    $router->post('/sites/data', [SitesController::class, 'getSite']);
     $router->get('/sites', [SitesController::class, 'index']);
+    $router->get('/sites/defaults', [SitesController::class, 'defaults']);
+    $router->post('/sites/store', [SitesController::class, 'store']);
     $router->post('/sites/save', [SitesController::class, 'save']);
     $router->post('/sites/console', [SitesController::class, 'openConsole']);
     $router->post('/sites/delete', [SitesController::class, 'delete']);
