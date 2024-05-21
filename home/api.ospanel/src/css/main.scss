@@ -1,0 +1,46 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+:root {
+  --scrollbar-size: 0.5rem;
+
+  --radius: 0.5rem;
+  --radius-half: 0.25rem;
+  --body-color: #f3f4f6;
+
+  --muted-color: #6b7b91;
+  --danger-color: #f53c3c;
+  --success-color: #22c55e;
+
+  --hr-color: #374151;
+  --hr-color-light: #4b5563;
+
+  --table-border: var(--hr-color-light);
+  --table-radius: 0.5rem;
+  --table-body-bg: #2c3541;
+  --table-header-bg: #171f2a;
+  --table-td-x-padding: 0.5rem;
+
+  --app-header-padding-y: 0rem;
+  --app-header-height: 4rem;
+  --app-header-padding-x: 1.5rem;
+  --app-side-padding-y: 1rem;
+  --app-side-padding-x: 0.5rem;
+  --app-side-bg: #1f2937;
+
+  --input-height: 2.5rem;
+}
+
+@import "./partials/scrollbars";
+@import "./partials/base";
+@import "./partials/buttons";
+@import "./partials/input";
+@import "./partials/form";
+@import "./partials/table";
+@import "./partials/bulb";
+@import "./partials/nav";
+@import "./partials/tabs";
+@import "./partials/modal";
+@import "./partials/helpers";

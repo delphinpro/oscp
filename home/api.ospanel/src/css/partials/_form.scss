@@ -1,0 +1,55 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+.form {
+  display: grid;
+  align-items: start;
+  margin-bottom: 2rem;
+  grid-template-columns: minmax(25%, 30%) 1fr;
+  gap: 1.25rem 1rem;
+
+  .form-row {
+    display: contents;
+  }
+  .monospace {
+    font-size: 1.4em;
+  }
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  min-height: var(--input-height);
+}
+
+.form-hint {
+  font-size: 1em;
+  display: block;
+  .form-label & {
+    margin-top: 0.25rem;
+  }
+}
+
+.form-desc {
+  font-size: 0.85em;
+  font-style: italic;
+  margin-top: 4px;
+  color: var(--muted-color);
+  code {
+    font-size: 1.4em;
+    font-style: normal;
+  }
+}
+
+.form-subtitle {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--muted-color);
+  grid-column: span 2;
+}
+
+.req {
+  color: red;
+}

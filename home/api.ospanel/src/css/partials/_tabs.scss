@@ -1,0 +1,33 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--hr-color-light);
+  gap: 2px;
+}
+
+.tab {
+  margin-bottom: -1px;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid var(--hr-color-light);
+  border-bottom: none;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+
+  &:hover {
+    background: var(--hr-color);
+  }
+  &.active {
+    background: var(--hr-color-light);
+  }
+
+  @media(max-width: 992px) {
+    flex-grow: 1;
+  }
+}

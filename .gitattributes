@@ -1,0 +1,9 @@
+.gitattributes                      export-ignore
+home/api.ospanel/public             export-ignore
+home/api.ospanel/src                export-ignore
+home/api.ospanel/babel.config.js    export-ignore
+home/api.ospanel/vue.config.js      export-ignore
+home/api.ospanel/jsconfig.json      export-ignore
+home/api.ospanel/package.json       export-ignore
+home/api.ospanel/package-lock.json  export-ignore
+home/api.ospanel/.browserslistrc    export-ignore

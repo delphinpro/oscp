@@ -1,0 +1,26 @@
+// Web OSP by delphinpro
+// Copyright (c) 2024.
+// Licensed under MIT License
+//////////////////////////////
+
+@use "sass:math";
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar,
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  width: var(--scrollbar-size, 0.5rem);
+  height: var(--scrollbar-size, 0.5rem);
+  border: calc(var(--scrollbar-size, 0.5rem) / 4) solid transparent;
+  border-radius: 0.5rem;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner { background-color: transparent; }
+
+
+::-webkit-scrollbar-thumb,
+:hover::-webkit-scrollbar-thumb { box-shadow: inset 0 0 0 var(--scrollbar-size, 0.5rem) rgba(255, 255, 255, 0.1); }
+
+::-webkit-scrollbar-thumb:hover { box-shadow: inset 0 0 0 var(--scrollbar-size, 0.5rem) rgba(255, 255, 255, 0.2); }
