@@ -9,6 +9,7 @@ namespace OpenServer\Controllers;
 
 use OpenServer\Router\Request;
 use OpenServer\Router\Response;
+use OpenServer\Services\IniFile;
 
 class FilesController extends Controller
 {
@@ -69,7 +70,10 @@ class FilesController extends Controller
     {
         if (file_exists($dir)) return $dir;
 
-        $defaultStartDirectory = str_replace('/', '\\', ROOT_DIR.'/home');
+        $paths = IniFile::open('config/program.ini')->get('main')['projects_search_path'] ?? '{root_dir}\home';
+        [$searchPath] = explode(';', $paths, 2);
+
+        $defaultStartDirectory = str_replace(['/', '{root_dir}'], ['\\', ROOT_DIR], $searchPath);
 
         if (!$dir) {
             return $defaultStartDirectory;
