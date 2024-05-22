@@ -88,7 +88,18 @@ export default {
 
       this.defaults = await http.get('sites/defaults');
       const mods = await http.get('modules/engines');
-      this.php_engines = toLowerCaseField(mods?.php_engines ?? [], 'name');
+
+      this.php_engines = { Apache: [], FastCGI: [] };
+
+      toLowerCaseField(mods?.php_engines ?? [], 'name').forEach(e => {
+        if (e.alt_name.includes('Apache')) {
+          this.php_engines.Apache.push(e);
+        }
+        if (e.alt_name.includes('FastCGI')) {
+          this.php_engines.FastCGI.push(e);
+        }
+      });
+
       this.nginx_engines = toLowerCaseField(mods?.nginx_engines ?? [], 'name');
 
       this.ready = true;
@@ -192,7 +203,7 @@ export default {
       <form-input    v-model="site.host" :has-error="errorHost" label="Хост" required @input="errorHost = false"/>
       <form-input    v-model="site.aliases" desc="Несколько алиасов указываются через пробел" hint="aliases" label="Алиасы"/>
       <form-input    v-model="site.ip" hint="ip" label="IP-адрес"/>
-      <form-select   v-model="site.php_engine" :options="php_engines" empty="Не требуется" hint="php_engine" label="PHP" text-key="opt_name" value-key="name"/>
+      <form-select   v-model="site.php_engine" :group="true" :options="php_engines" empty="Не требуется" hint="php_engine" label="PHP" text-key="opt_name" value-key="name"/>
       <form-select   v-model="site.nginx_engine" :options="nginx_engines" empty="Не требуется" hint="nginx_engine" label="Nginx" text-key="opt_name" value-key="name"/>
       <form-input    v-model="site.node_engine" hint="node_engine" label="NodeJS"/>
       <div class="form-row">

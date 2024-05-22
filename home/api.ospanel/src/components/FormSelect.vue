@@ -17,6 +17,7 @@ export default {
     empty     : String,
     valueKey  : { type: String, default: 'value' },
     textKey   : { type: String, default: 'text' },
+    group     : { type: Boolean, default: false },
   },
   emits   : [
     'update:modelValue',
@@ -45,7 +46,14 @@ export default {
           class="select"
       >
         <option v-if="empty" value="">{{ empty }}</option>
-        <option v-for="option in options" :value="option[valueKey]">{{ option[textKey] }}</option>
+        <template v-if="group">
+          <optgroup v-for="(group, name) in options" :label="name">
+            <option v-for="option in group" :value="option[valueKey]">{{ option[textKey] }}</option>
+          </optgroup>
+        </template>
+        <template v-else>
+          <option v-for="option in options" :value="option[valueKey]">{{ option[textKey] }}</option>
+        </template>
       </select>
     </div>
   </div>
