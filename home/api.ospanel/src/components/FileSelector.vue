@@ -35,7 +35,7 @@ export default {
     openBrowser() {
       this.isOpenBrowser = true;
       this.currentDir = this.modelValue ?? '';
-      if (!this.currentDir) {
+      if (!this.currentDir || this.currentDir.includes('{')) {
         this.currentDir = this.initialPath ?? '';
       }
       this.readFs();
