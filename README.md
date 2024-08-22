@@ -36,4 +36,16 @@ Web-панель управления для OSPanel v6.
 * Скачайте архив из раздела релизов
 * Распакуйте файлы в соответствующие директории, согласитесь с заменой файлов
 * Перезапустите программу
-* Откройте в браузере страницу http://ospanel 
+* Откройте в браузере страницу http://ospanel
+
+## Скриншоты
+
+| . | . |
+|---|---|
+| ![20240823-013556](https://github.com/user-attachments/assets/6ad3aabd-62f9-4088-8da0-7eb2540a7c55) | ![20240823-013618](https://github.com/user-attachments/assets/ab514a64-ae17-4872-9fc7-9b84f800c358) |
+| ![20240823-013807](https://github.com/user-attachments/assets/cbbdb8fa-d3e3-4573-b73b-b2e2748b585f) | ![20240823-013832](https://github.com/user-attachments/assets/bede3b14-f107-4d3a-a496-67a5201c3228) |
+
+
+
+
+
