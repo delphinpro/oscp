@@ -5,8 +5,6 @@
  * Licensed under MIT License
  */
 
-use JetBrains\PhpStorm\NoReturn;
-
 const TLD = 'TLD';
 
 function dump($var, $level = 0): void
@@ -68,8 +66,7 @@ function dump($var, $level = 0): void
     }
 }
 
-#[NoReturn]
-function dd(...$vars): void
+function dd(...$vars): never
 {
     foreach ($vars as $var) {
         echo '<pre style="font-size:1rem">';
