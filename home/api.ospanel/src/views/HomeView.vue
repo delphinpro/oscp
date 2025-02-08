@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2024.
+  Copyright (c) 2024-2025.
   Licensed under MIT License
   --------------------------->
 <script>
@@ -28,7 +28,7 @@ export default {
   },
 
   mounted() {
-    this.$store.commit('setPageTitle', 'Open Server Control Panel by delphinpro');
+    this.$store.commit('setPageTitle', 'Open Server Control Panel by delphinpro v1.1');
   },
 
   methods: {
@@ -144,9 +144,9 @@ export default {
   }
   dt, dd {
     margin: 0;
-    background: var(--table-body-bg);
     padding-block: 0.75rem;
     padding-inline: 1rem;
+    background: var(--table-body-bg);
   }
   dt:nth-child(1) { border-top-left-radius: var(--table-radius); }
   dd:nth-child(2) { border-top-right-radius: var(--table-radius); }
