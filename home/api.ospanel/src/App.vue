@@ -244,7 +244,11 @@ export default {
 .app {
   display: grid;
   width: 100%;
+  max-width: 75rem;
   min-height: 100vh;
+  margin: 0 auto;
+  border-right: 1px solid var(--hr-color);
+  border-left: 1px solid var(--hr-color);
   grid-template-columns: 17rem 1fr;
   grid-template-rows: auto 1fr;
 
@@ -294,9 +298,11 @@ export default {
       --hr-color: var(--hr-color-light);
     }
   }
+
   &__sidebar {
     padding: 1rem 0.5rem;
   }
+
   &__footer {
     position: sticky;
     bottom: 0;
