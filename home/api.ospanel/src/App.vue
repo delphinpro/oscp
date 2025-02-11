@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2023-2024.
+  Copyright (c) 2023-2025.
   Licensed under MIT License
   --------------------------->
 <script>
@@ -31,6 +31,8 @@ export default {
 
   computed: {
     ...mapState({
+      version: state => state.version,
+
       isLoading : state => state.isLoading,
       restarting: state => state.restarting,
 
@@ -169,31 +171,40 @@ export default {
     </div>
     <template v-else>
       <div class="app">
-        <div class="app__brand">
-          <img alt="" class="" src="/assets/icon.svg">
-          <router-link :to="{ name: 'home' }">OSPanel <span class="text-muted">{{ ospVersion }}</span></router-link>
+        <div class="app__topbar">
+          <div class="app__brand">
+            <div class="app-brand">
+              <img alt="" class="" src="/assets/icon.svg">
+              <router-link :to="{ name: 'home' }">OSPanel <span class="text-muted">{{ ospVersion }}</span></router-link>
+            </div>
+            <button class="btn btn-icon" style="height:auto;" title="Перезапустить" @click="systemReload">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+          <div class="app__header">
+            <div id="title">{{ pageTitle }}</div>
+            <div id="top"></div>
+          </div>
         </div>
-        <div class="app__header">
-          <div id="title">{{ pageTitle }}</div>
-          <div id="top"></div>
-        </div>
-        <div class="app__navigation">
-          <side-bar class="app__sidebar"/>
+        <div class="app__body">
+          <div class="app__navigation">
+            <side-bar class="app__sidebar"/>
+          </div>
+          <div class="app__main">
+            <router-view/>
+          </div>
           <div class="app__footer">
-            <nav class="nav nav_compact">
-              <button class="nav__item active" style="padding-block:0.5rem" @click="systemReload">
-                <i class="bi bi-arrow-clockwise"></i>
-                Перезапустить
-              </button>
-              <a class="nav__item muted" href="https://ospanel.io/forum/" target="_blank">
+            <nav class="nav-inline">
+              <span>Сообщество:</span>
+              <a class="nav-inline__item" href="https://ospanel.io/forum/" target="_blank">
                 <i class="bi bi-box-arrow-up-right"></i>
                 Форум
               </a>
-              <a class="nav__item muted" href="https://t.me/ospanel_chat" target="_blank">
+              <a class="nav-inline__item" href="https://t.me/ospanel_chat" target="_blank">
                 <i class="bi bi-box-arrow-up-right"></i>
                 Telegram
               </a>
-              <a class="nav__item muted"
+              <a class="nav-inline__item"
                   href="https://github.com/OSPanel/OpenServerPanel/wiki/Документация"
                   target="_blank"
               >
@@ -201,10 +212,10 @@ export default {
                 Документация
               </a>
             </nav>
+            <div class="muted">
+              © 2023-2025, OSCP by delphinpro v{{ version }}. Licensed under MIT License.
+            </div>
           </div>
-        </div>
-        <div class="app__main">
-          <router-view/>
         </div>
       </div>
     </template>
@@ -249,72 +260,108 @@ export default {
   margin: 0 auto;
   border-right: 1px solid var(--hr-color);
   border-left: 1px solid var(--hr-color);
-  grid-template-columns: 17rem 1fr;
-  grid-template-rows: auto 1fr;
+  background: var(--app-bg);
+  grid-template-columns: var(--app-side-width) 1fr;
+  grid-template-rows: var(--app-header-height) 1fr;
 
-  &__brand, &__navigation {
-    border-right: 1px solid var(--hr-color);
-    background: var(--app-side-bg);
-  }
+  &__topbar {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    display: grid;
+    background: var(--app-bg);
+    grid-template-columns: subgrid;
+    grid-column: span 2;
 
-  &__brand, &__header {
-    height: var(--app-header-height);
-    padding: var(--app-header-padding-y) var(--app-header-padding-x);
-    border-bottom: 1px solid var(--hr-color);
+    &::after {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      content: '';
+      background: linear-gradient(to bottom, rgba(#000, 0.4), transparent);
+    }
   }
 
   &__brand {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    img {
-      flex-shrink: 0;
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-    }
-    a {
-      font-size: 1.2rem;
-      color: currentColor;
-      span {
-        font-family: monospace;
-        font-size: 1rem;
-      }
-    }
+    justify-content: space-between;
+    padding: var(--app-header-py) var(--app-px);
+    border-right: 1px solid var(--hr-color);
+    background: var(--app-side-bg);
   }
 
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: var(--app-header-py) var(--app-px);
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: span 2;
+    grid-template-rows: 1fr auto;
   }
 
   &__navigation {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-right: 1px solid var(--hr-color);
+    background: var(--app-side-bg);
+    grid-row: span 2;
     hr {
-      margin: 1rem -0.5rem;
-      --hr-color: var(--hr-color-light);
+      margin: 1rem calc(var(--app-px) * -1);
     }
   }
 
   &__sidebar {
-    padding: 1rem 0.5rem;
+    position: sticky;
+    top: var(--app-header-height);
+    overflow: auto;
+    max-height: calc(100vh - var(--app-header-height));
+    padding: var(--app-py) var(--app-px);
   }
 
   &__footer {
-    position: sticky;
-    bottom: 0;
-    padding: 1rem 0.5rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--app-py) / 2) var(--app-px);
+    color: var(--muted-color);
     border-top: 1px solid var(--hr-color);
+    background: #000;
     background: var(--app-side-bg);
-    box-shadow: -5px 0 10px rgba(#000, 0.7);
   }
 
   &__main {
     min-width: 0;
-    padding: 1rem 1.5rem;
+    padding: var(--app-py) var(--app-px);
+  }
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  img {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+  a {
+    font-size: 1.2rem;
+    color: currentColor;
+    span {
+      font-family: monospace;
+      font-size: 1rem;
+    }
   }
 }
 

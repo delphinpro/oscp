@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2024.
+  Copyright (c) 2024-2025.
   Licensed under MIT License
   --------------------------->
 
@@ -100,7 +100,7 @@ export default {
             <div class="d-flex align-items-center gap-1 justify-end text-end">
               <div v-if="!domain.computed.enabled" class="d-flex align-items-center gap-0.5 justify-end">
                 <span class="text-muted">Сайт отключён</span>
-                <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
               </div>
               <!--<div v-else-if="!domain.isAvailable" class="d-flex align-items-center gap-0.5 justify-end">
                 <span class="text-muted">Модуль {{ domain.computed.php_engine }} отсутствует или выключен</span>
@@ -117,7 +117,7 @@ export default {
                       class="btn btn-icon"
                       target="_blank"
                       title="Админка"
-                  ><i class="bi bi-box-arrow-in-right"></i></a>
+                  ><i class="bi bi-box-arrow-in-right"></i> Админка</a>
                   <button class="btn btn-icon" title="Консоль" @click="openConsole(domain.host)">
                     <i class="bi bi-terminal"></i>
                   </button>

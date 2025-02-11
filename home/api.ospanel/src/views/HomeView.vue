@@ -14,6 +14,8 @@ export default {
 
   computed: {
     ...mapState({
+      version: (state) => state.version,
+
       ospVersion: (state) => state.main.ospVersion,
       ospDate   : (state) => state.main.ospDate,
       webApiUrl : (state) => state.main.webApiUrl,
@@ -28,7 +30,7 @@ export default {
   },
 
   mounted() {
-    this.$store.commit('setPageTitle', 'Open Server Control Panel by delphinpro v1.1');
+    this.$store.commit('setPageTitle', 'Open Server Control Panel by delphinpro v' + this.version);
   },
 
   methods: {
@@ -61,7 +63,7 @@ export default {
         <div class="card__label">Всего сайтов:</div>
         <div class="d-flex align-items-center gap-1 space-between">
           <div class="card__value">{{ totalDomains }}</div>
-          <router-link :to="{ name: 'siteCreate' }" class="btn">
+          <router-link :to="{ name: 'siteCreate' }" class="btn btn-success">
             <i class="bi bi-plus-lg"></i>
             <span class="text-nowrap">Добавить сайт</span>
           </router-link>
@@ -109,7 +111,6 @@ export default {
 <style lang="scss" scoped>
 .cards {
   display: grid;
-  max-width: 50rem;
   grid-template-columns: repeat(12, 1fr);
   gap: 1rem;
 }

@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2024.
+  Copyright (c) 2024-2025.
   Licensed under MIT License
   --------------------------->
 
@@ -112,7 +112,7 @@ export default {
                   <div :style="{direction: currentDir.length>3 ? 'rtl':'ltr'}" class="current-path">
                     {{ currentDir }}
                   </div>
-                  <button class="btn" @click="selectDir">Выбрать</button>
+                  <button class="btn btn-success" @click="selectDir">Выбрать</button>
                 </div>
               </div>
               <div class="files">

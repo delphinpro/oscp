@@ -1,6 +1,6 @@
 /*
  * Web OSP by delphinpro
- * Copyright (c) 2024.
+ * Copyright (c) 2024-2025.
  * Licensed under MIT License
  */
 
@@ -25,6 +25,7 @@ export default createStore({
             ospDate   : null,
         },
         settings: {},
+        version : '1.1',
 
         pageTitle: null,
 

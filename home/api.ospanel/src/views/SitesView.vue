@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2023-2024.
+  Copyright (c) 2023-2025.
   Licensed under MIT License
   --------------------------->
 
@@ -98,7 +98,7 @@ export default {
 
 <template>
   <teleport to="#top">
-    <router-link :to="{ name: 'siteCreate' }" class="btn">
+    <router-link :to="{ name: 'siteCreate' }" class="btn btn-success">
       <i class="bi bi-plus-lg"></i>
       <span class="text-nowrap">Добавить сайт</span>
     </router-link>
@@ -145,8 +145,8 @@ export default {
     border-bottom-right-radius: 0;
   }
   .btn {
-    border-radius: 0 var(--radius-half) var(--radius-half) 0;
     padding-inline: 0.75rem;
+    border-radius: 0 var(--radius-half) var(--radius-half) 0;
   }
 }
 </style>

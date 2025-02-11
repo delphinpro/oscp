@@ -1,16 +1,18 @@
 // Web OSP by delphinpro
-// Copyright (c) 2024.
+// Copyright (c) 2024-2025.
 // Licensed under MIT License
 //////////////////////////////
 
 .nav {
   display: grid;
+  margin-inline: calc(var(--nav-px) * -1);
   gap: 4px;
 
   &__title {
     font-size: 0.9rem;
     display: block;
     margin: 0.5rem 0;
+    padding: 0 var(--nav-px);
     color: var(--muted-color);
   }
 
@@ -19,7 +21,7 @@
     line-height: 1.4;
     min-width: 0;
     max-width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem var(--nav-px);
     cursor: pointer;
     text-align: left;
     text-decoration: none;

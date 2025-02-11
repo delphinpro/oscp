@@ -1,5 +1,5 @@
 // Web OSP by delphinpro
-// Copyright (c) 2024.
+// Copyright (c) 2024-2025.
 // Licensed under MIT License
 //////////////////////////////
 
@@ -8,19 +8,20 @@
   line-height: 1;
   display: inline-flex;
   align-items: center;
-
   height: 2.5rem;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
+  transition: 0.25s ease;
   vertical-align: middle;
   color: var(--btn-color);
   border: 1px solid var(--btn-border);
   border-radius: var(--radius);
   background: var(--btn-bg);
+
   --btn-color: var(--body-color);
   --btn-bg: #374151;
   --btn-hover-bg: #4b5563;
-  --btn-border: #4b5563;
+  --btn-border: var(--btn-hover-bg);
   gap: 0.5em;
 
   td & {
@@ -37,13 +38,18 @@
   --btn-color: var(--body-color);
   --btn-bg: #d85656;
   --btn-hover-bg: #f53c3c;
-  --btn-border: #f53c3c;
+}
+
+.btn-success {
+  --btn-color: var(--body-color);
+  --btn-bg: #117d39;
+  --btn-hover-bg: #12893e;
 }
 
 .btn-icon {
-  color: #92a5c0;
-  padding-inline: 0.75em;
   padding-block: 0.3em;
+  padding-inline: 0.75em;
+  color: #92a5c0;
   .bi {
     font-size: 1rem;
   }

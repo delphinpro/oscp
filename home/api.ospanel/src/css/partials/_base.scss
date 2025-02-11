@@ -1,11 +1,14 @@
 // Web OSP by delphinpro
-// Copyright (c) 2024.
+// Copyright (c) 2024-2025.
 // Licensed under MIT License
 //////////////////////////////
 
 * {
   &, &::before, &::after {
     box-sizing: border-box;
+  }
+  &::before, &::after {
+    pointer-events: none;
   }
 }
 
@@ -16,6 +19,7 @@ body {
   margin: 0;
   color: var(--body-color);
   background: #111827;
+  background: #171f2a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 

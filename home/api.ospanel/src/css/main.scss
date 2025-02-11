@@ -1,5 +1,5 @@
 // Web OSP by delphinpro
-// Copyright (c) 2024.
+// Copyright (c) 2024-2025.
 // Licensed under MIT License
 //////////////////////////////
 
@@ -12,6 +12,7 @@
 
   --muted-color: #6b7b91;
   --danger-color: #f53c3c;
+  --warning-color: #ff9800;
   --success-color: #22c55e;
 
   --hr-color: #374151;
@@ -23,12 +24,18 @@
   --table-header-bg: #171f2a;
   --table-td-x-padding: 0.5rem;
 
-  --app-header-padding-y: 0rem;
+  --app-bg: #111827;
+  --app-py: 1.5rem;
+  --app-px: 1.5rem;
   --app-header-height: 4rem;
-  --app-header-padding-x: 1.5rem;
-  --app-side-padding-y: 1rem;
-  --app-side-padding-x: 0.5rem;
+  --app-header-py: 0rem;
+  --app-header-px: 1.5rem;
+  --app-side-width: 17rem;
+  --app-side-py: 1rem;
+  --app-side-px: 0.5rem;
   --app-side-bg: #1f2937;
+
+  --nav-px: 1rem;
 
   --input-height: 2.5rem;
 }
@@ -41,6 +48,7 @@
 @import "./partials/table";
 @import "./partials/bulb";
 @import "./partials/nav";
+@import "./partials/nav-inline";
 @import "./partials/tabs";
 @import "./partials/modal";
 @import "./partials/helpers";

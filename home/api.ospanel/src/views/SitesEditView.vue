@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2023-2024.
+  Copyright (c) 2023-2025.
   Licensed under MIT License
   --------------------------->
 
@@ -235,8 +235,8 @@ export default {
           <i class="bi bi-arrow-left"></i>
           <span class="text-nowrap">Назад</span>
         </router-link>
-        <button v-if="ready" class="btn" @click="save">Сохранить</button>
-        <button v-if="ready" class="btn" @click="deleteSite">Удалить</button>
+        <button v-if="ready" class="btn btn-success" @click="save">Сохранить</button>
+        <button v-if="ready" class="btn btn-danger" @click="deleteSite">Удалить</button>
       </div>
     </teleport>
 

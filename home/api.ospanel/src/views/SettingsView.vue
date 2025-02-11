@@ -1,6 +1,6 @@
 <!----------------------------
   Web OSP by delphinpro
-  Copyright (c) 2024.
+  Copyright (c) 2024-2025.
   Licensed under MIT License
   --------------------------->
 
@@ -74,7 +74,7 @@ export default {
 <template>
   <div>
     <teleport to="#top">
-      <button v-if="ready" class="btn" @click="save">Сохранить</button>
+      <button v-if="ready" class="btn btn-success" @click="save">Сохранить</button>
     </teleport>
 
     <div class="alert mb-1">После изменения настроек будет выполнен перезапуск программы</div>
